@@ -22,5 +22,5 @@ import Route from "@ioc:Adonis/Core/Route";
 
 Route.get("/", async () => {
   const test12 = "TEST DEBUG";
-  return { hello: "world" + test12 };
+  return { hello: "world. This is: " + test12 };
 });
