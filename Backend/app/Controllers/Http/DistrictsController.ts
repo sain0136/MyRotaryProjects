@@ -8,7 +8,6 @@ import { CustomReponse } from "Contracts/SharedInterfaces/CustomReponse";
 import DistrictInterface from "Contracts/SharedInterfaces/DistrictInterface";
 import {
   DistrictDetailsInterface,
-  ReportLinksInterface,
 } from "Contracts/SharedInterfaces/DistrictInterface";
 
 export default class DistrictsController {

@@ -1,4 +1,4 @@
-import { Meta } from './DistrictInterface'
+import { DistrictMetaInterface} from './DistrictInterface'
 export interface budgetItem {
   itemCost: number
   itemName: string
@@ -255,6 +255,6 @@ export interface DMProject {
   district_id: number
 }
 export interface ProjectPagination {
-  meta: Meta
+  meta: DistrictMetaInterface
   data: Array<ClubProject | DMProject | DSGProject>
 }
