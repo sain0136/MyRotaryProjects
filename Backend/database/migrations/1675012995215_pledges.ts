@@ -18,17 +18,13 @@ export default class extends BaseSchema {
         .nullable()
         .unsigned()
         .references("project_id")
-        .inTable("projects")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
+        .inTable("projects");
       table
         .integer("user_id", 50)
         .notNullable()
         .unsigned()
         .references("user_id")
-        .inTable("users")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
+        .inTable("users");
       table.timestamp("created_at");
       table.timestamp("updated_at");
     });

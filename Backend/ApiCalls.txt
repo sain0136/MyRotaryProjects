@@ -1,0 +1,46 @@
+#  District STORE CALL http://127.0.0.1:3333/district/ ----POST
+{
+	"district":{
+  "district_name": "District",
+  "district_number": 9100,
+  "district_president": "Paul Wall",
+  "district_email": "string@gmail.com",
+  "district_description": "JSON stands for  and is pronounced (like in the Friday the 13th movies). It's meant to be a human-readable and compact solution to represent a complex data structure and facilitate data-interchange between systems.",
+  "site_url": null,
+  "districtlogo_url": "",
+  "district_details": {
+     "ddfCalculation": "",
+     "ddfCapes": {
+        "dsgCap": 100,
+        "dsgFraction": 1,
+        "dmCap": 100,
+        "dmFraction": 1
+     },
+     "dates": {
+        "grant_submission_closedate": "",
+        "grant_submission_startdate": ""
+     },
+     "reportLinks": ""
+  }
+}
+}
+#District Update http://127.0.0.1:3333/district/5 ---PUT
+{
+	"district":{
+		"district_president":"Time Jones",
+		"district_details": {
+			"dates": {
+				"grant_submission_closedate": "",
+				"grant_submission_startdate": ""
+			},
+			"ddfCapes": {
+				"dmCap": 100,
+				"dsgCap": 100,
+				"dmFraction": 1,
+				"dsgFraction": 1
+			},
+			"reportLinks": "",
+			"ddfCalculation": ""
+		}
+	}
+}

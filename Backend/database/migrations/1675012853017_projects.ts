@@ -25,7 +25,7 @@ export default class extends BaseSchema {
       table.decimal("co_operating_organisation_contribution", 15, 2).nullable();
       table.decimal("district_simplified_grant_request", 15, 2).nullable();
       table.decimal("district_matching_grant_request", 15, 2).nullable();
-      table.decimal("pledge_amount", 15, 2).nullable();
+      table.decimal("total_pledges", 15, 2).nullable();
       table.string("currency", 5).notNullable().defaultTo("USD");
       table.jsonb("extra_descriptions").nullable();
       table.jsonb("itemized_budget").nullable();
