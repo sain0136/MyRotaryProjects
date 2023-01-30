@@ -15,7 +15,7 @@ export default class extends BaseSchema {
       table.string("user_country", 50).nullable();
       table.string("phone", 180).nullable();
       table.string("email", 254).notNullable().unique();
-      table.string("password", 128).notNullable();
+      table.string("password", 255).notNullable();
       table.jsonb("extra_details").nullable();
       table.string("user_type", 8).notNullable();
       table

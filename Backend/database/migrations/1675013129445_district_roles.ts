@@ -1,7 +1,7 @@
 import BaseSchema from "@ioc:Adonis/Lucid/Schema";
 
 export default class extends BaseSchema {
-  protected tableName = "district_roles";
+  protected tableName = "district_role";
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
@@ -21,8 +21,6 @@ export default class extends BaseSchema {
         .inTable("districts")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
-      table.timestamps(true, true);
-
       table.timestamp("created_at");
       table.timestamp("updated_at");
     });
