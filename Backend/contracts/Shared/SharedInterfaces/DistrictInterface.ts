@@ -1,5 +1,5 @@
 import DataObjectApi from "./DataObject";
-import User from "./UserInterface";
+import IUser from "./UserInterface";
 export interface DistrictDetailsInterface {
   ddfCalculation: Array<String>;
   ddfCapes: {
@@ -52,7 +52,7 @@ export interface DistrictMetaInterface {
 
 export interface DistrictPaginationInterface {
   meta: DistrictMetaInterface;
-  data: Array<User | DistrictInterface>;
+  data: Array<IUser | DistrictInterface>;
 }
 
 export default DistrictInterface;

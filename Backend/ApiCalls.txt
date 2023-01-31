@@ -44,3 +44,29 @@
 		}
 	}
 }
+#POST all clubmembers http://127.0.0.1:3333/club/members
+{
+   "club_id":1,
+   "current_page":1,
+   "limit":5
+}
+#creat new club POST http://127.0.0.1:3333/club/
+{
+   "club":{
+      "club_name": "Test Club",
+      "club_address": "123 Street",
+      "club_city": "Test City",
+      "club_postal": "124434",
+      "club_province": "TestLand",
+      "club_country": "United States",
+      "club_description": "Because JSON derives from JavaScript, you can parse a JSON string simply by invoking the eval() function. The JSON string needs to be wrapped by parenthesis, else it will not work! This is the #1 problem when programmers first start to manipulate JSON strings. That being said, DON'T do this!",
+      "club_email": "sdfsd@gmail.com",
+      "site_url": null,
+      "district_id": 1
+   }
+}
+#http://127.0.0.1:3333/user/verify/  POST Verify user 
+{
+	"email":"jssr26@gmail.com",
+	"password":"123456"
+}

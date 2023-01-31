@@ -4,11 +4,9 @@ import Clubs from "App/Models/Clubs";
 import Club from "App/Models/Clubs";
 import District from "App/Models/Districts";
 import User from "App/Models/Users";
-import { CustomReponse } from "Contracts/SharedInterfaces/CustomReponse";
-import DistrictInterface from "Contracts/SharedInterfaces/DistrictInterface";
-import {
-  DistrictDetailsInterface,
-} from "Contracts/SharedInterfaces/DistrictInterface";
+import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
+import DistrictInterface from "Contracts/Shared/SharedInterfaces/DistrictInterface";
+import { DistrictDetailsInterface } from "Contracts/Shared/SharedInterfaces/DistrictInterface";
 
 export default class DistrictsController {
   /**
