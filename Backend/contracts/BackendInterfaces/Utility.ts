@@ -13,7 +13,7 @@ export const UserType = {
   Club: "CLUB",
 };
 
-export const Roles = {
+export const RotaryRoles = {
   DISTRICTADMIN: "District Admin",
   DISTRICTGRANT: "District Grants Chair",
   DISTRICTFOUNDATION: "District Foundations Chair",
@@ -21,4 +21,20 @@ export const Roles = {
   CLUBADMIN: "Club Admin",
   STANDARD: "Standard Member",
   GUEST: "Guest",
+};
+
+export const GrantType = {
+  CLUBPROJECT: "Club Project",
+  DISTRICTSIMPLIFIEDPROJECT: "District Simplified Project",
+  DISTRICTMATCHINGPROJECT: "District Matching Project",
+  GLOBALPROJECT: "Global Project",
+};
+
+export const ProjectStatus = {
+  LOOKINGFORFUNDING: "Looking for funding",
+  FULLYFUNDED: "Fully funded",
+  PENDINGAPPROVAL: "Pending approval",
+  APPROVED: "Approved",
+  REPORTSDUE: "Reports Due",
+  COMPLETED: "Completed",
 };

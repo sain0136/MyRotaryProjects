@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string("project_status", 25).notNullable();
       table.integer("project_number", 7).notNullable().unique();
       // the code is the number + the abbrev of the type of project i.e DM-1348420
-      table.string("project_code", 10).notNullable().unique();
+      table.string("project_code", 12).notNullable().unique();
       table.string("project_description", 3000).nullable();
       table.string("country", 50).notNullable();
       table.string("region", 50).notNullable();

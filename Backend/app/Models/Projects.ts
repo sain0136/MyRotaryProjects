@@ -2,18 +2,16 @@ import { DateTime } from "luxon";
 import { BaseModel, column, computed } from "@ioc:Adonis/Lucid/Orm";
 import { NonPlurizeNamingStrategy } from "Contracts/NonPlurizeNamingStrategy";
 import Pledge from "./Pledges";
+import { ProjectDetails } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 
 export default class Projects extends BaseModel {
   public static namingStrategy = new NonPlurizeNamingStrategy();
 
-  // @computed()
-  // public districtOrClubInformation: districtOrClubInformation
-
   @computed()
   public pledgesAssociated: Array<Pledge>;
 
-  // @computed()
-  // public creatorInformation: creatorInformation
+  @computed()
+  public projectDetails: ProjectDetails;
 
   @column({ isPrimary: true })
   public projectId: number;

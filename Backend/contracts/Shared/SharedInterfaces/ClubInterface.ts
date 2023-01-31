@@ -1,4 +1,4 @@
-interface Club {
+interface IClub {
   club_name: string;
   club_address: string;
   club_city: string;
@@ -12,4 +12,4 @@ interface Club {
   club_id: number;
   [key: string]: any;
 }
-export default Club;
+export default IClub;

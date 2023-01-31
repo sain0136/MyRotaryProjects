@@ -1,4 +1,4 @@
-interface User {
+interface IUser {
   firstname: string;
   lastname: string;
   address: string;
@@ -18,7 +18,7 @@ interface User {
   role: Array<roles>;
   // creation or etc properties
   [key: string]: any;
-  role_type: number;
+  role_type: string;
 }
 interface roles {
   club_id: number;
@@ -32,4 +32,4 @@ interface roles {
   district_role: string;
 }
 
-export default User;
+export default IUser;
