@@ -1,3 +1,4 @@
+
 export const AreaOfFocus = [
   "Peace Conflict Prevention",
   "Disease Prevention And Treatment",
@@ -7,6 +8,16 @@ export const AreaOfFocus = [
   "Economic And Community Development",
   "Environment",
 ];
+
+export interface IAreaOfFocus{
+  Peace_Conflict_Prevention: boolean,
+  Disease_Prevention_And_Treatment: boolean,
+  Water_And_Sanitation: boolean,
+  Maternal_And_Child_Health: boolean,
+  Basic_Education_And_Literacy: boolean,
+  Economic_And_Community_Development: boolean,
+  Environment: boolean,
+}
 
 export const UserType = {
   District: "DISTRICT",
@@ -37,4 +48,17 @@ export const ProjectStatus = {
   APPROVED: "Approved",
   REPORTSDUE: "Reports Due",
   COMPLETED: "Completed",
+};
+
+export interface SearchCriteria {
+  current_page: number,
+  limit: number,
+  club_id: number,
+  search_text: string,
+  project_status: string,
+  project_region: string,
+  area_focus: string,
+  rotary_year: string,
+  district_id: number,
+  grant_type: string,
 };
