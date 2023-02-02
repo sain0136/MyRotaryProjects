@@ -7,6 +7,7 @@ export default class UploadsController {
     const coverImage = request.file("test");
     const cover2 = coverImage;
     const res = {
+
       s3error: "",
       s3url: "",
       localurl: "",
