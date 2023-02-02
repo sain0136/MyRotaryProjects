@@ -18,7 +18,9 @@ export default class extends BaseSchema {
         .nullable()
         .unsigned()
         .references("project_id")
-        .inTable("projects");
+        .inTable("projects")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
       table
         .integer("user_id", 50)
         .notNullable()

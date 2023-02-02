@@ -26,6 +26,8 @@ import "App/Modules/Project/routes";
 import "App/Modules/Pledge/routes";
 import "App/Modules/Mail/routes";
 import "App/Modules/Assets/routes";
+import "App/Modules/Uploads/routes";
+
 Route.get("/", async () => {
   const test12 = "TEST DEBUG Version:1";
   return { hello: "world. This is: " + test12 };

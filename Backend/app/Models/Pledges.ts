@@ -9,7 +9,7 @@ export default class Pledges extends BaseModel {
   public pledgeId: number;
 
   @column()
-  public pledge_amount: number;
+  public pledgeAmount: number;
 
   @column()
   public firstname: string;
@@ -28,6 +28,13 @@ export default class Pledges extends BaseModel {
 
   @column()
   public districtNumber: string;
+
+  
+  @column()
+  public projectId: number;
+
+  @column()
+  public userId: string;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

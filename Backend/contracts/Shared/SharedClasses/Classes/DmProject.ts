@@ -1,7 +1,7 @@
-import { IDMProject } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
+import { IDmProject } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 import DsgProject from "./DsgProject";
 
-export default class DmProject extends DsgProject implements IDMProject {
+export default class DmProject extends DsgProject implements IDmProject {
   hostclub_information = {
     host_club_name: "",
     district_number: "",

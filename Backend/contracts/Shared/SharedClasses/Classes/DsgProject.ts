@@ -1,11 +1,11 @@
 import {
   BudgetItem,
   FundingSource,
-  IDSGProject,
+  IDsgProject,
 } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 import GenericProject from "./GenericProject";
 
-export default class DsgProject extends GenericProject implements IDSGProject {
+export default class DsgProject extends GenericProject implements IDsgProject {
   co_operating_organisation_contribution = 0;
   district_simplified_grant_request = 0;
   intial_sponsor_club_contribution = 0;
