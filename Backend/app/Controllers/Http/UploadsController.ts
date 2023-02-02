@@ -7,17 +7,21 @@ export default class UploadsController {
     const coverImage = request.file("test");
     const cover2 = coverImage;
     const res = {
+
+      s3error: "",
       s3url: "",
       localurl: "",
     };
     try {
       if (coverImage) {
-        await coverImage.moveToDisk("./", {}, "s3");
+        await coverImage.moveToDisk("./", {}, "spaces");
         let path = coverImage.filePath;
-
-        res.s3url = await Drive.getUrl(path as string);
+        if (path) {
+          res.s3url = path;
+        }
       }
     } catch (error) {
+      res.s3error = error.message;
       res.s3url = error;
     }
     try {
