@@ -1,9 +1,9 @@
 import {
   DocLinks,
-  Uploads,
+  IGenericProject,
 } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 
-export default class GenericProject {
+export default class GenericProject implements IGenericProject {
   project_id = 0;
   project_name = "";
   project_theme = "";
@@ -37,6 +37,11 @@ export default class GenericProject {
     reports_files: [] as DocLinks[],
     evidence_files: [] as DocLinks[],
   };
+  rotary_year = "";
+  image_link = "";
+  created_by = 0;
+  club_id = 0
+  district_id = 0
   image = null;
   file = null;
   mulitFile = [];

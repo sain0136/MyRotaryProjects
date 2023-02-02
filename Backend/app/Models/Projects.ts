@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
-import { BaseModel, column, computed } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasMany, column, computed, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import { NonPlurizeNamingStrategy } from "Contracts/NonPlurizeNamingStrategy";
 import Pledge from "./Pledges";
 import { ProjectDetails } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
+import Pledges from "./Pledges";
 
 export default class Projects extends BaseModel {
   public static namingStrategy = new NonPlurizeNamingStrategy();
@@ -138,4 +139,7 @@ export default class Projects extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  @hasMany(() => Pledges,{ foreignKey: 'projectId',})
+  public pledges: HasMany<typeof Pledges>
 }

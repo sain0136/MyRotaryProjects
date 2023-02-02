@@ -7,7 +7,6 @@
 
 import Env from '@ioc:Adonis/Core/Env'
 import { driveConfig } from '@adonisjs/core/build/config'
-import Application from '@ioc:Adonis/Core/Application'
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +52,7 @@ export default driveConfig({
       | files.
       |
       */
-      root: Application.tmpPath('uploads'),
+      root:Env.get('LOCAL_UPLOAD_PATH'),
 
       /*
       |--------------------------------------------------------------------------
@@ -77,7 +76,7 @@ export default driveConfig({
       | you are not registering routes with this prefix.
       |
       */
-      basePath: '/uploads',
+      basePath: '/testuploads',
     },
 
     /*
@@ -91,20 +90,17 @@ export default driveConfig({
     |**************************************************************************
     | npm i @adonisjs/drive-s3
     |**************************************************************************
-    |
     */
-    // s3: {
-    //   driver: 's3',
-    //   visibility: 'public',
-    //   key: Env.get('S3_KEY'),
-    //   secret: Env.get('S3_SECRET'),
-    //   region: Env.get('S3_REGION'),
-    //   bucket: Env.get('S3_BUCKET'),
-    //   endpoint: Env.get('S3_ENDPOINT'),
-    //
-    //  // For minio to work
-    //  // forcePathStyle: true,
-    // },
+    
+    s3: {
+      driver: 's3',
+      visibility: 'public',
+      key: Env.get('S3_KEY'),
+      secret: Env.get('S3_SECRET'),
+      region: Env.get('S3_REGION'),
+      bucket: Env.get('S3_BUCKET'),
+      endpoint: Env.get('S3_ENDPOINT'),
+    }
 
     /*
     |--------------------------------------------------------------------------

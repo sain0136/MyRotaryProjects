@@ -8,20 +8,18 @@ import {
   RotaryRoles,
   UserType,
 } from "Contracts/BackendInterfaces/Utility";
-import Asset from "../../app/Models/Assets";
+import Assets from "../../app/Models/Assets";
 import Projects from "App/Models/Projects";
 import { DateTime } from "luxon";
-import Pledges from "App/Models/Pledges";
 import { RotaryYear } from "Contracts/BackendInterfaces/RotaryYear";
 
 export default class extends BaseSeeder {
   public async run() {
-    await Asset.create({
-      clubIntial: 1000000,
-      dsgIntial: 3000000,
-      dmInitial: 5000000,
-      globalIntial: 7000000,
-      assets: "[]",
+    await Assets.create({
+      dmInitial: 800000,
+      dsgIntial: 500000,
+      clubIntial: 100000,
+      globalIntial: 1200000,
     });
     await District.createMany([
       {

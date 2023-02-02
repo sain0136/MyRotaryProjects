@@ -136,7 +136,7 @@ export interface CreatorInformation {
 
 export interface ProjectPagination {
   meta: DistrictMetaInterface;
-  data: Array<IClubProject | IDMProject | IDSGProject>;
+  data: Array<IClubProject | IDmProject | IDsgProject>;
 }
 
 export interface Uploads {
@@ -170,6 +170,9 @@ export interface IGenericProject {
   anticipated_funding: number;
   total_pledges: number;
   file_uploads: Uploads;
+  rotary_year: string;
+  image_link: string;
+  created_by: number;
   // creation or update properties
   image: any;
   file: any;
@@ -183,7 +186,7 @@ export interface IClubProject extends IGenericProject {
   extra_descriptions: ClubProjectExtraDescriptions;
 }
 
-export interface IDSGProject extends IGenericProject {
+export interface IDsgProject extends IGenericProject {
   extra_descriptions: ExtraDescriptions;
   co_operating_organisation_contribution: number;
   district_simplified_grant_request: number;
@@ -191,11 +194,11 @@ export interface IDSGProject extends IGenericProject {
   itemized_budget: Array<BudgetItem>;
 }
 
-export interface IDMProject extends IGenericProject, IDSGProject {
+export interface IDmProject extends IGenericProject, IDsgProject {
   hostclub_information: HostclubInformation;
 }
 
 export interface IGlobalProject
   extends IGenericProject,
-    IDSGProject,
-    IDMProject {}
+    IDsgProject,
+    IDmProject {}
