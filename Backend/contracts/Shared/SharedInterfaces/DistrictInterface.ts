@@ -21,7 +21,7 @@ export interface ReportLinksInterface {
   url: string;
 }
 
-export interface DistrictInterface {
+export interface IDistrict {
   district_id: number;
   district_name: string;
   district_number: string;
@@ -52,7 +52,7 @@ export interface DistrictMetaInterface {
 
 export interface DistrictPaginationInterface {
   meta: DistrictMetaInterface;
-  data: Array<IUser | DistrictInterface>;
+  data: Array<IUser | IDistrict>;
 }
 
-export default DistrictInterface;
+export default IDistrict;

@@ -143,6 +143,7 @@ export interface Uploads {
   reports_files: Array<DocLinks>;
   evidence_files: Array<DocLinks>;
 }
+export type FileType = "cover" | "evidence" | "report";
 
 export interface IGenericProject {
   project_id: number;

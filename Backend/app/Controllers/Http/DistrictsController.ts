@@ -5,7 +5,7 @@ import Club from "App/Models/Clubs";
 import District from "App/Models/Districts";
 import User from "App/Models/Users";
 import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
-import DistrictInterface from "Contracts/Shared/SharedInterfaces/DistrictInterface";
+import IDistrict from "Contracts/Shared/SharedInterfaces/DistrictInterface";
 import { DistrictDetailsInterface } from "Contracts/Shared/SharedInterfaces/DistrictInterface";
 
 export default class DistrictsController {
@@ -92,7 +92,7 @@ export default class DistrictsController {
     request,
     response,
   }: HttpContextContract): Promise<void> {
-    const district: DistrictInterface = request.input("district");
+    const district: IDistrict = request.input("district");
     let extraDetails: DistrictDetailsInterface = {
       ddfCalculation: district.district_details.ddfCalculation,
       dates: {
@@ -134,7 +134,7 @@ export default class DistrictsController {
     request,
     params,
   }: HttpContextContract): Promise<void> {
-    const district: DistrictInterface = request.input("district");
+    const district: IDistrict = request.input("district");
     const districtToBeUpdated: District = await District.findOrFail(params.id);
     let extraDetails: DistrictDetailsInterface = {
       ddfCalculation: district.district_details.ddfCalculation,
