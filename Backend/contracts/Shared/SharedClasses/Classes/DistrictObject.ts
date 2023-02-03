@@ -1,9 +1,9 @@
 import DataObjectApi from "Contracts/Shared/SharedInterfaces/DataObject";
-import DistrictInterface, {
+import IDistrict, {
   DistrictDetailsInterface,
 } from "Contracts/Shared/SharedInterfaces/DistrictInterface";
 
-export default class RotaryDistrict implements DistrictInterface {
+export default class RotaryDistrict implements IDistrict {
   district_id: number;
   district_name: string;
   district_number: string;

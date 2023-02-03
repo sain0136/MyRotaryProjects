@@ -32,7 +32,11 @@ export default class ProjectsController {
       .select("*")
       .where({ project_id: id });
   }
-
+  /**
+   * @desc Retrieves project details based on a given id including information about the creator,
+   * district and club associated with the project.
+   * @param  {number} id
+   */
   private async getProjectDetails(id: number) {
     const projectById: Projects = await Projects.findOrFail(id);
     const creator: Users = await Users.findOrFail(projectById.createdBy);
@@ -40,7 +44,6 @@ export default class ProjectsController {
       projectById.districtId
     );
     const projectClub: Clubs = await Clubs.findOrFail(projectById.clubId);
-
     const projectDetails: ProjectDetails = {
       creatorData: {
         fullName: creator.fullName,
@@ -55,6 +58,20 @@ export default class ProjectsController {
     };
     return projectDetails;
   }
+  
+  /**
+   * @desc Add computed pledges and project details to a project object.
+   * @param  {Projects} updatedProject
+   */
+  public async addComputed(updatedProject: Projects) {
+    updatedProject.pledgesAssociated = await this.pledgesAsscoiated(
+      updatedProject.projectId
+    );
+    updatedProject.projectDetails = await this.getProjectDetails(
+      updatedProject.projectId
+    );
+    return updatedProject
+  }
 
   /**
    * @desc Filters projects based on provided search criteria
@@ -65,7 +82,7 @@ export default class ProjectsController {
   private async filter(searchCriteria: SearchCriteria) {
     return await Projects.query()
       .where(async (db) => {
-        let raw;
+        let raw: Projects[];
         if (searchCriteria.rotary_year) {
           db.from("projects").where({
             rotary_year: searchCriteria.rotary_year,
@@ -111,7 +128,6 @@ export default class ProjectsController {
               `%${searchCriteria.search_text}%`
             )
             .orWhere("project_name", "like", `%${searchCriteria.search_text}%`);
-          console.log(raw);
         }
       })
       .orderBy("project_id", "desc")
@@ -478,11 +494,12 @@ export default class ProjectsController {
           fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
         })
         .save();
-      return response.json(await addComputed(updatedProject));
+      return response.json(await this.addComputed(updatedProject));
     }
 
     if (oldProjectImformation instanceof DsgProject) {
-        const updatedProject =await projectToBeUpdateds.merge({
+      const updatedProject = await projectToBeUpdateds
+        .merge({
           projectName: oldProjectImformation.project_name,
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
@@ -513,12 +530,14 @@ export default class ProjectsController {
           ),
           itemizedBudget: JSON.stringify(oldProjectImformation.itemized_budget),
           fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
-        }).save();
-        return response.json(await addComputed(updatedProject));
+        })
+        .save();
+      return response.json(await this.addComputed(updatedProject));
     }
 
     if (oldProjectImformation instanceof DmProject) {
-        const updatedProject = await projectToBeUpdateds.merge({
+      const updatedProject = await projectToBeUpdateds
+        .merge({
           projectName: oldProjectImformation.project_name,
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
@@ -552,20 +571,9 @@ export default class ProjectsController {
           hostclubInformation: JSON.stringify(
             oldProjectImformation.hostclub_information
           ),
-        }).save();
-        return response.json(await addComputed(updatedProject));
-    }
-    /**
-     * @desc Add computed pledges and project details to a project object.
-     * @param  {Projects} updatedProject
-     */
-    async function addComputed(updatedProject: Projects) {
-      updatedProject.pledgesAssociated = await this.pledgesAsscoiated(
-        updatedProject.projectId
-      );
-      updatedProject.projectDetails = await this.getProjectDetails(
-        updatedProject.projectId
-      );
+        })
+        .save();
+      return response.json(await this.addComputed(updatedProject));
     }
   }
 
