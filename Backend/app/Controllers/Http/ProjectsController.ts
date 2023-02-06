@@ -59,7 +59,7 @@ export default class ProjectsController {
     };
     return projectDetails;
   }
-  
+
   /**
    * @desc Add computed pledges and project details to a project object.
    * @param  {Projects} updatedProject
@@ -71,7 +71,7 @@ export default class ProjectsController {
     updatedProject.projectDetails = await this.getProjectDetails(
       updatedProject.projectId
     );
-    return updatedProject
+    return updatedProject;
   }
 
   /**
@@ -83,7 +83,6 @@ export default class ProjectsController {
   private async filter(searchCriteria: SearchCriteria) {
     return await Projects.query()
       .where(async (db) => {
-        let raw: Projects[];
         if (searchCriteria.rotary_year) {
           db.from("projects").where({
             rotary_year: searchCriteria.rotary_year,
@@ -119,7 +118,7 @@ export default class ProjectsController {
             `area_focus->>'$.${searchCriteria.area_focus}' = 'true'`
           );
         }
-
+        let raw: Projects[];
         if (searchCriteria.search_text) {
           raw = await db
             .from("projects")
@@ -222,8 +221,8 @@ export default class ProjectsController {
   }: HttpContextContract): Promise<void> {
     const newProject: IDmProject | IDsgProject | IClubProject =
       request.input("project");
-      const convertedStartDate = moment(newProject.start_date, "D");
-      const convertedCompletionDate = moment(newProject.completion_date, "D");
+    const convertedStartDate = moment(newProject.start_date, "D");
+    const convertedCompletionDate = moment(newProject.completion_date, "D");
 
     if (newProject instanceof ClubProject) {
       try {
@@ -330,8 +329,8 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate  as unknown as DateTime,
-          startDate: convertedStartDate  as unknown as DateTime,
+          completionDate: convertedCompletionDate as unknown as DateTime,
+          startDate: convertedStartDate as unknown as DateTime,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
           createdBy: newProject.created_by,
@@ -452,7 +451,10 @@ export default class ProjectsController {
     );
 
     const convertedStartDate = moment(oldProjectImformation.start_date, "D");
-    const convertedCompletionDate = moment(oldProjectImformation.completion_date, "D");
+    const convertedCompletionDate = moment(
+      oldProjectImformation.completion_date,
+      "D"
+    );
 
     if (oldProjectImformation instanceof ClubProject) {
       const updatedProject = await projectToBeUpdateds
