@@ -18,7 +18,33 @@ import HelloWorld from './components/HelloWorld.vue'
   </header>
 
   <RouterView />
+  <div>Hi I got a big one!{{ districts }}</div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  data() {
+    return {
+      districts: "",
+    };
+  },
+ async created() {
+      this.districts = await this.index()
+  },
+  methods: {
+     async index() {
+    const res = await fetch(import.meta.env.VITE_API_URL + "district", {
+      method: "GET",
+    });
+    const response = await res.json();
+    if (res.ok) {
+      return response;
+    } 
+  }
+  }
+})
+</script>
 
 <style scoped>
 header {

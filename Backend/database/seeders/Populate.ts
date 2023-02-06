@@ -20,6 +20,7 @@ export default class extends BaseSeeder {
       dsgIntial: 500000,
       clubIntial: 100000,
       globalIntial: 1200000,
+      assets:JSON.stringify({main_logo:{}})
     });
     await District.createMany([
       {
