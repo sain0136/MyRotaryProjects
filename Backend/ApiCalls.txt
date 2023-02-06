@@ -1,0 +1,72 @@
+#  District STORE CALL http://127.0.0.1:3333/district/ ----POST
+{
+	"district":{
+  "district_name": "District",
+  "district_number": 9100,
+  "district_president": "Paul Wall",
+  "district_email": "string@gmail.com",
+  "district_description": "JSON stands for  and is pronounced (like in the Friday the 13th movies). It's meant to be a human-readable and compact solution to represent a complex data structure and facilitate data-interchange between systems.",
+  "site_url": null,
+  "districtlogo_url": "",
+  "district_details": {
+     "ddfCalculation": "",
+     "ddfCapes": {
+        "dsgCap": 100,
+        "dsgFraction": 1,
+        "dmCap": 100,
+        "dmFraction": 1
+     },
+     "dates": {
+        "grant_submission_closedate": "",
+        "grant_submission_startdate": ""
+     },
+     "reportLinks": ""
+  }
+}
+}
+#District Update http://127.0.0.1:3333/district/5 ---PUT
+{
+	"district":{
+		"district_president":"Time Jones",
+		"district_details": {
+			"dates": {
+				"grant_submission_closedate": "",
+				"grant_submission_startdate": ""
+			},
+			"ddfCapes": {
+				"dmCap": 100,
+				"dsgCap": 100,
+				"dmFraction": 1,
+				"dsgFraction": 1
+			},
+			"reportLinks": "",
+			"ddfCalculation": ""
+		}
+	}
+}
+#POST all clubmembers http://127.0.0.1:3333/club/members
+{
+   "club_id":1,
+   "current_page":1,
+   "limit":5
+}
+#creat new club POST http://127.0.0.1:3333/club/
+{
+   "club":{
+      "club_name": "Test Club",
+      "club_address": "123 Street",
+      "club_city": "Test City",
+      "club_postal": "124434",
+      "club_province": "TestLand",
+      "club_country": "United States",
+      "club_description": "Because JSON derives from JavaScript, you can parse a JSON string simply by invoking the eval() function. The JSON string needs to be wrapped by parenthesis, else it will not work! This is the #1 problem when programmers first start to manipulate JSON strings. That being said, DON'T do this!",
+      "club_email": "sdfsd@gmail.com",
+      "site_url": null,
+      "district_id": 1
+   }
+}
+#http://127.0.0.1:3333/user/verify/  POST Verify user 
+{
+	"email":"jssr26@gmail.com",
+	"password":"123456"
+}

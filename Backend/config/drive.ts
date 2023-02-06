@@ -7,7 +7,6 @@
 
 import Env from '@ioc:Adonis/Core/Env'
 import { driveConfig } from '@adonisjs/core/build/config'
-import Application from '@ioc:Adonis/Core/Application'
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +52,7 @@ export default driveConfig({
       | files.
       |
       */
-      root: Application.tmpPath('uploads'),
+      root:Env.get('LOCAL_UPLOAD_PATH'),
 
       /*
       |--------------------------------------------------------------------------
@@ -91,8 +90,8 @@ export default driveConfig({
     |**************************************************************************
     | npm i @adonisjs/drive-s3
     |**************************************************************************
-    |
     */
+    
     // s3: {
     //   driver: 's3',
     //   visibility: 'public',
@@ -101,10 +100,18 @@ export default driveConfig({
     //   region: Env.get('S3_REGION'),
     //   bucket: Env.get('S3_BUCKET'),
     //   endpoint: Env.get('S3_ENDPOINT'),
-    //
-    //  // For minio to work
-    //  // forcePathStyle: true,
     // },
+    // spaces: {
+    //   name: 'spaces',
+    //   visibility: 'public',
+    //   driver: 's3',
+    //   key: Env.get('S3_KEY'),
+    //   secret: Env.get('S3_SECRET'),
+    //   region: Env.get('S3_REGION'),
+    //   bucket: Env.get('S3_BUCKET'),
+    //   endpoint: Env.get('S3_ENDPOINT'),
+    // },
+
 
     /*
     |--------------------------------------------------------------------------

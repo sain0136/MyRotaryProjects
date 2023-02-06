@@ -1,0 +1,119 @@
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Clubs from "../../Models/Clubs";
+import Users from "App/Models/Users";
+import IClub from "Contracts/Shared/SharedInterfaces/ClubInterface";
+import Projects from "App/Models/Projects";
+import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
+
+export default class ClubsController {
+  /**
+   * @desc Pull all clubs
+   * @param  {HttpContextContract} {response}
+   */
+  public async index({ response }: HttpContextContract) {
+    const clubs: Clubs[] = await Clubs.all();
+    return response.json(clubs);
+  }
+  /**
+   * @desc all club members paginated
+   * @param  {} {request
+   * @param  {HttpContextContract} response}
+   */
+  public async clubMembersPagination({
+    request,
+    response,
+  }: HttpContextContract) {
+    const clubID: number = request.input("club_id");
+    const currentPage: number = request.input("current_page");
+    const limit: number = request.input("limit");
+    const allMembers = await Users.query()
+      .where({ clubId: clubID })
+      .paginate(currentPage, limit);
+    for (const user of allMembers as unknown as Users[]) {
+      user.role = await user
+        .related("clubRole")
+        .pivotQuery()
+        .where({ user_id: user.userId });
+    }
+    return response.json(allMembers);
+  }
+  /**
+   * @desc Create new club
+   * @param  {} {request
+   * @param  {HttpContextContract} response}
+   */
+  public async store({ request, response }: HttpContextContract) {
+    const newClub: IClub = request.input("club");
+    await Clubs.create({
+      clubName: newClub.club_name,
+      clubAddress: newClub.club_address,
+      clubCity: newClub.club_city,
+      clubPostal: newClub.club_postal,
+      clubProvince: newClub.club_province,
+      clubCountry: newClub.club_country,
+      clubDescription: newClub.club_description,
+      clubEmail: newClub.club_email,
+      districtId: newClub.district_id,
+      siteUrl: newClub.siteUrl,
+    });
+    return response.json(true);
+  }
+  /**
+   * @param  {} {response
+   * @param  {HttpContextContract} params}
+   */
+  public async show({ response, params }: HttpContextContract) {
+    const clubID: number = parseInt(params.id);
+    let clubById: Clubs = await Clubs.findOrFail(clubID);
+    return response.json(clubById);
+  }
+
+  /**
+   * @desc Update club record
+   * @param  {} {request
+   * @param  {} params
+   * @param  {HttpContextContract} response}
+   */
+  public async update({ request, params, response }: HttpContextContract) {
+    const updatedClubData: IClub = request.input("club");
+    const clubID: number = parseInt(params.id);
+    const clubToBeUpdated: Clubs = await Clubs.findOrFail(clubID);
+    await clubToBeUpdated
+      .merge({
+        clubName: updatedClubData.club_name,
+        clubAddress: updatedClubData.club_address,
+        clubCity: updatedClubData.club_city,
+        clubPostal: updatedClubData.club_postal,
+        clubProvince: updatedClubData.club_province,
+        clubCountry: updatedClubData.club_country,
+        clubDescription: updatedClubData.club_description,
+        clubEmail: updatedClubData.club_email,
+        siteUrl: updatedClubData.siteUrl,
+      })
+      .save();
+    return response.json(true);
+  }
+
+  /**
+   * @desc Delete club
+   * @param  {} {params
+   * @param  {HttpContextContract} response}
+   */
+  public async destroy({ params, response }: HttpContextContract) {
+    const clubToBeDeleted: Clubs = await Clubs.findOrFail(parseInt(params.id));
+    const allProjects = await Projects.all();
+    const found = allProjects.find((ele) => {
+      if (ele.clubId === parseInt(params.id)) {
+        return true;
+      }
+    });
+    if (typeof found === "undefined") {
+      await clubToBeDeleted.delete();
+      return response.json(true);
+    }
+    const customReponse = new CustomReponse(
+      "There are projects associated with this club!"
+    );
+    return response.json(customReponse);
+  }
+}
