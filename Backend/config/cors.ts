@@ -44,7 +44,7 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: ['http://localhost:5173','http://74.208.135.85'],
+  origin: ['http://localhost:5173','https://backendapi.myrotaryprojects.org/'],
 
   /*
   |--------------------------------------------------------------------------
