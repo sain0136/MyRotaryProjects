@@ -178,7 +178,7 @@ export default class UploadsController {
               modifiedLocationString = path.replace("C:\\Up\\", "");
             }
             if (Env.get("NODE_ENV") === "production") {
-              modifiedLocationString = path.replace("/", "");
+              modifiedLocationString = path.replace(Env.get('LOCAL_UPLOAD_PATH'), "");
             }
             storageInformation.url =
               Env.get("UPLOAD_URL") + "/uploads/" + modifiedLocationString;
