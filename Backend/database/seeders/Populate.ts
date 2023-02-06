@@ -219,8 +219,7 @@ export default class extends BaseSeeder {
         Environment: false,
       }),
       fundingGoal: 5000,
-      currentFunds: 1000,
-      anticipatedFunding: 0,
+      anticipatedFunding: 200,
       totalPledges: 0,
       fileUploads: JSON.stringify({
         reports_files: [],
@@ -254,7 +253,6 @@ export default class extends BaseSeeder {
         Environment: false,
       }),
       fundingGoal: 5000,
-      currentFunds: 1500,
       anticipatedFunding: 0,
       totalPledges: 0,
       fileUploads: JSON.stringify({
@@ -289,8 +287,7 @@ export default class extends BaseSeeder {
         Environment: true,
       }),
       fundingGoal: 4000,
-      currentFunds: 3000,
-      anticipatedFunding: 0,
+      anticipatedFunding: 500,
       totalPledges: 0,
       fileUploads: JSON.stringify({
         reports_files: [],
@@ -329,8 +326,7 @@ export default class extends BaseSeeder {
         Environment: false,
       }),
       fundingGoal: 15000,
-      currentFunds: 11000,
-      anticipatedFunding: 0,
+      anticipatedFunding: 1500,
       totalPledges: 0,
       fileUploads: JSON.stringify({
         reports_files: [],

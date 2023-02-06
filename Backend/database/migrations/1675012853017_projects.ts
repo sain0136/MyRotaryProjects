@@ -19,7 +19,6 @@ export default class extends BaseSchema {
       table.date("completion_date").notNullable();
       table.jsonb("area_focus").notNullable();
       table.decimal("funding_goal", 15, 2).notNullable();
-      table.decimal("current_funds", 15, 2).nullable();
       table.decimal("anticipated_funding", 15, 2).nullable();
       table.decimal("intial_sponsor_club_contribution", 15, 2).nullable();
       table.decimal("co_operating_organisation_contribution", 15, 2).nullable();

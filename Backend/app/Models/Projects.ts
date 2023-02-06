@@ -64,28 +64,69 @@ export default class Projects extends BaseModel {
   } */)
   public areaFocus: string;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public fundingGoal: number;
 
-  @column()
-  public currentFunds: number;
 
-  @column()
+
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public anticipatedFunding: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public intialSponsorClubContribution: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public coOperatingOrganisationContribution: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public districtSimplifiedGrantRequest: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public districtMatchingGrantRequest: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public totalPledges: number;
 
   @column()

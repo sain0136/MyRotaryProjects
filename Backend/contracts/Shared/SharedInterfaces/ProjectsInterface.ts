@@ -176,7 +176,6 @@ export interface IGenericProject {
     Environment: boolean;
   };
   funding_goal: number;
-  current_funds: number;
   anticipated_funding: number;
   total_pledges: number;
   file_uploads: Uploads;
