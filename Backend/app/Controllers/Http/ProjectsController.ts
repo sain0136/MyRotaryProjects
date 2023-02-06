@@ -118,7 +118,7 @@ export default class ProjectsController {
             `area_focus->>'$.${searchCriteria.area_focus}' = 'true'`
           );
         }
-        let raw: Projects[];
+        let raw: Projects[] = [];
         if (searchCriteria.search_text) {
           raw = await db
             .from("projects")

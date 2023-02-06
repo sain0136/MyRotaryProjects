@@ -40,11 +40,12 @@ export default class UsersController {
       return response.json(new CustomReponse("Email not found!"));
     }
     let user: Users = userByEmail[0];
-    let verifiedAndAccessGranted: Boolean = false;
     if (await Hash.verify(user.password, password)) {
+      let verifiedAndAccessGranted: Boolean = false;
       verifiedAndAccessGranted = true;
     } else {
-      verifiedAndAccessGranted=false
+      let verifiedAndAccessGranted: Boolean = false;
+      verifiedAndAccessGranted = false;
       return response.json(new CustomReponse("Password is wrong!"));
     }
     if (user.userType === "CLUB") {
