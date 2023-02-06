@@ -1,7 +1,9 @@
-import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Database from "@ioc:Adonis/Lucid/Database";
+import Pledges from "App/Models/Pledges";
 import Projects from "App/Models/Projects";
 import { ProjectStatus } from "Contracts/BackendInterfaces/Utility";
+import { Pledge } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 
 export default class PledgesController {
   /**
@@ -18,49 +20,102 @@ export default class PledgesController {
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
     const pledges = await Database.query()
-      .from("pledge")
+      .from("pledges")
       .select("*")
       .where({ project_id: project.projectId })
       .paginate(currentPage, limit);
-    project.pledgesAssociated = pledges;
+    let allPledges = await this.normalizePledgesAmount(project, false, pledges);
+    project.pledgesAssociated = allPledges;
     return response.json(project);
   }
-  /**
-   * @param  {} {request
-   * @param  {HttpContextContract} response}
-   * @returns Promise
-   */
-  public async store({
-    request,
-    response,
-  }: HttpContextContract): Promise<void> {
-    const pledge = request.input("pledge");
-    const project: Projects = await Projects.findOrFail(pledge.project_id);
-    const newPledgeTotal = (project.totalPledges += pledge.pledge_amount);
 
-    await Database.table("pledges").insert({
-      pledge_amount: pledge.pledge_amount,
+  public async pledgeStore({ request, response }: HttpContextContract) {
+    const pledge = request.input("pledge");
+    let pledgeHelper: Pledge = pledge;
+    const project: Projects = await Projects.findOrFail(pledge.project_id);
+    await Pledges.create({
+      pledgeAmount: pledge.pledge_amount,
       firstname: pledge.firstname,
       lastname: pledge.lastname,
       email: pledge.email,
       phone: pledge.phone,
-      district_number: pledge.district_number ? pledge.district_number : null,
-      club_name: pledge.club_name ? pledge.club_name : null,
+      districtNumber: pledge.district_number ? pledge.district_number : null,
+      clubName: pledge.club_name ? pledge.club_name : null,
       projectId: pledge.project_id,
       userId: pledge.user_id,
     });
-    if (
-      project.anticipatedFunding === project.fundingGoal &&
-      project.projectStatus === ProjectStatus.LOOKINGFORFUNDING
-    ) {
+    let changeStatus: Boolean =
+      parseFloat(project.anticipatedFunding.toString()) ===
+        parseFloat(project.fundingGoal.toString()) &&
+      project.projectStatus === ProjectStatus.LOOKINGFORFUNDING;
+    await project
+      .merge({
+        anticipatedFunding:
+          parseFloat(project.anticipatedFunding.toString()) +
+          pledgeHelper.pledge_amount,
+        totalPledges:
+          parseFloat(project.totalPledges.toString()) +
+          pledgeHelper.pledge_amount,
+        projectStatus: changeStatus
+          ? ProjectStatus.FULLYFUNDED
+          : project.projectStatus,
+      })
+      .save();
+    let allPledges = await this.normalizePledgesAmount(project, true);
+    project.pledgesAssociated = allPledges;
+    return response.json(project);
+  }
+
+  public async showAllPledgesByUser({
+    request,
+    response,
+  }: HttpContextContract) {
+    const userId: number = request.input("user_id");
+    const pledges = await Database.query()
+      .from("pledges")
+      .where({ user_id: userId });
+    this.normalizePledgesAmount(null, false, pledges);
+    return response.json(pledges);
+  }
+
+  public async deletePledge({
+    request,
+    response,
+  }: HttpContextContract): Promise<void> {
+    const pledgeId: number = request.input("pledge_id");
+    const pledge: Pledges = await Pledges.findOrFail(pledgeId);
+    const project: Projects = await Projects.findOrFail(pledge.projectId);
+    if (project.projectStatus === ProjectStatus.LOOKINGFORFUNDING) {
       await project
         .merge({
-          totalPledges: newPledgeTotal,
-          projectStatus: ProjectStatus.FULLYFUNDED,
+          anticipatedFunding:
+            parseFloat(project.anticipatedFunding.toString()) -
+            pledge.pledgeAmount,
+          totalPledges:
+            parseFloat(project.totalPledges.toString()) - pledge.pledgeAmount,
         })
         .save();
-    
+      await pledge.delete();
+      return response.json(true);
     }
-    return response.json(project);
+    return response.json(false);
+  }
+
+  private async normalizePledgesAmount(
+    project: Projects | null,
+    nonPaginated: boolean,
+    allPledgesParam?: any
+  ) {
+    let allPledges = nonPaginated ? null : allPledgesParam;
+    if (nonPaginated && project) {
+      allPledges = await Database.query()
+        .from("pledges")
+        .select("*")
+        .where({ project_id: project.projectId });
+    }
+    allPledges.forEach((val: Pledge) => {
+      val.pledge_amount = parseFloat(val.pledge_amount.toString());
+    });
+    return allPledges;
   }
 }

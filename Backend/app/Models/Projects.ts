@@ -55,35 +55,78 @@ export default class Projects extends BaseModel {
 
   @column(/* {
     serialize: (value: string | null) => {
-      if (value) {
-        return JSON.parse(value);
-      }
+          if (typeof value === 'object') {
+        if (Object.keys(value as unknown as object).length <= 0) {
+                  return JSON.parse("{}");
+        }
+      }else return JSON.parse(value)
     },
   } */)
   public areaFocus: string;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public fundingGoal: number;
 
-  @column()
-  public currentFunds: number;
 
-  @column()
+
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public anticipatedFunding: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public intialSponsorClubContribution: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public coOperatingOrganisationContribution: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public districtSimplifiedGrantRequest: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public districtMatchingGrantRequest: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public totalPledges: number;
 
   @column()
@@ -92,34 +135,38 @@ export default class Projects extends BaseModel {
   @column({
     serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })
   public extraDescriptions: string;
 
   @column({
-    serialize: (value: string | null) => {
+        serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })
   public itemizedBudget: string;
 
   @column({
-    serialize: (value: string | null) => {
+        serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })
   public hostclubInformation: string;
 
   @column({
-    serialize: (value: string | null) => {
+        serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })

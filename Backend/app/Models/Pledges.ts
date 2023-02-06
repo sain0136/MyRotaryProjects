@@ -8,7 +8,13 @@ export default class Pledges extends BaseModel {
   @column({ isPrimary: true })
   public pledgeId: number;
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (value) {
+        return parseFloat(value);
+      }
+    },
+  })
   public pledgeAmount: number;
 
   @column()

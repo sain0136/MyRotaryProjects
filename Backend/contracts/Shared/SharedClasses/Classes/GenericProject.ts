@@ -26,7 +26,6 @@ export default class GenericProject implements IGenericProject {
     Environment: false,
   };
   funding_goal = 0;
-  current_funds = 0;
   anticipated_funding = 0;
   total_pledges = 0;
   file_uploads = {
