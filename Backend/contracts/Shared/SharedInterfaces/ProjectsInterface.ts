@@ -15,9 +15,13 @@ export interface Pledge {
   phone: string;
   district_number: string;
   club_name: string;
+  user_id:number,
+  project_id:number
 }
 
-export interface DocLinks {
+export interface StorageInformation {
+  id:number;
+  fileType:string;
   url: string;
   location: string;
 }
@@ -140,10 +144,15 @@ export interface ProjectPagination {
 }
 
 export interface Uploads {
-  reports_files: Array<DocLinks>;
-  evidence_files: Array<DocLinks>;
+  reports_files: Array<StorageInformation>;
+  evidence_files: Array<StorageInformation>;
 }
-export type FileType = "cover" | "evidence" | "report";
+export const FileType = {
+  IMAGE_COVER: "image_cover",
+  FILE_EVIDENCE: "file_evidence",
+  FILE_REPORT: "file_report",
+  IMAGE_REPORT: "image_report"
+};
 
 export interface IGenericProject {
   project_id: number;
