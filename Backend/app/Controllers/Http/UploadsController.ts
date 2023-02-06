@@ -10,6 +10,7 @@ import {
   StorageInformation,
   Uploads,
 } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
+import Assets from "App/Models/Assets";
 
 export default class UploadsController {
   /**
@@ -75,11 +76,16 @@ export default class UploadsController {
       size: "10mb",
       extnames: ["jpg", "png", "gif"],
     });
+    const uploadsArrayAssetImage = request.files("image_assets", {
+      size: "10mb",
+      extnames: ["jpg", "png", "gif"],
+    });
     let allFilesArray = [
       ...uploadsArrayCover,
       ...uploadsArrayEvidence,
       ...uploadsArrayReportFile,
       ...uploadsArrayReportImage,
+      ...uploadsArrayAssetImage,
     ];
     const projectId: number = request.input("project_id");
     const project = await Projects.findOrFail(projectId);
@@ -178,7 +184,10 @@ export default class UploadsController {
               modifiedLocationString = path.replace("C:\\Up\\", "");
             }
             if (Env.get("NODE_ENV") === "production") {
-              modifiedLocationString = path.replace(Env.get('LOCAL_UPLOAD_PATH'), "");
+              modifiedLocationString = path.replace(
+                Env.get("LOCAL_UPLOAD_PATH"),
+                ""
+              );
             }
             storageInformation.url =
               Env.get("UPLOAD_URL") + "/uploads/" + modifiedLocationString;
@@ -235,9 +244,20 @@ export default class UploadsController {
       ) {
         delete storageInformation.file;
         fileUploads.reports_files.push(storageInformation);
+      } else if (fieldName.includes(FileType.IMAGE_ASSETS)) {
+        delete storageInformation.file;
+        const assets = await Assets.findOrFail(1);
+        let deleted: { main_logo: { location: string } } = assets.assets as any;
+
+        await Drive.delete(deleted.main_logo.location);
+        await assets
+          .merge({
+            assets: JSON.stringify({ main_logo: { ...storageInformation } }),
+          })
+          .save();
+        return project;
       }
     }
-
     project.fileUploads = JSON.stringify(fileUploads);
     return this.saveProjects(project);
   }
