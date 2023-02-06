@@ -32,7 +32,7 @@ export default class extends BaseSchema {
       table.jsonb("hostclub_information").nullable();
       table.jsonb("file_uploads").nullable();
       table.string("rotary_year", 10).notNullable();
-      table.string("image_link", 200).nullable();
+      table.string("image_link", 3000).nullable();
       table
         .integer("created_by", 50)
         .unsigned()

@@ -36,6 +36,6 @@ export default Env.rules({
   S3_BUCKET: Env.schema.string(),
   S3_REGION: Env.schema.string(),
   S3_ENDPOINT: Env.schema.string.optional(),
-  TEST_UPLOAD_URL:Env.schema.string(),
-  LOCAL_UPLOAD_PATH:Env.schema.string()
+  UPLOAD_URL:Env.schema.string(),
+  LOCAL_UPLOAD_PATH:Env.schema.string(),
 });

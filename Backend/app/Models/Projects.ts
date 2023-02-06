@@ -1,5 +1,11 @@
 import { DateTime } from "luxon";
-import { BaseModel, HasMany, column, computed, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  HasMany,
+  column,
+  computed,
+  hasMany,
+} from "@ioc:Adonis/Lucid/Orm";
 import { NonPlurizeNamingStrategy } from "Contracts/NonPlurizeNamingStrategy";
 import Pledge from "./Pledges";
 import { ProjectDetails } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
@@ -50,7 +56,7 @@ export default class Projects extends BaseModel {
   @column(/* {
     serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value)
+        return JSON.parse(value);
       }
     },
   } */)
@@ -83,46 +89,52 @@ export default class Projects extends BaseModel {
   @column()
   public currency: string;
 
-  @column(/* {
+  @column({
     serialize: (value: string | null) => {
       if (value) {
         return JSON.parse(value);
       }
     },
-  } */)
+  })
   public extraDescriptions: string;
 
-  @column(/* {
+  @column({
     serialize: (value: string | null) => {
       if (value) {
         return JSON.parse(value);
       }
     },
-  } */)
+  })
   public itemizedBudget: string;
 
-  @column(/* {
+  @column({
     serialize: (value: string | null) => {
       if (value) {
         return JSON.parse(value);
       }
     },
-  } */)
+  })
   public hostclubInformation: string;
 
-  @column(/* {
+  @column({
     serialize: (value: string | null) => {
       if (value) {
         return JSON.parse(value);
       }
     },
-  } */)
+  })
   public fileUploads: string;
 
   @column()
   public rotaryYear: string;
 
-  @column()
+  @column({
+    serialize: (value: string | null) => {
+      if (value) {
+        return JSON.parse(value);
+      }
+    },
+  })
   public imageLink: string;
 
   @column()
@@ -140,6 +152,6 @@ export default class Projects extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
 
-  @hasMany(() => Pledges,{ foreignKey: 'projectId',})
-  public pledges: HasMany<typeof Pledges>
+  @hasMany(() => Pledges, { foreignKey: "projectId" })
+  public pledges: HasMany<typeof Pledges>;
 }

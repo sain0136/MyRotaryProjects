@@ -1,5 +1,5 @@
 import {
-  DocLinks,
+  StorageInformation,
   IGenericProject,
 } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 
@@ -34,8 +34,8 @@ export default class GenericProject implements IGenericProject {
       url: "",
       location: "",
     },
-    reports_files: [] as DocLinks[],
-    evidence_files: [] as DocLinks[],
+    reports_files: [] as StorageInformation[],
+    evidence_files: [] as StorageInformation[],
   };
   rotary_year = "";
   image_link = "";
