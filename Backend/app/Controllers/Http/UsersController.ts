@@ -44,6 +44,7 @@ export default class UsersController {
     if (await Hash.verify(user.password, password)) {
       verifiedAndAccessGranted = true;
     } else {
+      verifiedAndAccessGranted=false
       return response.json(new CustomReponse("Password is wrong!"));
     }
     if (user.userType === "CLUB") {
