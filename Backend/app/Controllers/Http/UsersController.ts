@@ -41,11 +41,7 @@ export default class UsersController {
     }
     let user: Users = userByEmail[0];
     if (await Hash.verify(user.password, password)) {
-      let verifiedAndAccessGranted: Boolean = false;
-      verifiedAndAccessGranted = true;
     } else {
-      let verifiedAndAccessGranted: Boolean = false;
-      verifiedAndAccessGranted = false;
       return response.json(new CustomReponse("Password is wrong!"));
     }
     if (user.userType === "CLUB") {
