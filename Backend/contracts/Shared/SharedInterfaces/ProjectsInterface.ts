@@ -15,13 +15,13 @@ export interface Pledge {
   phone: string;
   district_number: string;
   club_name: string;
-  user_id:number,
-  project_id:number
+  user_id: number;
+  project_id: number;
 }
 
 export interface StorageInformation {
-  id:number;
-  fileType:string;
+  id: number;
+  fileType: string;
   url: string;
   location: string;
 }
@@ -151,7 +151,8 @@ export const FileType = {
   IMAGE_COVER: "image_cover",
   FILE_EVIDENCE: "file_evidence",
   FILE_REPORT: "file_report",
-  IMAGE_REPORT: "image_report"
+  IMAGE_REPORT: "image_report",
+  IMAGE_ASSETS: "image_assets",
 };
 
 export interface IGenericProject {
