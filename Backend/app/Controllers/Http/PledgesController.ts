@@ -30,7 +30,7 @@ export default class PledgesController {
    * @param  {HttpContextContract} response}
    * @returns Promise
    */
-  public async store({
+  public async storePledge({
     request,
     response,
   }: HttpContextContract): Promise<void> {

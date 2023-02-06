@@ -9,3 +9,5 @@ Route.post('/pledge/project/', 'PledgesController.showOneProjectWithPledgesPagin
 Route.post('/pledge/userPledges/', 'PledgesController.showAllPledgesByUser')
 
 Route.post('/pledge/delete/', 'PledgesController.deletePledge')
+
+Route.post('/pledge/store/', 'PledgesController.storePledge')

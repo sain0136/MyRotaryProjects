@@ -301,7 +301,7 @@ export default class extends BaseSeeder {
       clubId: 1,
       districtId: 1,
       rotaryYear: RotaryYear.getCurrentYear(),
-      extraDescriptions: JSON.stringify({}),
+      extraDescriptions: JSON.stringify({name:"sddssd"}),
       coOperatingOrganisationContribution: 0,
       districtSimplifiedGrantRequest: 0,
       intialSponsorClubContribution: 0,

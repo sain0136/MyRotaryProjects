@@ -55,9 +55,11 @@ export default class Projects extends BaseModel {
 
   @column(/* {
     serialize: (value: string | null) => {
-      if (value) {
-        return JSON.parse(value);
-      }
+          if (typeof value === 'object') {
+        if (Object.keys(value as unknown as object).length <= 0) {
+                  return JSON.parse("{}");
+        }
+      }else return JSON.parse(value)
     },
   } */)
   public areaFocus: string;
@@ -92,34 +94,38 @@ export default class Projects extends BaseModel {
   @column({
     serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })
   public extraDescriptions: string;
 
   @column({
-    serialize: (value: string | null) => {
+        serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })
   public itemizedBudget: string;
 
   @column({
-    serialize: (value: string | null) => {
+        serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })
   public hostclubInformation: string;
 
   @column({
-    serialize: (value: string | null) => {
+        serialize: (value: string | null) => {
       if (value) {
-        return JSON.parse(value);
+        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        return JSON.parse(parse);
       }
     },
   })

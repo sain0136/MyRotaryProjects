@@ -21,6 +21,7 @@ import {
   ProjectDetails,
 } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 import { DateTime } from "luxon/src/datetime";
+import moment from "moment";
 
 export default class ProjectsController {
   /**
@@ -221,14 +222,8 @@ export default class ProjectsController {
   }: HttpContextContract): Promise<void> {
     const newProject: IDmProject | IDsgProject | IClubProject =
       request.input("project");
-    const convertedStartDate: DateTime = DateTime.fromFormat(
-      newProject.start_date,
-      "D"
-    );
-    const convertedCompletionDate: DateTime = DateTime.fromFormat(
-      newProject.completion_date,
-      "D"
-    );
+      const convertedStartDate = moment(newProject.start_date, "D");
+      const convertedCompletionDate = moment(newProject.completion_date, "D");
 
     if (newProject instanceof ClubProject) {
       try {
@@ -240,10 +235,10 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate,
+          completionDate: convertedCompletionDate as unknown as DateTime,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
-          startDate: convertedStartDate,
+          startDate: convertedStartDate as unknown as DateTime,
           createdBy: newProject.created_by,
           region: newProject.region,
           rotaryYear: newProject.rotary_year,
@@ -284,8 +279,8 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate,
-          startDate: convertedStartDate,
+          completionDate: convertedCompletionDate as unknown as DateTime,
+          startDate: convertedStartDate as unknown as DateTime,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
           createdBy: newProject.created_by,
@@ -335,8 +330,8 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate,
-          startDate: convertedStartDate,
+          completionDate: convertedCompletionDate  as unknown as DateTime,
+          startDate: convertedStartDate  as unknown as DateTime,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
           createdBy: newProject.created_by,
@@ -456,15 +451,8 @@ export default class ProjectsController {
       oldProjectImformation.project_id
     );
 
-    const convertedStartDate: DateTime = DateTime.fromFormat(
-      oldProjectImformation.start_date,
-      "D"
-    );
-
-    const convertedCompletionDate: DateTime = DateTime.fromFormat(
-      oldProjectImformation.completion_date,
-      "D"
-    );
+    const convertedStartDate = moment(oldProjectImformation.start_date, "D");
+    const convertedCompletionDate = moment(oldProjectImformation.completion_date, "D");
 
     if (oldProjectImformation instanceof ClubProject) {
       const updatedProject = await projectToBeUpdateds
@@ -473,10 +461,10 @@ export default class ProjectsController {
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate,
+          completionDate: convertedCompletionDate as unknown as DateTime,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
-          startDate: convertedStartDate,
+          startDate: convertedStartDate as unknown as DateTime,
           createdBy: oldProjectImformation.created_by,
           region: oldProjectImformation.region,
           rotaryYear: oldProjectImformation.rotary_year,
@@ -504,8 +492,8 @@ export default class ProjectsController {
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate,
-          startDate: convertedStartDate,
+          completionDate: convertedCompletionDate as unknown as DateTime,
+          startDate: convertedStartDate as unknown as DateTime,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
           createdBy: oldProjectImformation.created_by,
@@ -542,8 +530,8 @@ export default class ProjectsController {
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate,
-          startDate: convertedStartDate,
+          completionDate: convertedCompletionDate as unknown as DateTime,
+          startDate: convertedStartDate as unknown as DateTime,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
           createdBy: oldProjectImformation.created_by,
