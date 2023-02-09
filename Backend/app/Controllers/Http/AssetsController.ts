@@ -2,6 +2,9 @@
 import Assets from 'App/Models/Assets'
 
 export default class AssetsController {
+    /**
+     * @param  {HttpContextContract} {response}
+     */
     public async index({ response }: HttpContextContract) {
         const assets = await Assets.findOrFail(1)
         return response.json(assets)
