@@ -14,11 +14,7 @@ module.exports = {
       },
     },
   },
-<<<<<<< HEAD
   content: {
-=======
-  purge: {
->>>>>>> 404f9f39757a5a23d4d1f70904c49e775ba698fa
     enabled: process.env.NODE_ENV === "production",
     content: ["./public/**/*.html", "./src/**/*.vue"],
     options: {
