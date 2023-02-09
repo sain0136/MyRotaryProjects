@@ -44,7 +44,7 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: ['localhost:5173','myrotaryprojects.org','myrotaryprojects.com'],
+  origin: ['http://localhost:5173','https://myrotaryprojects.org','https://myrotaryprojects.com'],
 
   /*
   |--------------------------------------------------------------------------
@@ -75,7 +75,7 @@ const corsConfig: CorsConfig = {
   | Function          - Receives the current header and should return one of the above values.
   |
   */
-  headers: true,
+  headers:  ['Content-Type', 'Authorization'],
 
   /*
   |--------------------------------------------------------------------------
@@ -104,6 +104,7 @@ const corsConfig: CorsConfig = {
     'expires',
     'last-modified',
     'pragma',
+    'Content-Range'
   ],
 
   /*
@@ -128,7 +129,7 @@ const corsConfig: CorsConfig = {
   | https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
   |
   */
-  maxAge: 90,
+  maxAge: 3360,
 }
 
 export default corsConfig
