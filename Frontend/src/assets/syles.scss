@@ -1,0 +1,16 @@
+
+// Variables
+$primaryColor: #ffb607;
+$nearBlack:#212427;
+$nearWhite:#F5F5FA;
+$primaryFontfamily: Montserrat;
+$mobileScreen: 768px;
+$tabletMinScreen: 769px;
+$tabletMaxScreen: 1023px;
+$desktopScreen: 1024px;
+
+// template media Queries
+@media screen and (max-width: $tabletMaxScreen) and (min-width: $tabletMinScreen) {
+}
+@media screen and (max-width: $tabletMaxScreen) {
+}
