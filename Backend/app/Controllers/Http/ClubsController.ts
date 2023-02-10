@@ -1,9 +1,11 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import Clubs from "../../Models/Clubs";
-import Users from "App/Models/Users";
-import IClub from "Contracts/Shared/SharedInterfaces/ClubInterface";
+import Clubs from "App/Models/Clubs";
 import Projects from "App/Models/Projects";
-import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
+import Users from "App/Models/Users";
+import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
+
+import { IClub } from "Contracts/util/sharedUtility/interfaces/ClubInterface";
+
 
 export default class ClubsController {
   /**

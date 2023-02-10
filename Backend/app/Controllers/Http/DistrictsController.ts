@@ -1,12 +1,12 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
 import Clubs from "App/Models/Clubs";
-import Club from "App/Models/Clubs";
-import District from "App/Models/Districts";
-import User from "App/Models/Users";
-import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
-import IDistrict from "Contracts/Shared/SharedInterfaces/DistrictInterface";
-import { DistrictDetailsInterface } from "Contracts/Shared/SharedInterfaces/DistrictInterface";
+import Districts from "App/Models/Districts";
+import Users from "App/Models/Users";
+import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
+
+import IDistrict, { DistrictDetails } from "Contracts/util/sharedUtility/interfaces/DistrictInterface";
+
 
 export default class DistrictsController {
   /**
@@ -15,7 +15,7 @@ export default class DistrictsController {
    * @returns Promise
    */
   public async index({ response }: HttpContextContract): Promise<void> {
-    const districts: District[] = await District.all();
+    const districts: Districts[] = await Districts.all();
     return response.json(districts);
   }
 
@@ -31,7 +31,7 @@ export default class DistrictsController {
   }: HttpContextContract): Promise<void> {
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
-    const districts: ModelPaginatorContract<District> = await District.query()
+    const districts: ModelPaginatorContract<Districts> = await Districts.query()
       .select("*")
       .paginate(currentPage, limit);
     return response.json(districts);
@@ -50,7 +50,7 @@ export default class DistrictsController {
     const districtID: number = request.input("district_id");
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
-    const allClubsiNDistrict = await Club.query()
+    const allClubsiNDistrict = await Clubs.query()
       .select("*")
       .where({ district_id: districtID })
       .paginate(currentPage, limit);
@@ -70,7 +70,7 @@ export default class DistrictsController {
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
     const districtID: number = request.input("district_id");
-    const allAdmins: ModelPaginatorContract<User> = await User.query()
+    const allAdmins: ModelPaginatorContract<Users> = await Users.query()
       .where({ district_id: districtID })
       .paginate(currentPage, limit);
     for await (const user of allAdmins) {
@@ -93,7 +93,7 @@ export default class DistrictsController {
     response,
   }: HttpContextContract): Promise<void> {
     const district: IDistrict = request.input("district");
-    let extraDetails: DistrictDetailsInterface = {
+    let extraDetails: DistrictDetails = {
       ddfCalculation: district.district_details.ddfCalculation,
       dates: {
         grant_submission_closedate:
@@ -110,7 +110,7 @@ export default class DistrictsController {
       },
     };
 
-    await District.create({
+    const newDistrict =  await Districts.create({
       districtNumber: "D-" + district.district_number,
       districtName: district.district_name,
       districtEmail: district.district_email,
@@ -119,7 +119,7 @@ export default class DistrictsController {
       siteUrl: district.site_url,
       districtDetails: JSON.stringify(extraDetails),
     });
-    return response.json(true);
+    return response.json(newDistrict);
   }
 
   /**
@@ -135,8 +135,8 @@ export default class DistrictsController {
     params,
   }: HttpContextContract): Promise<void> {
     const district: IDistrict = request.input("district");
-    const districtToBeUpdated: District = await District.findOrFail(params.id);
-    let extraDetails: DistrictDetailsInterface = {
+    const districtToBeUpdated: Districts = await Districts.findOrFail(params.id);
+    let extraDetails: DistrictDetails = {
       ddfCalculation: district.district_details.ddfCalculation,
       dates: {
         grant_submission_closedate:
@@ -176,7 +176,7 @@ export default class DistrictsController {
     response,
     params,
   }: HttpContextContract): Promise<void> {
-    const districtToBeDeleted: District = await District.findOrFail(params.id);
+    const districtToBeDeleted: Districts = await Districts.findOrFail(params.id);
     const clubFound: Clubs[] = await districtToBeDeleted
       .related("clubs")
       .query();

@@ -1,9 +1,10 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Database from "@ioc:Adonis/Lucid/Database";
-import Pledges from "App/Models/Pledges";
-import Projects from "App/Models/Projects";
-import { ProjectStatus } from "Contracts/BackendInterfaces/Utility";
-import { Pledge } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
+import Pledges from "../../Models/Pledges";
+import Projects from "../../Models/Projects";
+import { Pledge } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
+import { ProjectStatus } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
+
 
 export default class PledgesController {
   /**

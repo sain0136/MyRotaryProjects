@@ -1,5 +1,5 @@
  import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Assets from 'App/Models/Assets'
+import Assets from '../../Models/Assets'
 
 export default class AssetsController {
     /**

@@ -1,16 +1,14 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Drive from "@ioc:Adonis/Core/Drive";
 import Env from "@ioc:Adonis/Core/Env";
-import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
 import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
-import Projects from "App/Models/Projects";
+import Projects from "../../Models/Projects";
 import { v4 as uuidv4 } from "uuid";
-import {
-  FileType,
-  StorageInformation,
-  Uploads,
-} from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
-import Assets from "App/Models/Assets";
+
+import Assets from "../../Models/Assets";
+import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
+import { FileType } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
+import { Uploads, StorageInformation } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
 
 export default class UploadsController {
   /**

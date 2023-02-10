@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Mail from '@ioc:Adonis/Addons/Mail'
+import CustomReponse from 'Contracts/util/backend/classes/CustomReponse'
 
 export default class MailController {
     /**
@@ -27,9 +28,9 @@ export default class MailController {
                   body
               )
           })
-          return response.json({ message: 'your email was sent' })
+          return response.json(true)
         } catch (error) {
-          return response.json({ message: 'your email failed' + error })
+          return response.json(new CustomReponse('your email failed'))
         }
       }
 }

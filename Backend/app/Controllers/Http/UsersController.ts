@@ -1,7 +1,11 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import Users from "App/Models/Users";
+import Users from "../../Models/Users";
 import Hash from "@ioc:Adonis/Core/Hash";
-import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
+import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
+import IUser from "Contracts/util/sharedUtility/interfaces/UserInterface";
+import Districts from "App/Models/Districts";
+import Clubs from "App/Models/Clubs";
+import Projects from "App/Models/Projects";
 
 export default class UsersController {
   /**
@@ -93,5 +97,122 @@ export default class UsersController {
         .where({ user_id: userById.userId });
     }
     return response.json(userById);
+  }
+
+  public async store({ request, response }: HttpContextContract) {
+    const newUser: IUser = request.input("new_user");
+    await Users.create({
+      firstname: newUser.firstname,
+      lastname: newUser.lastname,
+      address: newUser.address,
+      userCity: newUser.userCity,
+      userPostal: newUser.userPostal,
+      userProvince: newUser.userProvince,
+      userCountry: newUser.userCountry,
+      phone: newUser.phone,
+      email: newUser.email,
+      password: newUser.password,
+      clubId: newUser.clubId,
+      districtId: newUser.districtId,
+      userType: newUser.userType,
+      extraDetails: JSON.stringify(newUser.extra_details),
+    });
+    if (newUser.user_type === "DISTRICT") {
+      const district: Districts = await Districts.findOrFail(
+        newUser.district_id
+      );
+      await newUser.related("districtRole").attach({
+        [district.districtId]: {
+          district_role: newUser.role_type,
+        },
+      });
+    } else {
+      const club: Clubs = await Clubs.findOrFail(newUser.club_id);
+      await newUser.related("clubRole").attach({
+        [club.clubId]: {
+          club_role: newUser.role_type,
+        },
+      });
+    }
+    return response.json(true);
+  }
+  
+  /**
+   * @param  {} {request
+   * @param  {} params
+   * @param  {HttpContextContract} response}
+   */
+  public async update({ request, params, response }: HttpContextContract) {
+    const userId: number = parseInt(params.id);
+    const userToBeUpdated: Users = await Users.findOrFail(userId);
+    const currentUserInfo: IUser = request.input("user");
+    const roleChanged: IUser = request.input("role_change");
+
+    if (roleChanged) {
+      if (currentUserInfo.userType === "DISTRICT") {
+        await currentUserInfo.related("districtRole").detach();
+        const district: Districts = await Districts.findOrFail(
+          currentUserInfo.district_id
+        );
+        await currentUserInfo.related("districtRole").attach({
+          [district.districtId]: {
+            district_role: currentUserInfo.role_type,
+          },
+        });
+      } else {
+        await currentUserInfo.related("clubRole").detach();
+        const club: Clubs = await Clubs.findOrFail(currentUserInfo.club_id);
+        await currentUserInfo.related("clubRole").attach({
+          [club.clubId]: {
+            club_role: currentUserInfo.role_type,
+          },
+        });
+      }
+    }
+   await userToBeUpdated
+      .merge({
+        firstname: currentUserInfo.firstname,
+        lastname: currentUserInfo.lastname,
+        address: currentUserInfo.address,
+        userCity: currentUserInfo.userCity,
+        userPostal: currentUserInfo.userPostal,
+        userProvince: currentUserInfo.userProvince,
+        userCountry: currentUserInfo.userCountry,
+        phone: currentUserInfo.phone,
+        email: currentUserInfo.email,
+        password: currentUserInfo.password,
+        clubId: currentUserInfo.clubId,
+        districtId: currentUserInfo.districtId,
+        userType: currentUserInfo.userType,
+        extraDetails: JSON.stringify(currentUserInfo.extra_details),
+      })
+      .save()
+
+    return response.json(true)
+  }
+
+  /**
+   * @param  {} {params
+   * @param  {HttpContextContract} response}
+   */
+  public async destroy({ params, response }: HttpContextContract) {
+    const userToBeDeleted = await Users.findOrFail(parseInt(params.id))
+    const allProjects = await Projects.all()
+    const found = allProjects.find((ele) => {
+      if (ele.createdBy === parseInt(params.id)) {
+        return true
+      }
+    })
+    if (typeof found === 'undefined') {
+      if (userToBeDeleted.userType === 'DISTRICT') {
+        await userToBeDeleted.related('districtRole').detach()
+        await userToBeDeleted.delete()
+        return response.json(true)
+      } else {
+        await userToBeDeleted.related('clubRole').detach()
+        await userToBeDeleted.delete()
+        return response.json(true)
+      }
+    } else return response.json(false)
   }
 }

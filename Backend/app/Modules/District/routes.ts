@@ -8,6 +8,9 @@ Route.post(
 );
 Route.post("/district/admins", "DistrictsController.districtAdminsPagination");
 
+
+
+// 
 Route.post("/reportSaver/", "DistrictsController.reportSaver");
 Route.post("/reportDeletion/", "DistrictsController.reportDeletion");
 Route.get("/districtAdmins/", "DistrictsController.getDistictAdmins");
