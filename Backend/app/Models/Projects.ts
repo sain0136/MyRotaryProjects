@@ -8,17 +8,17 @@ import {
 } from "@ioc:Adonis/Lucid/Orm";
 import { NonPlurizeNamingStrategy } from "Contracts/NonPlurizeNamingStrategy";
 import Pledge from "./Pledges";
-import { ProjectDetails } from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
 import Pledges from "./Pledges";
+import { ProjectDetails } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
 
 export default class Projects extends BaseModel {
   public static namingStrategy = new NonPlurizeNamingStrategy();
 
   @computed()
-  public pledgesAssociated: Array<Pledge>;
+  public pledgesAssociated: Array<Pledge> | [];
 
   @computed()
-  public projectDetails: ProjectDetails;
+  public projectDetails: ProjectDetails | {};
 
   @column({ isPrimary: true })
   public projectId: number;

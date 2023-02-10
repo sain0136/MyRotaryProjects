@@ -1,27 +1,21 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Database from "@ioc:Adonis/Lucid/Database";
-import Clubs from "App/Models/Clubs";
-import Districts from "App/Models/Districts";
-import Pledges from "App/Models/Pledges";
-import Projects from "App/Models/Projects";
-import Users from "App/Models/Users";
-import { RotaryYear } from "Contracts/BackendInterfaces/RotaryYear";
-import {
-  ProjectCodeGenerator,
-  SearchCriteria,
-} from "Contracts/BackendInterfaces/Utility";
-import ClubProject from "Contracts/Shared/SharedClasses/Classes/ClubProject";
-import DmProject from "Contracts/Shared/SharedClasses/Classes/DmProject";
-import DsgProject from "Contracts/Shared/SharedClasses/Classes/DsgProject";
-import { CustomReponse } from "Contracts/Shared/SharedInterfaces/CustomReponse";
-import {
-  IClubProject,
-  IDmProject,
-  IDsgProject,
-  ProjectDetails,
-} from "Contracts/Shared/SharedInterfaces/ProjectsInterface";
+import Clubs from "../../Models/Clubs";
+import Districts from "../../Models/Districts";
+import Pledges from "../../Models/Pledges";
+import Projects from "../../Models/Projects";
+import Users from "../../Models/Users";
+import RotaryYear from "Contracts/util/backend/classes/RotaryYear";
+
 import { DateTime } from "luxon/src/datetime";
 import moment from "moment";
+import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
+import ProjectCodeGenerator from "Contracts/util/backend/classes/ProjectCodeGenerator";
+import ClubProject from "Contracts/util/sharedUtility/classes/ClubProject";
+import DmProject from "Contracts/util/sharedUtility/classes/DmProject";
+import DsgProject from "Contracts/util/sharedUtility/classes/DsgProject";
+import { ProjectDetails, IDmProject, IDsgProject, IClubProject } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
+import { SearchCriteria } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
 
 export default class ProjectsController {
   /**
@@ -29,10 +23,23 @@ export default class ProjectsController {
    */
   private async pledgesAsscoiated(id: number): Promise<Pledges[]> {
     return await Database.query()
-      .from("pledge")
+      .from("pledges")
       .select("*")
       .where({ project_id: id });
   }
+
+  /**
+   * @param  {HttpContextContract} {response}
+   */
+  public async getRotaryYears({ response }: HttpContextContract) {
+    return response.json({
+      currentRotaryYear: RotaryYear.getCurrentYear(),
+      allRotaryYears: RotaryYear.getYears(
+        parseInt(RotaryYear.getCurrentYear())
+      ),
+    });
+  }
+
   /**
    * @desc Retrieves project details based on a given id including information about the creator,
    * district and club associated with the project.
@@ -64,7 +71,7 @@ export default class ProjectsController {
    * @desc Add computed pledges and project details to a project object.
    * @param  {Projects} updatedProject
    */
-  public async addComputed(updatedProject: Projects) {
+  private async addComputed(updatedProject: Projects) {
     updatedProject.pledgesAssociated = await this.pledgesAsscoiated(
       updatedProject.projectId
     );
@@ -72,6 +79,20 @@ export default class ProjectsController {
       updatedProject.projectId
     );
     return updatedProject;
+  }
+
+  /**
+   * @param  {HttpContextContract} {response}
+   */
+  public async index({ response }: HttpContextContract) {
+    const allProjects = await Projects.all();
+    for await (const project of allProjects) {
+      project.pledgesAssociated = await this.pledgesAsscoiated(
+        project.projectId
+      );
+      project.projectDetails = await this.getProjectDetails(project.projectId);
+    }
+    return response.json(allProjects);
   }
 
   /**
@@ -119,7 +140,7 @@ export default class ProjectsController {
           );
         }
         if (searchCriteria.search_text) {
-           await db
+          await db
             .from("projects")
             .where(
               "project_description",
@@ -131,26 +152,6 @@ export default class ProjectsController {
       })
       .orderBy("project_id", "desc")
       .paginate(searchCriteria.current_page, searchCriteria.limit);
-  }
-
-  /**
-   * @param  {HttpContextContract} {response}
-   */
-  public async index({ response }: HttpContextContract) {
-    const allProjects = await Projects.all();
-    return response.json(allProjects);
-  }
-
-  /**
-   * @param  {HttpContextContract} {response}
-   */
-  public async getRotaryYears({ response }: HttpContextContract) {
-    return response.json({
-      currentRotaryYear: RotaryYear.getCurrentYear(),
-      allRotaryYears: RotaryYear.getYears(
-        parseInt(RotaryYear.getCurrentYear())
-      ),
-    });
   }
 
   /**
@@ -376,8 +377,14 @@ export default class ProjectsController {
    * @param  {HttpContextContract} response}
    */
   public async show({ params, response }: HttpContextContract) {
-    const ProjectById: Projects = await Projects.findOrFail(params.id);
-    return response.json(ProjectById);
+    const projectById: Projects = await Projects.findOrFail(params.id);
+    projectById.pledgesAssociated = await this.pledgesAsscoiated(
+      projectById.projectId
+    );
+    projectById.projectDetails = await this.getProjectDetails(
+      projectById.projectId
+    );
+    return response.json(projectById);
   }
 
   /**

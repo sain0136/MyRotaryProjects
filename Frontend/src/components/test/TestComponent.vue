@@ -114,6 +114,7 @@ import { Modal } from "flowbite";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { required, email, min } from "@vee-validate/rules";
 import { ref } from "vue";
+import ValidationApi from "@/services/Validation";
 
 export default defineComponent({
   setup() {
@@ -168,6 +169,8 @@ export default defineComponent({
   },
   watch: {},
   async mounted() {
+    let pass = ""
+    let email = ""
     initModals();
     const $buttonElement = document.querySelector("#button");
     const $modalElement = document.querySelector("#modal");
