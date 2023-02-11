@@ -1,4 +1,5 @@
-import type { IApiError } from "@/utils/frontend/interfaces/Frontend";
+import Utilities from "@/utils/frontend/classes/Utilities";
+import { MyError, type IApiError, type IApiException } from "@/utils/frontend/interfaces/Frontend";
 import type {
   IClubProject,
   IDmProject,
@@ -30,8 +31,14 @@ export default class PledgesApi {
         current_page: current_page,
         limit: limit,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as
       | IApiError
       | IDmProject
       | IDsgProject
@@ -51,8 +58,14 @@ export default class PledgesApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ pledge: newPledge }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as
       | IApiError
       | IDmProject
       | IDsgProject
@@ -74,8 +87,14 @@ export default class PledgesApi {
       body: JSON.stringify({
         user_id: id,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | Array<Pledge>;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | Array<Pledge>;
   }
 
   /**
@@ -89,7 +108,13 @@ export default class PledgesApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ pledge_id: id }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | boolean;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | boolean;
   }
 }

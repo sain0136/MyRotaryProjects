@@ -25,6 +25,6 @@ export default class MailerApi {
         }),
       }
     );
-    return (await apiReponse.json()) as IApiError | boolean;
+    return apiReponse as IApiError | boolean;
   }
 }

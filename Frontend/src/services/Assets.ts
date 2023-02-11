@@ -1,6 +1,9 @@
-import type {
-  IApiError,
-  MainAssets,
+import Utilities from "@/utils/frontend/classes/Utilities";
+import {
+  MyError,
+  type IApiError,
+  type IApiException,
+  type MainAssets,
 } from "@/utils/frontend/interfaces/Frontend";
 import.meta.env.VITE_API_URL;
 
@@ -14,8 +17,14 @@ class AssetsApi {
       headers: {
         "Content-Type": "application/json",
       },
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | MainAssets;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | MainAssets;
   }
 }
 

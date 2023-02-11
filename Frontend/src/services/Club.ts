@@ -1,4 +1,5 @@
-import type { IApiError } from "@/utils/frontend/interfaces/Frontend";
+import Utilities from "@/utils/frontend/classes/Utilities";
+import { MyError, type IApiError, type IApiException } from "@/utils/frontend/interfaces/Frontend";
 import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
 
@@ -9,8 +10,14 @@ export default class Clubs {
   public static async getAllClubs(): Promise<IApiError | IClub[]> {
     const apiReponse = await fetch(import.meta.env.VITE_API_URL + "club", {
       method: "GET",
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | Array<IClub>;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | Array<IClub>;
   }
 
   /**
@@ -23,8 +30,14 @@ export default class Clubs {
       {
         method: "GET",
       }
-    );
-    return (await apiReponse.json()) as IApiError | IClub;
+    ).then(async (response) => {
+      return await response.json();
+    });
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    };
+    return apiReponse as IApiError | IClub;
   }
 
   /**
@@ -50,8 +63,14 @@ export default class Clubs {
           limit: limit,
         }),
       }
-    );
-    return (await apiReponse.json()) as IApiError | Array<IUser>;
+    ).then(async (response) => {
+      return await response.json();
+    });
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    };
+    return apiReponse as IApiError | Array<IUser>;
   }
 
   /**
@@ -66,8 +85,14 @@ export default class Clubs {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(creationObject),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | boolean;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | boolean;
   }
 
   /**
@@ -88,8 +113,14 @@ export default class Clubs {
         },
         body: JSON.stringify(data),
       }
-    );
-    return (await apiReponse.json()) as IApiError | boolean;
+    ).then(async (response) => {
+      return await response.json();
+    });
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    };
+    return apiReponse as IApiError | boolean;
   }
 
   /**
@@ -102,7 +133,13 @@ export default class Clubs {
       {
         method: "DELETE",
       }
-    );
-    return (await apiReponse.json()) as IApiError | boolean;
+    ).then(async (response) => {
+      return await response.json();
+    });
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    };
+    return apiReponse as IApiError | boolean;
   }
 }

@@ -1,13 +1,16 @@
 <template>
-  <div>
-    <h1>Login</h1>
+  <Main class="Web_Portal_Login bg-purple-400 ">
+  <div class="  bg-purple-400">
+    
   </div>
+  </Main>
+
 </template>
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
 export default defineComponent({
-  name: 'Login',
+  name: 'LoginApp',
   components: {},
   props: {},
   data() {

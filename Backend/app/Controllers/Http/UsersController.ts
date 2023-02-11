@@ -6,6 +6,7 @@ import IUser from "Contracts/util/sharedUtility/interfaces/UserInterface";
 import Districts from "App/Models/Districts";
 import Clubs from "App/Models/Clubs";
 import Projects from "App/Models/Projects";
+import { DateTime } from "luxon";
 
 export default class UsersController {
   /**
@@ -34,19 +35,25 @@ export default class UsersController {
    * @param  {} {request
    * @param  {HttpContextContract} response}
    */
-  public async passwordVerfication({ request, response }: HttpContextContract) {
+  public async passwordVerfication({
+    request,
+    response,
+    session,
+  }: HttpContextContract) {
+    // session.clear();
+    // return response.json((session as any).store);
     const password: string = request.input("password");
     const email: string = request.input("email");
     const userByEmail: Users[] = await Users.query()
       .select()
       .where({ email: email });
     if (userByEmail.length < 1) {
-      return response.json(new CustomReponse("Email not found!"));
+      return response.json(new CustomReponse("Email not found"));
     }
     let user: Users = userByEmail[0];
     if (await Hash.verify(user.password, password)) {
     } else {
-      return response.json(new CustomReponse("Password is wrong!"));
+      return response.json(new CustomReponse("Password is wrong"));
     }
     if (user.userType === "CLUB") {
       user.role = user.role = await user
@@ -59,8 +66,44 @@ export default class UsersController {
         .pivotQuery()
         .where({ user_id: user.userId });
     }
-    return response.json(true);
+    let district = user.districtId
+      ? await Districts.findOrFail(user.districtId)
+      : undefined;
+    if (user.userType === "CLUB") {
+      user.role = user.role = await user
+        .related("clubRole")
+        .pivotQuery()
+        .where({ user_id: user.userId });
+    } else {
+      user.role = await user
+        .related("districtRole")
+        .pivotQuery()
+        .where({ user_id: user.userId });
+    }
+    let club: Clubs = await Clubs.findOrFail(user.clubId);
+    if (!session.get("userIsLoggedIn")) {
+      session.put("userIsLoggedIn", true);
+      session.put("lastApiCallTimeStamp", DateTime.now().toMillis());
+    }
+    return response.json({
+      user: user,
+      verified: true,
+      diistrict: district,
+      club: club,
+      session: session.get("lastApiCallTimeStamp"),
+    });
   }
+
+  // Create a function to logout user by clearing session
+  public async logout({ session, response }: HttpContextContract) {
+    session.clear();
+    if (Object.keys((session as any).store).length > 0) {
+      return response.json(new CustomReponse("You have been logged out"));
+    } else {
+      return response.json(true);
+    }
+  }
+
   /**
    * @desc Make sure users email for signup is unique
    * @param  {} {request
@@ -136,7 +179,7 @@ export default class UsersController {
     }
     return response.json(true);
   }
-  
+
   /**
    * @param  {} {request
    * @param  {} params
@@ -169,7 +212,7 @@ export default class UsersController {
         });
       }
     }
-   await userToBeUpdated
+    await userToBeUpdated
       .merge({
         firstname: currentUserInfo.firstname,
         lastname: currentUserInfo.lastname,
@@ -186,9 +229,9 @@ export default class UsersController {
         userType: currentUserInfo.userType,
         extraDetails: JSON.stringify(currentUserInfo.extra_details),
       })
-      .save()
+      .save();
 
-    return response.json(true)
+    return response.json(true);
   }
 
   /**
@@ -196,23 +239,23 @@ export default class UsersController {
    * @param  {HttpContextContract} response}
    */
   public async destroy({ params, response }: HttpContextContract) {
-    const userToBeDeleted = await Users.findOrFail(parseInt(params.id))
-    const allProjects = await Projects.all()
+    const userToBeDeleted = await Users.findOrFail(parseInt(params.id));
+    const allProjects = await Projects.all();
     const found = allProjects.find((ele) => {
       if (ele.createdBy === parseInt(params.id)) {
-        return true
+        return true;
       }
-    })
-    if (typeof found === 'undefined') {
-      if (userToBeDeleted.userType === 'DISTRICT') {
-        await userToBeDeleted.related('districtRole').detach()
-        await userToBeDeleted.delete()
-        return response.json(true)
+    });
+    if (typeof found === "undefined") {
+      if (userToBeDeleted.userType === "DISTRICT") {
+        await userToBeDeleted.related("districtRole").detach();
+        await userToBeDeleted.delete();
+        return response.json(true);
       } else {
-        await userToBeDeleted.related('clubRole').detach()
-        await userToBeDeleted.delete()
-        return response.json(true)
+        await userToBeDeleted.related("clubRole").detach();
+        await userToBeDeleted.delete();
+        return response.json(true);
       }
-    } else return response.json(false)
+    } else return response.json(false);
   }
 }
