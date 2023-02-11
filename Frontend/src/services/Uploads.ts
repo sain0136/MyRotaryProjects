@@ -1,4 +1,5 @@
-import type { IApiError } from "@/utils/frontend/interfaces/Frontend";
+import Utilities from "@/utils/frontend/classes/Utilities";
+import { MyError, type IApiError, type IApiException } from "@/utils/frontend/interfaces/Frontend";
 import type {
   StorageInformation,
   Uploads,
@@ -47,7 +48,11 @@ export default class UploadsApi {
         "Content-Type": "multipart/form-data",
         "Access-Control-Request-Method": "POST",
       },
-    });
+    })
+    if (Utilities.isAnException(apiReponse.data)) {
+      const exception = apiReponse.data as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
     return apiReponse.data as IApiError | boolean;
   }
 
@@ -69,7 +74,13 @@ export default class UploadsApi {
         project_id: project_id,
         upload_information: upload_information,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | Uploads;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | Uploads;
   }
 }

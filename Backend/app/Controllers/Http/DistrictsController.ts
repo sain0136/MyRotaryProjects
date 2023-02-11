@@ -19,6 +19,12 @@ export default class DistrictsController {
     return response.json(districts);
   }
 
+  // Show a single district
+  public async show({ params, response }: HttpContextContract): Promise<void> {
+    const district: Districts = await Districts.findOrFail(params.id);
+    return response.json(district);
+  }
+
   /**
    * @desc Returns all districts paginated
    * @param  {} {request

@@ -1,8 +1,19 @@
 import type {IResizeImageOptions} from '../../frontend/interfaces/Frontend'
 
-class UtilityMethods {
-    constructor() {}
+export default class Utilities {
+    
     /**
+     * @description This function is used to check if an error is an exception
+     * @param  {any} error
+     * @returns boolean
+     */
+    public static isAnException(error: object): boolean {
+      if ('stack' in error) return true
+      else return false  
+    }
+    
+    /**
+     * @description This function is used to resize an image
      * @param  {IResizeImageOptions} settings
      * @returns Promise
      */

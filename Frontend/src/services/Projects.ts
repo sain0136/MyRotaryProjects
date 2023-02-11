@@ -1,7 +1,10 @@
-import type {
-  IApiError,
-  ProjectPagination,
-  RotaryYearObject,
+import Utilities from "@/utils/frontend/classes/Utilities";
+import {
+MyError,
+  type IApiError,
+  type ProjectPagination,
+  type RotaryYearObject,
+type IApiException,
 } from "@/utils/frontend/interfaces/Frontend";
 import type {
   IClubProject,
@@ -22,8 +25,14 @@ export default class ProjectsApi {
       headers: {
         "Content-Type": "application/json",
       },
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as RotaryYearObject | IApiError;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as RotaryYearObject | IApiError;
   }
 
   /**
@@ -51,8 +60,14 @@ export default class ProjectsApi {
         current_page: current_page,
         limit: limit,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as ProjectPagination | IApiError;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as ProjectPagination | IApiError;
   }
 
   /**
@@ -80,8 +95,14 @@ export default class ProjectsApi {
         current_page: current_page,
         limit: limit,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as ProjectPagination | IApiError;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as ProjectPagination | IApiError;
   }
 
   /**
@@ -98,8 +119,14 @@ export default class ProjectsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ project: newProject }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | boolean;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | boolean;
   }
 
   /**
@@ -116,8 +143,14 @@ export default class ProjectsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ project: updatedProject }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | boolean;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | boolean;
   }
 
   /**
@@ -130,8 +163,14 @@ export default class ProjectsApi {
   ): Promise<IApiError | IDmProject | IDsgProject | IClubProject> {
     const apiReponse = await fetch(API_ROUTE + id, {
       method: "GET",
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as
       | IApiError
       | IDmProject
       | IDsgProject
@@ -163,8 +202,14 @@ export default class ProjectsApi {
         current_page: current_page,
         limit: limit,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as ProjectPagination | IApiError;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as ProjectPagination | IApiError;
   }
 
   /**
@@ -192,8 +237,14 @@ export default class ProjectsApi {
         limit: limit,
         conditional: conditional,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as ProjectPagination | IApiError;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as ProjectPagination | IApiError;
   }
 
   /**
@@ -215,8 +266,14 @@ export default class ProjectsApi {
         project_id: project_id,
         project_status: project_status,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | boolean;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | boolean;
   }
 
   /**
@@ -238,7 +295,13 @@ export default class ProjectsApi {
         project_id: project_id,
         override: override,
       }),
+    }).then(async (response) => {
+      return await response.json();
     });
-    return (await apiReponse.json()) as IApiError | boolean;
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | boolean;
   }
 }

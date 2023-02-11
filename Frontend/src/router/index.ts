@@ -3,7 +3,7 @@ import Test from "../components/test/TestComponent.vue";
 import fourzerofour from "../components/common/fourzerofour.vue";
 import SiteAdminRoute from "../modules/administration/routes/routes";
 import HomeRoute from "../modules/home/routes/routes";
-import Login from "../modules/administration/views/Login.vue";
+import LoginApp from "../modules/administration/views/LoginApp.vue";
 const routes = [
   {
     path: "/Test",
@@ -12,8 +12,8 @@ const routes = [
   },
   {
     path: "/adminportal",
-    component: Login,
-    mame: "Login",
+    component: LoginApp,
+    mame: "LoginApp",
   },
   { path: "/:pathMatch(.*)*", component: fourzerofour, name: "fourzzerofour" },
   HomeRoute,
