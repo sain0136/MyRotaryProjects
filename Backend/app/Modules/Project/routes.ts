@@ -1,7 +1,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.resource('/project/', 'ProjectsController')
-Route.get('/year', 'ProjectsController.getRotaryYears')
+Route.get('/project/year', 'ProjectsController.getRotaryYears')
 Route.post('/project/paginate', 'ProjectsController.projectsPagination')
 Route.post('/project/filter', 'ProjectsController.paginationFilter')
 Route.post('/project/status', 'ProjectsController.getProjectsByStatus')

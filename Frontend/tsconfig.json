@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "module": "ES6",
+    "allowJs": true
+
   },
   "files": [],
   "references": [
@@ -13,5 +15,5 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
 }

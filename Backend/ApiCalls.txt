@@ -70,3 +70,11 @@
 	"email":"jssr26@gmail.com",
 	"password":"123456"
 }
+
+#http://127.0.0.1:3333/project/paginate POST
+{ 
+   "id_type": "district", 
+"id": 1, 
+"current_page": 1,
+ "limit": 10
+ }
