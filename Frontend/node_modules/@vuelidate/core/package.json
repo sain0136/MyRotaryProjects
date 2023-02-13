@@ -1,0 +1,62 @@
+{
+  "name": "@vuelidate/core",
+  "description": "Simple, lightweight model-based validation for Vue.js",
+  "version": "2.0.0",
+  "main": "dist/index.js",
+  "types": "index.d.ts",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.iife.min.js",
+  "jsdelivr": "dist/index.iife.min.js",
+  "repository": {
+    "url": "https://github.com/vuelidate/vuelidate",
+    "type": "git",
+    "directory": "packages/vuelidate"
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    },
+    "./*": "./*"
+  },
+  "scripts": {
+    "build": "bili",
+    "test:unit": "jest",
+    "lint": "eslint src test",
+    "dev": "yarn build --watch"
+  },
+  "dependencies": {
+    "vue-demi": "^0.13.11"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.0.0-rc.1",
+    "vue": "^2.0.0 || >=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@vue/compiler-sfc": "^3.2.2",
+    "bili": "^5.0.5",
+    "core-js": "^3.16.1",
+    "eslint-plugin-import": "^2.24.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "flush-promises": "^1.0.2",
+    "jest": "^27.0.6",
+    "vue": "^3.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "cf8e8e7b12c3b98dba8f4df9d6a80f0082e6d1b6"
+}
