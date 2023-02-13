@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "ES6",
+    "module": "esnext",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
