@@ -16,6 +16,7 @@ export default class ValidationApi {
     password: string,
     email: string
   ): Promise<IApiError | UserValidationApiResponse> {
+    ;
     const apiReponse = await fetch(
       import.meta.env.VITE_API_URL + "user/verify",
       {
@@ -28,6 +29,7 @@ export default class ValidationApi {
     ).then(async (response) => {
       return await response.json();
     });
+    
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
@@ -41,7 +43,7 @@ export default class ValidationApi {
     const apiReponse = await fetch(
       import.meta.env.VITE_API_URL + "user/logout",
       {
-        method: "GET",
+        method: "POST",
       }
     ).then(async (response) => {
       return await response.json();

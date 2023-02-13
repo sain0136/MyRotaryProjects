@@ -6,7 +6,19 @@ import type {
   IDsgProject,
 } from "@/utils/shared/interfaces/ProjectsInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
+ export const FORM_MODE_PROP ={
+  EDIT:"EDIT",
+  CREATE:"CREATE",
+  VIEW:"VIEW",
+ } 
 
+ export const TAILWIND_COMMON_CLASSES = {
+  H1:"text-2xl font-bold text-primary-black",
+  PARAGRAPHS:" text-primary-black text-lg",
+  DIVROW:"flex flex-row justify-center items-center",
+  DIVCOL:"flex flex-col justify-center items-center",
+  LABEL:"text-primary-black base-text font-bold", 
+ }
 export interface IResizeImageOptions {
   maxSize: number;
   file: File;
@@ -55,9 +67,8 @@ export interface MainAssets {
     };
   };
 }
-
-export interface ProjectPagination {
-  meta: {
+interface meta{
+  
     total: number;
     per_page: number;
     current_page: number;
@@ -67,7 +78,24 @@ export interface ProjectPagination {
     last_page_url: string;
     next_page_url: string;
     previous_page_url: string;
-  };
+  
+}
+export interface DistrictPagination {
+  meta: meta;
+  data: Array<IDistrict>;
+}
+
+export interface ClubPagination {
+  meta: meta;
+  data: Array<IClub>;
+}
+export interface UserPagination {
+  meta: meta;
+  data: Array<IUser>;
+}
+
+export interface ProjectPagination {
+  meta: meta;
   data: Array<IDsgProject | IDmProject | IClubProject>;
 }
 

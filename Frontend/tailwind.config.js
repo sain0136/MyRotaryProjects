@@ -2,10 +2,24 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}","./node_modules/flowbite/**/*.js"
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/flowbite/**/*.js",
   ],
   theme: {
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            color: "#212427",
+            a: {
+              color: "#212427",
+              "&:hover": {
+                color: "#ffb607",
+              },
+            },
+          },
+        },
+      },
       colors: {
         "primary-color": "#ffb607",
         "primary-black": "#212427",
@@ -15,15 +29,15 @@ module.exports = {
       },
       fontFamily: {
         baseSans: [
-          'Space Grotesk',
-          '-apple-system',
-          'BlinkMacSystemFont',
+          "Space Grotesk",
+          "-apple-system",
+          "BlinkMacSystemFont",
           '"Segoe UI"',
-          'Roboto',
+          "Roboto",
           '"Helvetica Neue"',
-          'Arial',
+          "Arial",
           '"Noto Sans"',
-          'sans-serif',
+          "sans-serif",
           '"Apple Color Emoji"',
           '"Segoe UI Emoji"',
           '"Segoe UI Symbol"',
@@ -32,7 +46,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('flowbite/plugin')
-]
-}
+  plugins: [require("flowbite/plugin"), require("flowbite-typography")],
+};

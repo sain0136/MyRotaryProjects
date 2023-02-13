@@ -1,17 +1,19 @@
 <template>
-  <Main class="Web_Portal_Login bg-purple-400 ">
-  <div class="  bg-purple-400">
-    
-  </div>
+  <Main class="Web_Portal_Login h-screen bg-purple-400">
+    <div class="flex h-screen w-screen items-center justify-center">
+      <AdminloginForm />
+    </div>
   </Main>
-
 </template>
 
-<script lang='ts'>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent } from "vue";
+import AdminloginForm from "../components/AdminloginForm.vue";
 export default defineComponent({
-  name: 'LoginApp',
-  components: {},
+  name: "LoginApp",
+  components: {
+    AdminloginForm,
+  },
   props: {},
   data() {
     return {};
@@ -23,5 +25,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

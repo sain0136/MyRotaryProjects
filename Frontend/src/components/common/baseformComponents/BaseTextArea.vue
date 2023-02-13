@@ -1,13 +1,14 @@
 <template>
-  <div>
+  <div class=" my-4">
     <label
       :for="label"
-      class="mb-2 block text-sm font-medium text-primary-color dark:text-white"
+      class="mb-2 block text-sm font-medium text-primary-black dark:text-white"
       >{{ label }}</label
     >
     <textarea
       :value="modelValue"
-      cols="10"
+      rows="5"
+      cols="15"
       id="input_text"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)

@@ -1,5 +1,9 @@
 import Utilities from "@/utils/frontend/classes/Utilities";
-import { MyError, type IApiError, type IApiException } from "@/utils/frontend/interfaces/Frontend";
+import {
+  MyError,
+  type IApiError,
+  type IApiException,
+} from "@/utils/frontend/interfaces/Frontend";
 import type {
   StorageInformation,
   Uploads,
@@ -19,7 +23,7 @@ export default class UploadsApi {
     file_report?: Array<File>;
     image_report?: Array<File>;
     image_assets?: File;
-  }): Promise<boolean | IApiError> {
+  }): Promise<boolean | IApiError | undefined> {
     let fd = new FormData();
 
     if (uploadData.image_cover) {
@@ -41,19 +45,29 @@ export default class UploadsApi {
       }
     }
     if (uploadData.image_assets) {
-      fd.append("file_evidence", uploadData.image_assets);
+      fd.append("image_assets", uploadData.image_assets);
     }
-    const apiReponse = await Axios.post(API_ROUTE, fd, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Access-Control-Request-Method": "POST",
-      },
-    })
-    if (Utilities.isAnException(apiReponse.data)) {
-      const exception = apiReponse.data as IApiException;
-      throw new MyError(exception.message, exception.stack, exception.code);
+    try {
+      const apiReponse = await Axios.post(API_ROUTE, fd, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Request-Method": "POST",
+        },
+      });
+      if (typeof apiReponse.data === "boolean") {
+        if (apiReponse.data) {
+          return true
+        }
+        return apiReponse.data;
+      }
+      if (Utilities.isAnException(apiReponse.data)) {
+        const exception = apiReponse.data as IApiException;
+        throw new MyError(exception.message, exception.stack, exception.code);
+      }
+      return apiReponse.data as IApiError | boolean;
+    } catch (error) {
+      throw error;
     }
-    return apiReponse.data as IApiError | boolean;
   }
 
   /**

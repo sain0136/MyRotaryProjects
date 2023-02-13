@@ -1,5 +1,5 @@
 import Utilities from "@/utils/frontend/classes/Utilities";
-import { MyError, type IApiError, type IApiException } from "@/utils/frontend/interfaces/Frontend";
+import { MyError, type IApiError, type IApiException, type ProjectPagination, type DistrictPagination, type UserPagination, type ClubPagination } from "@/utils/frontend/interfaces/Frontend";
 import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
@@ -31,7 +31,7 @@ export default class DistrictsApi {
   public static async paginationAllDistricts(
     current_page: number,
     limit: number
-  ): Promise<IApiError | IDistrict[]> {
+  ): Promise<IApiError | DistrictPagination> {
     const apiReponse = await fetch(API_ROUTE + "pagination", {
       method: "POST",
       headers: {
@@ -45,7 +45,7 @@ export default class DistrictsApi {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as IApiError | Array<IDistrict>;
+    return apiReponse as IApiError | DistrictPagination
   }
 
   /**
@@ -58,7 +58,7 @@ export default class DistrictsApi {
     district_id: number,
     current_page: number,
     limit: number
-  ): Promise<IApiError | IClub[]> {
+  ): Promise<IApiError | ClubPagination> {
     const apiReponse = await fetch(API_ROUTE + "clubs/", {
       method: "POST",
       headers: {
@@ -76,7 +76,7 @@ export default class DistrictsApi {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as IApiError | Array<IClub>;
+    return apiReponse as IApiError | ClubPagination;
   }
 
   // write a function to get a single district by id send as a get with id in url 
@@ -105,7 +105,7 @@ export default class DistrictsApi {
     district_id: number,
     current_page: number,
     limit: number
-  ): Promise<IApiError | IUser[]> {
+  ): Promise<IApiError | UserPagination> {
     const apiReponse = await fetch(API_ROUTE + "admins", {
       method: "POST",
       headers: {
@@ -123,7 +123,7 @@ export default class DistrictsApi {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as IApiError | Array<IUser>;
+    return apiReponse as IApiError | UserPagination;
   }
 
   /**
