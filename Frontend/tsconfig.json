@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "module": "ES6",
-    "allowJs": true,
-    "types": [
-      "pinia-plugin-persist"
-    ]
-
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/modules/*": ["src/modules/*"],
+      "@/components/*": ["src/components/*"]
+    }
   },
+  
   "files": [],
   "references": [
     {
