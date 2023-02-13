@@ -101,7 +101,7 @@ export default defineComponent({
       ErrorMessages: ErrorMessages,
       validateName: (value: string) => {
         if (value.length > 2) {
-          debugger;
+          ;
           return "yo";
         }
         if (!value) {

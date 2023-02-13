@@ -29,7 +29,7 @@
           <p
             class="text-center text-base leading-relaxed text-gray-900 dark:text-gray-400"
           >
-            Stack Trace: {{ StackTrace }}
+            Stack Trace: {{ stackTrace }}
           </p>
           <p
             class="text-center text-base leading-relaxed text-primary-error font-semibold dark:text-gray-400"
@@ -65,7 +65,7 @@ export default defineComponent({
       type: String,
       default: "Something went wrong",
     },
-    StackTrace: {
+    stackTrace: {
       type: String,
       default: "No stack trace available",
     },

@@ -8,7 +8,12 @@ import { v4 as uuidv4 } from "uuid";
 import Assets from "../../Models/Assets";
 import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
 import { FileType } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
-import { Uploads, StorageInformation } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
+import {
+  Uploads,
+  StorageInformation,
+} from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
+import Districts from "App/Models/Districts";
+import IDistrict from "Contracts/util/sharedUtility/interfaces/DistrictInterface";
 
 export default class UploadsController {
   /**
@@ -58,6 +63,10 @@ export default class UploadsController {
    * @param  {HttpContextContract} response}
    */
   public async handleFileUpload({ request, response }: HttpContextContract) {
+    const districtReportFileType: {
+      fileType: string;
+      districtId: number;
+    } = request.input("district_report_file_type");
     const uploadsArrayCover = request.files("image_cover", {
       size: "10mb",
       extnames: ["jpg", "png", "gif"],
@@ -74,19 +83,29 @@ export default class UploadsController {
       size: "10mb",
       extnames: ["jpg", "png", "gif"],
     });
-    const uploadsArrayAssetImage = request.files("image_assets", {
+    const uploadsArrayAssetImage = request.file("image_assets", {
       size: "10mb",
       extnames: ["jpg", "png", "gif"],
     });
+    if (uploadsArrayAssetImage) {
+      let succes = await this.upLoadAssetImage(uploadsArrayAssetImage);
+      if (succes) {
+        return response.json(true);
+      }
+    }
     let allFilesArray = [
       ...uploadsArrayCover,
       ...uploadsArrayEvidence,
       ...uploadsArrayReportFile,
       ...uploadsArrayReportImage,
-      ...uploadsArrayAssetImage,
     ];
     const projectId: number = request.input("project_id");
-    const project = await Projects.findOrFail(projectId);
+    let project: any;
+    try {
+      project = await Projects.findOrFail(projectId);
+    } catch (error) {
+      project = undefined
+    }
     if (allFilesArray) {
       const wasItValidated: MultipartFileContract[] | CustomReponse =
         this.validateFileUpload(allFilesArray);
@@ -95,10 +114,14 @@ export default class UploadsController {
       }
     }
     try {
-      const updatedProject: Projects = await this.handleSpacesUpload(
+      const updatedProject: Projects | string = await this.handleSpacesUpload(
         allFilesArray,
-        project
+        project,
+        districtReportFileType
       );
+      if (updatedProject === "true") {
+        return response.json(true);
+      }
       return response.json(updatedProject);
     } catch (error) {
       return response.json(new CustomReponse(error.message));
@@ -139,7 +162,11 @@ export default class UploadsController {
    */
   private async handleSpacesUpload(
     allFiles: MultipartFileContract[],
-    projectToBeUpdated: Projects
+    projectToBeUpdated?: Projects,
+    districtReportFileType?: {
+      fileType: string;
+      districtId: number;
+    }
   ): Promise<any> {
     try {
       let storageInformationToBeStored = [] as Array<{
@@ -158,13 +185,17 @@ export default class UploadsController {
             url: "",
             location: "",
             file: file,
+            extraLabel: "",
           };
+          const firstPArt = projectToBeUpdated?.projectCode
+            ? projectToBeUpdated.projectCode
+            : districtReportFileType?.fileType;
           const newUUID = uuidv4();
           await file.moveToDisk(
             "./",
             {
               name:
-                projectToBeUpdated.projectCode +
+                firstPArt +
                 "_" +
                 file.fieldName +
                 "_" +
@@ -191,6 +222,9 @@ export default class UploadsController {
               Env.get("UPLOAD_URL") + "/uploads/" + modifiedLocationString;
             storageInformation.id = newUUID;
             storageInformation.location = modifiedLocationString;
+            if (districtReportFileType) {
+              storageInformation.extraLabel = districtReportFileType.fileType;
+            }
             storageInformationToBeStored.push(storageInformation);
           } else
             throw new Error(
@@ -199,6 +233,21 @@ export default class UploadsController {
         } catch (error) {
           throw new Error(error);
         }
+      }
+      if (!projectToBeUpdated) {
+        const district = await Districts.findOrFail(
+          districtReportFileType?.districtId as number
+        );
+        let districtTobeUpdated = district as unknown as IDistrict;
+        districtTobeUpdated.district_details.reportLinks.push(
+          storageInformationToBeStored[0]
+        );
+        await district
+          .merge({
+            districtDetails: JSON.stringify(districtTobeUpdated),
+          })
+          .save();
+        return "true";
       }
       const projects = await this.storeLinks(
         projectToBeUpdated,
@@ -242,18 +291,6 @@ export default class UploadsController {
       ) {
         delete storageInformation.file;
         fileUploads.reports_files.push(storageInformation);
-      } else if (fieldName.includes(FileType.IMAGE_ASSETS)) {
-        delete storageInformation.file;
-        const assets = await Assets.findOrFail(1);
-        let deleted: { main_logo: { location: string } } = assets.assets as any;
-
-        await Drive.delete(deleted.main_logo.location);
-        await assets
-          .merge({
-            assets: JSON.stringify({ main_logo: { ...storageInformation } }),
-          })
-          .save();
-        return project;
       }
     }
     project.fileUploads = JSON.stringify(fileUploads);
@@ -272,6 +309,62 @@ export default class UploadsController {
       })
       .save();
     return updated;
+  }
+
+  private async upLoadAssetImage(file: MultipartFileContract) {
+    if (!file.isValid) {
+      throw new Error(file.errors[0].message);
+    }
+    try {
+      const newUUID = uuidv4();
+      await file.moveToDisk(
+        "./",
+        {
+          name: "assets_" + newUUID + "." + file.extname,
+        },
+        "local"
+      );
+      let storageInformation = {
+        id: 0,
+        fileType: "",
+        url: "",
+        location: "",
+      };
+      storageInformation.fileType = file.fieldName;
+      let path = file.filePath;
+      if (path) {
+        let modifiedLocationString = "";
+        if (Env.get("NODE_ENV") === "development") {
+          modifiedLocationString = path.replace("C:\\Up\\", "");
+        }
+        if (Env.get("NODE_ENV") === "production") {
+          modifiedLocationString = path.replace(
+            Env.get("LOCAL_UPLOAD_PATH"),
+            ""
+          );
+        }
+        storageInformation.url =
+          Env.get("UPLOAD_URL") + "/uploads/" + modifiedLocationString;
+        storageInformation.id = newUUID;
+        storageInformation.location = modifiedLocationString;
+      } else
+        throw new Error(
+          "Upload of one of the files did not complete. Contact the webmaster."
+        );
+      if (file.fieldName.includes(FileType.IMAGE_ASSETS)) {
+        const assets = await Assets.findOrFail(1);
+        let deleted: { main_logo: { location: string } } = assets.assets as any;
+        await Drive.delete(deleted.main_logo.location);
+        await assets
+          .merge({
+            assets: JSON.stringify({ main_logo: { ...storageInformation } }),
+          })
+          .save();
+      }
+      return true;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   /**

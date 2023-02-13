@@ -2,7 +2,6 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Clubs from "App/Models/Clubs";
 import Projects from "App/Models/Projects";
 import Users from "App/Models/Users";
-import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
 
 import { IClub } from "Contracts/util/sharedUtility/interfaces/ClubInterface";
 
@@ -109,13 +108,10 @@ export default class ClubsController {
         return true;
       }
     });
-    if (typeof found === "undefined") {
+    if (!found) {
       await clubToBeDeleted.delete();
       return response.json(true);
     }
-    const customReponse = new CustomReponse(
-      "There are projects associated with this club!"
-    );
-    return response.json(customReponse);
+    return response.json(false);
   }
 }

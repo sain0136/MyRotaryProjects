@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-4 flex items-center">
+  <div class="my-4 flex items-center">
     <input
       :checked="modelValue"
       id="default-checkbox"

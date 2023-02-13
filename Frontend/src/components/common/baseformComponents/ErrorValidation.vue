@@ -1,5 +1,5 @@
 <template>
-  <p id="filled_error_help" class="mt-2 text-xs text-red-600 dark:text-red-400">
+  <p id="filled_error_help" class="my-2 text-xs text-red-600 dark:text-red-400">
     <span class="font-medium">{{ errorMsg }}</span> 
   </p>
 </template>

@@ -126,6 +126,7 @@ export interface StorageInformation {
   fileType: string;
   url: string;
   location: string;
+  extraLabel?: string;
 }
 
 export interface Uploads {

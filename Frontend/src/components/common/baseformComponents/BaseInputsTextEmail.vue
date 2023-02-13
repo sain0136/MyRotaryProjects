@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class=" my-4">
     <label
       :for="label"
-      class="mb-2 block text-sm font-medium text-primary-color dark:text-white"
+      class="mb-2 block text-sm font-medium text-primary-black dark:text-white"
       >{{ label }}</label
     >
     <input

@@ -1,18 +1,25 @@
 <template>
-<button class="bg-primary-black rounded-lg  hover:bg-primary-white hover:text-primary-black py-2 px-4 font-medium text-white">
-    {{ label }}
-</button>
+  <div>
+    <button class="rounded-lg py-2 px-4 font-medium" :class="theme">
+      {{ label }}
+    </button>
+  </div>
 </template>
 
-<script lang='ts'>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'MyComponent',
+  name: "MyComponent",
   components: {},
   props: {
     label: {
       type: String,
       required: true,
+    },
+    theme: {
+      type: String,
+      default:
+        "bg-primary-black text-primary-white  hover:bg-primary-color hover:text-primary-black",
     },
   },
   data() {
@@ -25,5 +32,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

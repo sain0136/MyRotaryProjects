@@ -1,5 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+
 import {
   MyError,
   type IApiError,
@@ -20,11 +21,26 @@ import {
 } from "@/utils/shared/interfaces/SharedInterface";
 import DistrictsApi from "@/services/Districts";
 import UserApi from "@/services/User";
+export interface IDistrictFormProps {
+  formModeProp?: string;
+  districtIdProp?: number;
+}
+export class districtFormPropsPojo implements IDistrictFormProps {
+  formModeProp: string | undefined;
+  districtIdProp: number | undefined;
+  constructor(props: IDistrictFormProps) {
+    this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
+    this.districtIdProp = props.districtIdProp
+      ? props.districtIdProp
+      : undefined;
+  }
+}
+
 export const useRotaryStore = defineStore("main", {
   //The Global state variabales
-
   state: () => {
     return {
+      districtFormProps: {} as IDistrictFormProps,
       isSiteAdminLoggedIn: false,
       isDistrictAdminLoggedIn: false,
       isClubAdminLoggedIn: false,
@@ -50,18 +66,22 @@ export const useRotaryStore = defineStore("main", {
      * @param  {string} password
      * @returns Promise
      */
-    async validateUserLogin(email: string, password: string): Promise<unknown> {
+    async validateUserLogin(
+      email: string,
+      password: string
+    ): Promise<true | IApiError | MyError> {
       try {
         const apiReponse = await ValidationApi.validateUserCredentials(
           password,
           email
         );
-        if (!("messaage" in apiReponse)) {
+        if ("message" in apiReponse) {
+          return apiReponse as IApiError;
+        } else
           this.setLoggedInUserInforamtion(
             (apiReponse as UserValidationApiResponse).user
           );
-          return true;
-        } else return apiReponse as IApiError;
+        return true;
       } catch (error) {
         return error as MyError;
       }
@@ -125,7 +145,7 @@ export const useRotaryStore = defineStore("main", {
 
     async signOut(): Promise<void> {
       let response = await ValidationApi.logoutUser();
-      if ((typeof response !== "boolean")) {
+      if (typeof response !== "boolean") {
         throw new MyError((response as IApiError).message);
       }
       this.isSiteAdminLoggedIn = false;
@@ -146,10 +166,11 @@ export const useRotaryStore = defineStore("main", {
         throw new MyError((error as MyError).message);
       }
     },
+    async setCurrentProps(props: IDistrictFormProps) {
+      let districtFormProps = new districtFormPropsPojo({ ...props });
+      this.districtFormProps = districtFormProps;
+    },
   },
-
+  persist: true,
   // Keep state persistence through refresh
-  persist: {
-    enabled: true,
-  },
 });

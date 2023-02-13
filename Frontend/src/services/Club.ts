@@ -3,7 +3,7 @@ import { MyError, type IApiError, type IApiException } from "@/utils/frontend/in
 import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
 
-export default class Clubs {
+export default class ClubsApi {
   /**
    * @returns Promise
    */

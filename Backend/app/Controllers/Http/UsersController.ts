@@ -97,8 +97,8 @@ export default class UsersController {
   // Create a function to logout user by clearing session
   public async logout({ session, response }: HttpContextContract) {
     session.clear();
-    if (Object.keys((session as any).store).length > 0) {
-      return response.json(new CustomReponse("You have been logged out"));
+    if (!(session as any).store.isEmpty) {
+      return response.json(new CustomReponse("Error logging out"));
     } else {
       return response.json(true);
     }

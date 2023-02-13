@@ -1,15 +1,15 @@
 import BaseSeeder from "@ioc:Adonis/Lucid/Seeder";
-import Club from "../../Models/Clubs";
-import District from "../../Models/Districts";
-import User from "../../Models/Users";
+import Club from "../../app/Models/Clubs";
+import District from "../../app/Models/Districts";
+import User from "../../app/Models/Users";
 import {
   GrantType,
   ProjectStatus,
   RotaryRoles,
   UserType,
-} from "Contracts/util/backend/interfaces/Utility";
-import Assets from "../../../../Models/Assets";
-import Projects from "../../Models/Projects";
+} from "../../contracts/util/backend/interfaces/Utilities";
+import Assets from "../../app/Models/Assets";
+import Projects from "../../app/Models/Projects";
 import { DateTime } from "luxon";
 import RotaryYear from "Contracts/util/backend/classes/RotaryYear";
 
