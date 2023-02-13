@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
+    "module": "ES6",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@/modules/*": ["src/modules/*"],
       "@/components/*": ["src/components/*"]
-    }
+    },
+    "types": [
+      "pinia-plugin-persist"
+    ]
   },
-  
+
   "files": [],
   "references": [
     {
@@ -19,5 +23,5 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ],
+  ]
 }
