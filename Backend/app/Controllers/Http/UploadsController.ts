@@ -13,49 +13,62 @@ import {
   StorageInformation,
 } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
 import Districts from "App/Models/Districts";
-import IDistrict from "Contracts/util/sharedUtility/interfaces/DistrictInterface";
+import { DistrictDetails } from "Contracts/util/sharedUtility/interfaces/DistrictInterface";
+
+type districtReportExtraDetails = {
+  extraLabel: string;
+  districtId: number;
+};
+
+type uploadStorageType = {
+  id: number;
+  fileType: string;
+  url: string;
+  location: string;
+  file?: MultipartFileContract;
+  extraLabel?: string;
+};
 
 export default class UploadsController {
   /**
    * @param  {} {request
    * @param  {HttpContextContract} response}
    */
-  // public async testUpload({ request, response }: HttpContextContract) {
-  //   const coverImage = request.file("test");
-  //   const cover2 = coverImage;
-  //   const res = {
-  //     s3error: "",
-  //     s3url: "",
-  //     localurl: "",
-  //   };
-  //   try {
-  //     if (coverImage) {
-  //       await coverImage.moveToDisk("./", {}, "spaces");
-  //       let path = coverImage.filePath;
-  //       if (path) {
-  //         res.s3url = path;
-  //       }
-  //     }
-  //   } catch (error) {
-  //     res.s3error = error.message;
-  //     res.s3url = error;
-  //   }
-  //   try {
-  //     if (cover2) {
-  //       await cover2.moveToDisk("./", {}, "local");
-  //       let path = cover2.filePath;
-  //       if (path) {
-  //         path = await Drive.getUrl(path as string);
-  //         path = path.replace(/C:\/Up\//, "");
-  //       }
-  //       res.localurl = Env.get("TEST_UPLOAD_URL") + path;
-  //     }
-  //   } catch (error) {
-  //     res.localurl = error.message;
-  //   }
-  //   return response.json(res);
-  // }
-
+  public async testUpload({ request, response }: HttpContextContract) {
+    const coverImage = request.file("test");
+    const cover2 = coverImage;
+    const res = {
+      s3error: "",
+      s3url: "",
+      localurl: "",
+    };
+    // try {
+    //   if (coverImage) {
+    //     await coverImage.moveToDisk("./", {}, "spaces");
+    //     let path = coverImage.filePath;
+    //     if (path) {
+    //       res.s3url = path;
+    //     }
+    //   }
+    // } catch (error) {
+    //   res.s3error = error.message;
+    //   res.s3url = error;
+    // }
+    try {
+      if (cover2) {
+        await cover2.moveToDisk("./", {}, "local");
+        let path = cover2.filePath;
+        if (path) {
+          path = await Drive.getUrl(path as string);
+          path = path.replace(/C:\/Up\//, "");
+        }
+        res.localurl = Env.get("TEST_UPLOAD_URL") + path;
+      }
+    } catch (error) {
+      res.localurl = error.message;
+    }
+    return response.json(res);
+  }
   /**
    * @desc Handles file upload and validates uploaded files, returns
    *  response with links or error message.
@@ -63,10 +76,14 @@ export default class UploadsController {
    * @param  {HttpContextContract} response}
    */
   public async handleFileUpload({ request, response }: HttpContextContract) {
-    const districtReportFileType: {
-      fileType: string;
-      districtId: number;
-    } = request.input("district_report_file_type");
+    const extraLabel: string = request.input("extra_label");
+    const districtId: string = request.input("district_id");
+
+    const districtReportExtraDetails: districtReportExtraDetails = {
+      extraLabel: extraLabel,
+      districtId: Number(districtId),
+    };
+
     const uploadsArrayCover = request.files("image_cover", {
       size: "10mb",
       extnames: ["jpg", "png", "gif"],
@@ -88,9 +105,14 @@ export default class UploadsController {
       extnames: ["jpg", "png", "gif"],
     });
     if (uploadsArrayAssetImage) {
-      let succes = await this.upLoadAssetImage(uploadsArrayAssetImage);
-      if (succes) {
-        return response.json(true);
+      try {
+        this.validateFileUpload([uploadsArrayAssetImage]);
+        const updatedAssets = await this.handleSpacesUpload([
+          uploadsArrayAssetImage,
+        ]);
+        return response.json(updatedAssets);
+      } catch (error) {
+        return response.json(new CustomReponse(error.message));
       }
     }
     let allFilesArray = [
@@ -100,11 +122,11 @@ export default class UploadsController {
       ...uploadsArrayReportImage,
     ];
     const projectId: number = request.input("project_id");
-    let project: any;
+    let project: Projects | undefined;
     try {
       project = await Projects.findOrFail(projectId);
     } catch (error) {
-      project = undefined
+      project = undefined;
     }
     if (allFilesArray) {
       const wasItValidated: MultipartFileContract[] | CustomReponse =
@@ -114,15 +136,13 @@ export default class UploadsController {
       }
     }
     try {
-      const updatedProject: Projects | string = await this.handleSpacesUpload(
-        allFilesArray,
-        project,
-        districtReportFileType
-      );
-      if (updatedProject === "true") {
-        return response.json(true);
-      }
-      return response.json(updatedProject);
+      const updatedProjectOrDistrict: Projects | Districts =
+        await this.handleSpacesUpload(
+          allFilesArray,
+          project,
+          districtReportExtraDetails
+        );
+      return response.json(updatedProjectOrDistrict);
     } catch (error) {
       return response.json(new CustomReponse(error.message));
     }
@@ -163,19 +183,10 @@ export default class UploadsController {
   private async handleSpacesUpload(
     allFiles: MultipartFileContract[],
     projectToBeUpdated?: Projects,
-    districtReportFileType?: {
-      fileType: string;
-      districtId: number;
-    }
+    districtReportExtraDetails?: districtReportExtraDetails
   ): Promise<any> {
     try {
-      let storageInformationToBeStored = [] as Array<{
-        id: number;
-        fileType: string;
-        url: string;
-        location: string;
-        file?: MultipartFileContract;
-      }>;
+      let storageInformationToBeStored = [] as Array<uploadStorageType>;
 
       for await (const file of allFiles) {
         try {
@@ -186,16 +197,20 @@ export default class UploadsController {
             location: "",
             file: file,
             extraLabel: "",
-          };
-          const firstPArt = projectToBeUpdated?.projectCode
-            ? projectToBeUpdated.projectCode
-            : districtReportFileType?.fileType;
+          } as uploadStorageType;
+          let fileCategoryIndicator: string = "";
+          if (projectToBeUpdated) {
+            fileCategoryIndicator = projectToBeUpdated.projectCode;
+          } else if (districtReportExtraDetails) {
+            fileCategoryIndicator = districtReportExtraDetails.extraLabel;
+          }
+
           const newUUID = uuidv4();
           await file.moveToDisk(
             "./",
             {
               name:
-                firstPArt +
+                fileCategoryIndicator +
                 "_" +
                 file.fieldName +
                 "_" +
@@ -222,9 +237,11 @@ export default class UploadsController {
               Env.get("UPLOAD_URL") + "/uploads/" + modifiedLocationString;
             storageInformation.id = newUUID;
             storageInformation.location = modifiedLocationString;
-            if (districtReportFileType) {
-              storageInformation.extraLabel = districtReportFileType.fileType;
+            if (districtReportExtraDetails) {
+              storageInformation.extraLabel =
+                districtReportExtraDetails.extraLabel;
             }
+            delete storageInformation.file;
             storageInformationToBeStored.push(storageInformation);
           } else
             throw new Error(
@@ -234,34 +251,50 @@ export default class UploadsController {
           throw new Error(error);
         }
       }
-      if (!projectToBeUpdated) {
-        const district = await Districts.findOrFail(
-          districtReportFileType?.districtId as number
+      if (!projectToBeUpdated && districtReportExtraDetails) {
+        return await this.storeDistrictReportLink(
+          districtReportExtraDetails,
+          storageInformationToBeStored
         );
-        let districtTobeUpdated = district as unknown as IDistrict;
-        districtTobeUpdated.district_details.reportLinks.push(
-          storageInformationToBeStored[0]
+      } else if (projectToBeUpdated) {
+        return await this.storeProjectLinks(
+          projectToBeUpdated,
+          storageInformationToBeStored
         );
-        await district
-          .merge({
-            districtDetails: JSON.stringify(districtTobeUpdated),
-          })
-          .save();
-        return "true";
-      }
-      const projects = await this.storeLinks(
-        projectToBeUpdated,
-        storageInformationToBeStored
-      );
-      if (projects) {
-        return projectToBeUpdated;
+      } else if (allFiles.length === 1) {
+        return await this.saveAssetLogoImage(storageInformationToBeStored[0]);
       }
     } catch (error) {
       return error.message;
     }
   }
 
-  private async storeLinks(
+  /**
+   * @desc Stores the district report link in the database.
+   * @param  {districtReportExtraDetails} districtReportExtraDetails
+   * @param  {Array<StorageInformation>} storageInformationToBeStored
+   * @returns Promise
+   */
+  private async storeDistrictReportLink(
+    districtReportExtraDetails: districtReportExtraDetails,
+    storageInformationToBeStored: Array<StorageInformation>
+  ): Promise<Districts> {
+    const district = await Districts.findOrFail(
+      districtReportExtraDetails.districtId as number
+    );
+    const priorDistrictDetails =
+      district.districtDetails as unknown as DistrictDetails;
+    priorDistrictDetails.reportLinks.push(storageInformationToBeStored[0]);
+    await district
+      .merge({
+        districtDetails: JSON.stringify(priorDistrictDetails),
+      })
+      .save();
+    let updatedDistrict = await Districts.findOrFail(district.districtId);
+    return updatedDistrict;
+  }
+
+  private async storeProjectLinks(
     project: Projects,
     storageInformationToBeStored: Array<{
       id: number;
@@ -278,18 +311,14 @@ export default class UploadsController {
     for await (const storageInformation of storageInformationToBeStored) {
       const { fieldName } = storageInformation.file as MultipartFileContract;
       if (fieldName.includes(FileType.IMAGE_COVER)) {
-        delete storageInformation.file;
         project.imageLink = JSON.stringify(storageInformation);
       }
       if (fieldName.includes(FileType.FILE_EVIDENCE)) {
-        delete storageInformation.file;
-
         fileUploads.evidence_files.push(storageInformation);
       } else if (
         fieldName.includes(FileType.FILE_REPORT) ||
         fieldName.includes(FileType.IMAGE_REPORT)
       ) {
-        delete storageInformation.file;
         fileUploads.reports_files.push(storageInformation);
       }
     }
@@ -311,60 +340,16 @@ export default class UploadsController {
     return updated;
   }
 
-  private async upLoadAssetImage(file: MultipartFileContract) {
-    if (!file.isValid) {
-      throw new Error(file.errors[0].message);
-    }
-    try {
-      const newUUID = uuidv4();
-      await file.moveToDisk(
-        "./",
-        {
-          name: "assets_" + newUUID + "." + file.extname,
-        },
-        "local"
-      );
-      let storageInformation = {
-        id: 0,
-        fileType: "",
-        url: "",
-        location: "",
-      };
-      storageInformation.fileType = file.fieldName;
-      let path = file.filePath;
-      if (path) {
-        let modifiedLocationString = "";
-        if (Env.get("NODE_ENV") === "development") {
-          modifiedLocationString = path.replace("C:\\Up\\", "");
-        }
-        if (Env.get("NODE_ENV") === "production") {
-          modifiedLocationString = path.replace(
-            Env.get("LOCAL_UPLOAD_PATH"),
-            ""
-          );
-        }
-        storageInformation.url =
-          Env.get("UPLOAD_URL") + "/uploads/" + modifiedLocationString;
-        storageInformation.id = newUUID;
-        storageInformation.location = modifiedLocationString;
-      } else
-        throw new Error(
-          "Upload of one of the files did not complete. Contact the webmaster."
-        );
-      if (file.fieldName.includes(FileType.IMAGE_ASSETS)) {
-        const assets = await Assets.findOrFail(1);
-        let deleted: { main_logo: { location: string } } = assets.assets as any;
-        await Drive.delete(deleted.main_logo.location);
-        await assets
-          .merge({
-            assets: JSON.stringify({ main_logo: { ...storageInformation } }),
-          })
-          .save();
-      }
-      return true;
-    } catch (error) {
-      throw new Error(error);
-    }
+  private async saveAssetLogoImage(storageInformation: StorageInformation) {
+    const assets = await Assets.findOrFail(1);
+    let deleted: { main_logo: { location: string } } = assets.assets as any;
+    await Drive.delete(deleted.main_logo.location);
+    const updatedAssets = await assets
+      .merge({
+        assets: JSON.stringify({ main_logo: { ...storageInformation } }),
+      })
+      .save();
+    return updatedAssets;
   }
 
   /**

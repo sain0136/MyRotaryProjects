@@ -9,6 +9,13 @@ import type IUser from "@/utils/shared/interfaces/UserInterface";
   VIEW:"VIEW",
  } 
 
+ export const DISTRIST_REPORT_TYPE = {
+  DSG_EN: "DSG_EN",
+  DSG_FR: "DSG_FR",
+  DM_EN: "DM_EN",
+  DM_FR: "DM_FR",
+ }
+ 
  export const TAILWIND_COMMON_CLASSES = {
   H1:"text-2xl font-bold text-primary-black",
   PARAGRAPHS:" text-primary-black text-lg",

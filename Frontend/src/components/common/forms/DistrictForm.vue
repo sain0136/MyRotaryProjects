@@ -207,7 +207,7 @@ export default defineComponent({
       formTypesList: [
         "",
         "Dsg English",
-        " Dsg French",
+        "Dsg French",
         "DM English",
         "DM French",
       ],

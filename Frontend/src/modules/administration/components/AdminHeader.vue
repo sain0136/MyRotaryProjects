@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="rounded border-gray-200 bg-primary-black p-3 dark:border-gray-700 dark:bg-gray-800"
+    class=" border-gray-200 bg-primary-black p-3 dark:border-gray-700 dark:bg-gray-800"
   >
     <div class="flex  justify-center w-full">
       <img

@@ -23,8 +23,18 @@ export default class UploadsApi {
     file_report?: Array<File>;
     image_report?: Array<File>;
     image_assets?: File;
-  }): Promise<boolean | IApiError | undefined> {
+    extraLabel?: string;
+    districtId?: number;
+  }) {
     let fd = new FormData();
+
+    if (uploadData.extraLabel) {
+      fd.append("extra_label", uploadData.extraLabel);
+    }
+
+    if (uploadData.districtId) {
+      fd.append("district_id", uploadData.districtId.toString());
+    }
 
     if (uploadData.image_cover) {
       fd.append("image_cover", uploadData.image_cover);
@@ -56,7 +66,7 @@ export default class UploadsApi {
       });
       if (typeof apiReponse.data === "boolean") {
         if (apiReponse.data) {
-          return true
+          return true;
         }
         return apiReponse.data;
       }
