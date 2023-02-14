@@ -148,7 +148,6 @@
 
 <script lang="ts">
 import Utilities from "@/utils/frontend/classes/Utilities";
-
 import type {
   ProjectPagination,
 } from "@/utils/frontend/interfaces/Frontend";
@@ -238,7 +237,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "../../../assets/syles.scss";
+@import "@/assets/syles.scss";
 .t_head {
     height: 50px;
     th{
