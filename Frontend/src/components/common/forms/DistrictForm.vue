@@ -1,5 +1,6 @@
-<!-- <template>
-  <div class="container mt-8 min-w-full gap-8" :class="tailwind.DIVCOL">
+<template>
+  <h1>Test</h1>
+  <!-- <div class="container mt-8 min-w-full gap-8" :class="tailwind.DIVCOL">
     <div class="container" :class="tailwind.DIVCOL">
       <Toast
         v-if="toast.display"
@@ -131,136 +132,136 @@
         <h1 class="text-center font-bold" :class="tailwind.H1"></h1>
       </form>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
-import {
-  TAILWIND_COMMON_CLASSES,
-  type IApiException,
-  FORM_MODE_PROP,
-} from "@/utils/frontend/interfaces/Frontend";
-import { defineComponent, ref } from "vue";
-import RotaryButton from "@/components/common/RotaryButton.vue";
-import BaseFileUpload from "@/components/common/baseformComponents/BaseFileUpload.vue";
-import BaseSelect from "@/components/common/baseformComponents/BaseSelect.vue";
-import BaseCheckBox from "@/components/common/baseformComponents/BaseCheckBox.vue";
-import BaseInputsText from "@/components/common/baseformComponents/BaseInputsText.vue";
-import BaseInputsTextEmail from "@/components/common/baseformComponents/BaseInputsTextEmail.vue";
-import BaseTextArea from "@/components/common/baseformComponents/BaseTextArea.vue";
-import useVuelidate from "@vuelidate/core";
-import ConfirmModal from "@/components/common/../common/modals/ConfirmModal.vue";
-import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
-import Toast from "@/components/common/toast/Toast.vue";
-import DistrictObject from "@/utils/shared/classes/DistrictObject";
-import { useRotaryStore } from "@/stores/rotaryStore";
-export default defineComponent({
-  beforeRouteLeave(next: any) {
-    if (this.allowedToLeaveForm) {
-      next(true);
-      return;
-    }
-    (this.showConfirmModal as any) = {
-      showConfirmModal: true,
-      confirmModalMessage:
-        "Are you sure you want to leave form with subitting?",
-      idTobeDeleted: 0,
-    };
-  },
-  name: "DistrictForm",
-  components: {
-    RotaryButton,
-    BaseFileUpload,
-    BaseSelect,
-    BaseCheckBox,
-    BaseInputsText,
-    BaseTextArea,
-    ConfirmModal,
-    ExceptionModal,
-    Toast,
-    BaseInputsTextEmail,
-  },
-  props: {},
-  setup() {
-    const store = useRotaryStore();
-    const showConfirmModal = ref({
-      showConfirmModal: false,
-      confirmModalMessage: "",
-      idTobeDeleted: 0,
-    });
-    function updateShowModal(newValue: any) {
-      showConfirmModal.value = newValue;
-    }
-    const v$ = useVuelidate();
-    return {
-      showConfirmModal,
-      updateShowModal,
-      v$,
-      store,
-    };
-  },
-  data() {
-    return {
-      file: null,
-      currentFormChoice: "",
-      formTypesList: [
-        "",
-        "Dsg English",
-        " Dsg French",
-        "DM English",
-        "DM French",
-      ],
-      formMode: FORM_MODE_PROP,
-      district: new DistrictObject(),
-      tailwind: TAILWIND_COMMON_CLASSES,
-      serverException: false,
-      expectionObject: {} as IApiException,
-      confirmNavigation: null as any,
-      toast: {
-        display: false,
-        msg: "",
-        width: "w-1/2",
-        closeTimer: 4000,
-      },
-      allowedToLeaveForm: false,
-    };
-  },
-  watch: {
-    confirmNavigation: {
-      async handler(newValue: any) {
-        if (newValue) {
-          this.allowedToLeaveForm = true;
-          this.$router.go(-1);
-        }
-      },
-      immediate: true,
-    },
-  },
-  async created() {
-    if (
-      this.store.$state.districtFormProps.formModeProp === this.formMode.EDIT
-    ) {
-    }
-  },
-  methods: {
-    resetSet() {
-      (this.showConfirmModal as any) = {
-        showConfirmModal: false,
-        confirmModalMessage: "",
-        idTobeDeleted: 0,
-      };
-    },
-    async handleFileChange(event: Event): Promise<void> {
-      const target = event.target as HTMLInputElement;
-      const files = target.files;
-      if (!files || !files[0]) return;
-      let file = files[0] as any;
-      file = files[0] as any;
-      this.file = file;
-    },
-  },
-  computed: {},
-});
+// import {
+//   TAILWIND_COMMON_CLASSES,
+//   type IApiException,
+//   FORM_MODE_PROP,
+// } from "@/utils/frontend/interfaces/Frontend";
+// import { defineComponent, ref } from "vue";
+// import RotaryButton from "@/components/common/RotaryButton.vue";
+// import BaseFileUpload from "@/components/common/baseformComponents/BaseFileUpload.vue";
+// import BaseSelect from "@/components/common/baseformComponents/BaseSelect.vue";
+// import BaseCheckBox from "@/components/common/baseformComponents/BaseCheckBox.vue";
+// import BaseInputsText from "@/components/common/baseformComponents/BaseInputsText.vue";
+// import BaseInputsTextEmail from "@/components/common/baseformComponents/BaseInputsTextEmail.vue";
+// import BaseTextArea from "@/components/common/baseformComponents/BaseTextArea.vue";
+// import useVuelidate from "@vuelidate/core";
+// import ConfirmModal from "@/components/common/../common/modals/ConfirmModal.vue";
+// import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
+// import Toast from "@/components/common/toast/Toast.vue";
+// import DistrictObject from "@/utils/shared/classes/DistrictObject";
+// import { useRotaryStore } from "@/stores/rotaryStore";
+// export default defineComponent({
+//   beforeRouteLeave(next: any) {
+//     if (this.allowedToLeaveForm) {
+//       next(true);
+//       return;
+//     }
+//     (this.showConfirmModal as any) = {
+//       showConfirmModal: true,
+//       confirmModalMessage:
+//         "Are you sure you want to leave form with subitting?",
+//       idTobeDeleted: 0,
+//     };
+//   },
+//   name: "DistrictForm",
+//   components: {
+//     RotaryButton,
+//     BaseFileUpload,
+//     BaseSelect,
+//     BaseCheckBox,
+//     BaseInputsText,
+//     BaseTextArea,
+//     ConfirmModal,
+//     ExceptionModal,
+//     Toast,
+//     BaseInputsTextEmail,
+//   },
+//   props: {},
+//   setup() {
+//     const store = useRotaryStore();
+//     const showConfirmModal = ref({
+//       showConfirmModal: false,
+//       confirmModalMessage: "",
+//       idTobeDeleted: 0,
+//     });
+//     function updateShowModal(newValue: any) {
+//       showConfirmModal.value = newValue;
+//     }
+//     const v$ = useVuelidate();
+//     return {
+//       showConfirmModal,
+//       updateShowModal,
+//       v$,
+//       store,
+//     };
+//   },
+//   data() {
+//     return {
+//       file: null,
+//       currentFormChoice: "",
+//       formTypesList: [
+//         "",
+//         "Dsg English",
+//         " Dsg French",
+//         "DM English",
+//         "DM French",
+//       ],
+//       formMode: FORM_MODE_PROP,
+//       district: new DistrictObject(),
+//       tailwind: TAILWIND_COMMON_CLASSES,
+//       serverException: false,
+//       expectionObject: {} as IApiException,
+//       confirmNavigation: null as any,
+//       toast: {
+//         display: false,
+//         msg: "",
+//         width: "w-1/2",
+//         closeTimer: 4000,
+//       },
+//       allowedToLeaveForm: false,
+//     };
+//   },
+//   watch: {
+//     confirmNavigation: {
+//       async handler(newValue: any) {
+//         if (newValue) {
+//           this.allowedToLeaveForm = true;
+//           this.$router.go(-1);
+//         }
+//       },
+//       immediate: true,
+//     },
+//   },
+//   async created() {
+//     if (
+//       this.store.$state.districtFormProps.formModeProp === this.formMode.EDIT
+//     ) {
+//     }
+//   },
+//   methods: {
+//     resetSet() {
+//       (this.showConfirmModal as any) = {
+//         showConfirmModal: false,
+//         confirmModalMessage: "",
+//         idTobeDeleted: 0,
+//       };
+//     },
+//     async handleFileChange(event: Event): Promise<void> {
+//       const target = event.target as HTMLInputElement;
+//       const files = target.files;
+//       if (!files || !files[0]) return;
+//       let file = files[0] as any;
+//       file = files[0] as any;
+//       this.file = file;
+//     },
+//   },
+//   computed: {},
+// });
 </script>
 
-<style scoped lang="scss"></style> -->
+<style scoped lang="scss"></style>

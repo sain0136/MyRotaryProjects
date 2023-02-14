@@ -220,6 +220,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "../../../assets/syles.scss";
+@import "@/assets/syles.scss";
 
 </style>

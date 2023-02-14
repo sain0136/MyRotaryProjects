@@ -214,7 +214,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "../../../assets/syles.scss";
+@import "@/assets/syles.scss";
 
 #all_clubs_in_district_table{
   min-width: 25%;
