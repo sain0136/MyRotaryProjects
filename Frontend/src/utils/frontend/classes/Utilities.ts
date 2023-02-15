@@ -66,7 +66,10 @@ export default class Utilities {
    * @param  {object} error
    * @returns boolean
    */
-  public static isAnApiError(error: object): boolean {
+  public static isAnApiError(error: object | boolean): boolean {
+    if (typeof error !== "object") {
+      return false;
+    }
     if ("message" in error) return true;
     else return false;
   }

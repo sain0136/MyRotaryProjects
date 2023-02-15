@@ -5,8 +5,9 @@ import Districts from "App/Models/Districts";
 import Users from "App/Models/Users";
 import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
 
-import IDistrict, { DistrictDetails } from "Contracts/util/sharedUtility/interfaces/DistrictInterface";
-
+import IDistrict, {
+  DistrictDetails,
+} from "Contracts/util/sharedUtility/interfaces/DistrictInterface";
 
 export default class DistrictsController {
   /**
@@ -117,16 +118,27 @@ export default class DistrictsController {
       },
     };
 
-    const newDistrict =  await Districts.create({
-      districtNumber: "D-" + district.district_number,
-      districtName: district.district_name,
-      districtEmail: district.district_email,
-      districtPresident: district.district_president,
-      districtDescription: district.district_description,
-      siteUrl: district.site_url,
-      districtDetails: JSON.stringify(extraDetails),
-    });
-    return response.json(newDistrict);
+    try {
+      const created = await Districts.create({
+        districtNumber: "D-" + district.district_name,
+        districtName: "District " + district.district_name,
+        districtEmail: district.district_email,
+        districtPresident: district.district_president,
+        districtDescription: district.district_description,
+        siteUrl: district.site_url,
+        districtDetails: JSON.stringify(extraDetails),
+      });
+      let newDistrict: Districts = await Districts.findOrFail(
+        created.districtId
+      );
+      return response.json(newDistrict);
+    } catch (error) {
+      if (error.code === "ER_DUP_ENTRY") {
+        return response.json(
+          new CustomReponse("District Number Already Exists")
+        );
+      }
+    }
   }
 
   /**
@@ -142,7 +154,9 @@ export default class DistrictsController {
     params,
   }: HttpContextContract): Promise<void> {
     const district: IDistrict = request.input("district");
-    const districtToBeUpdated: Districts = await Districts.findOrFail(params.id);
+    const districtToBeUpdated: Districts = await Districts.findOrFail(
+      params.id
+    );
     let extraDetails: DistrictDetails = {
       ddfCalculation: district.district_details.ddfCalculation,
       dates: {
@@ -159,18 +173,26 @@ export default class DistrictsController {
         dmFraction: district.district_details.ddfCapes.dmFraction,
       },
     };
-    await districtToBeUpdated
-      .merge({
-        districtNumber: district.district_number,
-        districtName: district.district_name,
-        districtEmail: district.district_email,
-        districtPresident: district.district_president,
-        districtDescription: district.district_description,
-        siteUrl: district.site_url,
-        districtDetails: JSON.stringify(extraDetails),
-      })
-      .save();
-    return response.json(true);
+    try {
+      await districtToBeUpdated
+        .merge({
+          districtNumber: district.district_number,
+          districtName: district.district_name,
+          districtEmail: district.district_email,
+          districtPresident: district.district_president,
+          districtDescription: district.district_description,
+          siteUrl: district.site_url,
+          districtDetails: JSON.stringify(extraDetails),
+        })
+        .save();
+      return response.json(true);
+    } catch (error) {
+      if (error.code === "ER_DUP_ENTRY") {
+        return response.json(
+          new CustomReponse("District Number Already Exists")
+        );
+      }
+    }
   }
 
   /**
@@ -183,7 +205,9 @@ export default class DistrictsController {
     response,
     params,
   }: HttpContextContract): Promise<void> {
-    const districtToBeDeleted: Districts = await Districts.findOrFail(params.id);
+    const districtToBeDeleted: Districts = await Districts.findOrFail(
+      params.id
+    );
     const clubFound: Clubs[] = await districtToBeDeleted
       .related("clubs")
       .query();

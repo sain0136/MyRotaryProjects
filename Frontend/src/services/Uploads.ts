@@ -75,7 +75,7 @@ export default class UploadsApi {
         const exception = apiReponse.data as IApiException;
         throw new MyError(exception.message, exception.stack, exception.code);
       }
-      return apiReponse.data as IApiError | boolean;
+      return apiReponse.data as IApiError | boolean | IDistrict;
     } catch (error) {
       throw error;
     }
@@ -87,8 +87,8 @@ export default class UploadsApi {
    * @returns Promise
    */
   public static async deleteAnUpload(
-    project_id: number,
-    upload_information: StorageInformation
+    upload_information: StorageInformation,
+    project_id?: number
   ): Promise<IApiError | Uploads> {
     const apiReponse = await fetch(API_ROUTE + "delete", {
       method: "POST",
@@ -109,9 +109,11 @@ export default class UploadsApi {
     return apiReponse as IApiError | Uploads;
   }
 
-//  write a deleteADistrictReportUpload function below that will delete a district report upload
-public static async deleteADistrictReportUpload( district_id: number, upload_information: StorageInformation): Promise<IApiError | IDistrict> {
-
+  //  write a deleteADistrictReportUpload function below that will delete a district report upload
+  public static async deleteADistrictReportUpload(
+    district_id: number,
+    upload_information: StorageInformation
+  ): Promise<IApiError | IDistrict> {
     const apiReponse = await fetch(API_ROUTE + "delete/district", {
       method: "POST",
       headers: {
@@ -130,6 +132,4 @@ public static async deleteADistrictReportUpload( district_id: number, upload_inf
     }
     return apiReponse as IApiError | IDistrict;
   }
-
-
 }

@@ -20,7 +20,14 @@
       />
       <DistrictUploadModal
         v-if="showDistrictUploadModal"
+        :districtIdProp="district.district_id"
         :districReportFileUpload="districReportFileUpload"
+        :modelValue="showDistrictUploadModal"
+        :formTypesListProp="formTypesList"
+        @update:modelValue="
+          showDistrictUploadModal = false;
+          populateFormData();
+        "
       />
       <h1 class="text-center font-bold" :class="tailwind.H1">
         {{
@@ -30,8 +37,11 @@
         }}
       </h1>
       <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
-      <form @submit.prevent="" class="flex w-2/4 flex-col p-8">
-        <BaseInputsText label="District Name" v-model="district.district_name" />
+      <form @submit.prevent="" class="flex w-2/4 flex-col p-8" novalidate>
+        <BaseInputsText
+          label="District Number"
+          v-model="district.district_name"
+        />
         <ErrorValidation
           v-if="v$.district.district_name.$error"
           :errorMsg="v$.district.district_name.$errors[0].$message"
@@ -53,13 +63,24 @@
           v-if="v$.district.district_description.$error"
           :errorMsg="v$.district.district_description.$errors[0].$message"
         />
-        <h1
-          v-if="district.district_details.reportLinks.length > 0"
-          class="text-center font-bold"
-          :class="tailwind.H1"
+
+        <div
+          class="my-4 flex flex-col items-center gap-4"
+          v-if="store.$state.districtFormProps.formModeProp === formMode.EDIT &&
+         formTypesList.length > 0"
         >
-          Report Forms
-        </h1>
+          <hr class="my-8 h-px w-full border-0 bg-gray-500" />
+          <h1 class="text-center font-bold" :class="tailwind.H1">
+            Report Forms
+          </h1>
+          <RotaryButton
+            label="Add Report Form"
+            @click="showDistrictUploadModal = true"
+            :formTypesListProp="formTypesList"
+          />
+          <hr class="my-8 h-px w-full border-0 bg-gray-500" />
+        </div>
+
         <table
           v-if="district.district_details.reportLinks.length > 0"
           class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
@@ -68,7 +89,7 @@
             <tr>
               <th scope="col" class="px-6 py-3">FileType</th>
               <th scope="col" class="px-6 py-3">Link</th>
-              <th scope="col" class="px-6 py-3">Actions</th>
+              <th scope="col" class="px-6 py-3 text-center">Actions</th>
             </tr>
           </thead>
           <tbody class="tb_r">
@@ -85,14 +106,24 @@
                 {{ link.extraLabel }}
               </th>
               <td class="px-6 py-4 text-primary-black">
-                {{ link.url }}
+                <a :href="link.url" target="_blank" :class="tailwind.A_LINK"
+                  >View</a
+                >
               </td>
               <td class="px-6 py-4 text-primary-black">
-                <div class="buttons_container2 flex gap-2">
+                <div class="buttons_container2 flex justify-center gap-2">
                   <button
                     title="Delete Report"
                     class="crud_buttons hover:text-primary-c"
-                    @click=""
+                    @click="
+                      deleteFile({
+                        id: link.id,
+                        fileType: link.fileType,
+                        url: link.url,
+                        location: link.location,
+                        extraLabel: link.extraLabel,
+                      })
+                    "
                   >
                     <font-awesome-icon
                       class="hover:text-primary-color"
@@ -103,19 +134,37 @@
               </td>
             </tr>
           </tbody>
-        </table>   
+        </table>
         <h1 class="my-4 text-center font-bold" :class="tailwind.H1">
-        District Settings
+          District Settings
         </h1>
         <hr class="my-8 h-px w-full border-0 bg-gray-500" />
-     
+
         <BaseDatePicker
           v-model="district.district_details.dates.grant_submission_startdate"
           label="Set the date for when DM and DSG grant submission will be opened"
         />
+        <ErrorValidation
+          v-if="
+            v$.district.district_details.dates.grant_submission_startdate.$error
+          "
+          :errorMsg="
+            v$.district.district_details.dates.grant_submission_startdate
+              .$errors[0].$message
+          "
+        />
         <BaseDatePicker
           v-model="district.district_details.dates.grant_submission_closedate"
           label="Set the date for when DM and DSG grant submission will be closed"
+        />
+        <ErrorValidation
+          v-if="
+            v$.district.district_details.dates.grant_submission_closedate.$error
+          "
+          :errorMsg="
+            v$.district.district_details.dates.grant_submission_closedate
+              .$errors[0].$message
+          "
         />
         <BaseInputsText
           v-model="district.district_details.ddfCapes.dsgCap"
@@ -123,11 +172,25 @@
           formType="number"
           inputMode="numeric"
         />
+        <ErrorValidation
+          v-if="v$.district.district_details.ddfCapes.dsgCap.$error"
+          :errorMsg="
+            v$.district.district_details.ddfCapes.dsgCap.$errors[0].$message
+          "
+        />
         <BaseInputsText
           v-model="district.district_details.ddfCapes.dsgFraction"
           label="Set the fraction/rate to the USD to match funds"
           formType="number"
           inputMode="numeric"
+          step="0.01"
+        />
+        <ErrorValidation
+          v-if="v$.district.district_details.ddfCapes.dsgFraction.$error"
+          :errorMsg="
+            v$.district.district_details.ddfCapes.dsgFraction.$errors[0]
+              .$message
+          "
         />
         <BaseInputsText
           v-model="district.district_details.ddfCapes.dmCap"
@@ -135,13 +198,26 @@
           formType="number"
           inputMode="numeric"
         />
+        <ErrorValidation
+          v-if="v$.district.district_details.ddfCapes.dmCap.$error"
+          :errorMsg="
+            v$.district.district_details.ddfCapes.dmCap.$errors[0].$message
+          "
+        />
         <BaseInputsText
           v-model="district.district_details.ddfCapes.dmFraction"
           label="Set the fraction/rate to the USD to match funds"
           formType="number"
           inputMode="numeric"
+          step="0.01"
         />
-        <hr class="my-8  h-px w-full border-0 bg-gray-500" />
+        <ErrorValidation
+          v-if="v$.district.district_details.ddfCapes.dmFraction.$error"
+          :errorMsg="
+            v$.district.district_details.ddfCapes.dmFraction.$errors[0].$message
+          "
+        />
+        <hr class="my-8 h-px w-full border-0 bg-gray-500" />
         <h1 class="mb-4 text-center font-bold" :class="tailwind.H1">
           Set The Funding Sources That Will Be Used To Calculate Your District's
           DDF Limit.
@@ -218,7 +294,9 @@ import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
   FORM_MODE_PROP,
-ErrorMessages,
+  ErrorMessages,
+  type IApiError,
+  DISTRIST_REPORT_TYPE,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent, ref } from "vue";
 import DistrictUploadModal from "@/components/common/modals/DistrictUploadModal.vue";
@@ -239,7 +317,15 @@ import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import ErrorValidation from "@/components/common/baseformComponents/ErrorValidation.vue";
 import DistrictsApi from "@/services/Districts";
-import { email, helpers, maxLength, minLength, required } from "@vuelidate/validators";
+import type { StorageInformation } from "@/utils/shared/interfaces/ProjectsInterface";
+import {
+  email,
+  helpers,
+  maxLength,
+  minLength,
+  required,
+} from "@vuelidate/validators";
+import UploadsApi from "@/services/Uploads";
 
 export default defineComponent({
   beforeRouteLeave(next: any) {
@@ -281,6 +367,7 @@ export default defineComponent({
     function updateShowModal(newValue: any) {
       showConfirmModal.value = newValue;
     }
+
     const v$ = useVuelidate();
     return {
       showConfirmModal,
@@ -289,50 +376,21 @@ export default defineComponent({
       store,
     };
   },
-  validations() {
-    return {
-      district: {
-        // district_number: { required },
-        district_name: {
-          required:helpers.withMessage(ErrorMessages.REQURIED_FIELD, required)
-        },
-        district_description: {
-          required:helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
-          maxLength: maxLength(1000),
-          minLenght: minLength(100),
-        },
-        district_email: {
-          required:helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
-          email: helpers.withMessage(ErrorMessages.INVALID_EMAIL, email),
-        },
-        district_details: {
-          dates: {
-            grant_submission_closedate: { required },
-            grant_submission_startdate: { required },
-          },
-          ddfCapes: {
-            dsgCap: { required },
-            dsgFraction: { required },
-            dmCap: { required },
-            dmFraction: { required },
-          },
-        },
-      },
-    };
-  },
+
   data() {
     return {
       districReportFileUpload: {
         extra_label: "",
         district_id: 0,
       },
+      formTypesList: [] as string[],
       formMode: FORM_MODE_PROP,
       submitButtonmsg: "Submit",
       district: new DistrictObject(),
       tailwind: TAILWIND_COMMON_CLASSES,
       serverException: false,
       expectionObject: {} as IApiException,
-      confirmNavigation: null as any,
+      confirmNavigation: false,
       toast: {
         display: false,
         msg: "",
@@ -353,6 +411,81 @@ export default defineComponent({
       duplicateErrorMsg: "",
     };
   },
+  validations() {
+    return {
+      district: {
+        // district_number: { required },
+        district_name: {
+          required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
+        },
+        district_description: {
+          required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
+          maxLength: maxLength(1000),
+          minLenght: minLength(100),
+        },
+        district_email: {
+          required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
+          email: helpers.withMessage(ErrorMessages.INVALID_EMAIL, email),
+        },
+        district_details: {
+          dates: {
+            grant_submission_closedate: { required },
+            grant_submission_startdate: { required },
+          },
+          ddfCapes: {
+            dsgCap: {
+              greaterThanOne: helpers.withMessage(
+                ErrorMessages.REQURIED_NUM_MIN_LENGTH,
+                () => {
+                  return this.district.district_details.ddfCapes.dsgCap >= 1;
+                }
+              ),
+            },
+            dsgFraction: {
+              greaterThanOne: helpers.withMessage(
+                ErrorMessages.REQURIED_NUM_MIN_LENGTH,
+                () => {
+                  return (
+                    this.district.district_details.ddfCapes.dsgFraction > 0
+                  );
+                }
+              ),
+              lessThanOne: helpers.withMessage(
+                ErrorMessages.NUMBER_MUST_FRAC,
+                () => {
+                  return (
+                    this.district.district_details.ddfCapes.dsgFraction < 1
+                  );
+                }
+              ),
+            },
+            dmCap: {
+              greaterThanOne: helpers.withMessage(
+                ErrorMessages.REQURIED_NUM_MIN_LENGTH,
+                () => {
+                  return this.district.district_details.ddfCapes.dmCap >= 1;
+                }
+              ),
+            },
+            dmFraction: {
+              greaterThanOne: helpers.withMessage(
+                ErrorMessages.REQURIED_NUM_MIN_LENGTH,
+                () => {
+                  return this.district.district_details.ddfCapes.dmFraction > 0;
+                }
+              ),
+              lessThanOne: helpers.withMessage(
+                ErrorMessages.NUMBER_MUST_FRAC,
+                () => {
+                  return this.district.district_details.ddfCapes.dmFraction < 1;
+                }
+              ),
+            },
+          },
+        },
+      },
+    };
+  },
   watch: {
     confirmNavigation: {
       async handler(newValue: any) {
@@ -370,9 +503,30 @@ export default defineComponent({
     ) {
       this.submitButtonmsg = Utilities.uncapitalize(FORM_MODE_PROP.EDIT);
       await this.populateFormData();
+      this.setformTypesList();
     }
+    this.setformTypesList();
   },
   methods: {
+    setformTypesList() {
+      const checkReportType = [] as string[];
+      for (const key in DISTRIST_REPORT_TYPE) {
+        checkReportType.push(key);
+      }
+      if (this.district.district_details.reportLinks.length > 0) {
+        this.district.district_details.reportLinks.forEach((item) => {
+          if (checkReportType.includes(item.extraLabel as string)) {
+            checkReportType.splice(
+              checkReportType.indexOf(item.extraLabel as string),
+              1
+            );
+          }
+        });
+        this.formTypesList = checkReportType;
+      } else {
+        this.formTypesList = checkReportType;
+      }
+    },
     async validateDistrict(): Promise<void> {
       await this.v$.$validate();
       if (this.v$.$error) {
@@ -384,17 +538,72 @@ export default defineComponent({
         }, 4000);
         return;
       }
-      // if (!this.v$.$error) {
-      //   if (this.submited) {
-      //     this.updateExistingDistrict();
-      //     return;
-      //   }
-      //   if (this.editOrCreateProp == "CREATE") {
-      //     this.createDistrict();
-      //   } else {
-      //     this.updateExistingDistrict();
-      //   }
-      // }
+      if (!this.v$.$error) {
+        // if (this.submited) {
+        //   this.updateExistingDistrict();
+        //   return;
+        // }
+        if (
+          this.store.$state.districtFormProps.formModeProp ===
+          FORM_MODE_PROP.EDIT
+        ) {
+          this.updateExistingDistrict();
+        } else {
+          this.createDistrict();
+        }
+      }
+    },
+    async createDistrict() {
+      try {
+        const response = await DistrictsApi.createDistrict(this.district);
+        if (!Utilities.isAnApiError(response)) {
+          window.scrollTo(0, 0);
+          this.district = response as DistrictObject;
+          this.districtCreated = true;
+          this.showDistrictUploadModal = true;
+          this.store.$state.districtFormProps.formModeProp =
+            FORM_MODE_PROP.EDIT;
+          this.store.$state.districtFormProps.districtIdProp =
+            this.district.district_id;
+          this.submitButtonmsg = Utilities.uncapitalize(FORM_MODE_PROP.EDIT);
+          this.toast.display = true;
+          this.toast.msg =
+            "District Created Successfully! Upload District Reports";
+          setTimeout(() => {
+            this.toast.display = false;
+            this.showDistrictUploadModal = true;
+          }, 3000);
+        } else {
+          this.toast.display = true;
+          this.toast.msg = (response as IApiError).message;
+          window.scrollTo(0, 0);
+          setTimeout(() => {
+            this.toast.display = false;
+          }, 4000);
+        }
+      } catch (error) {
+        this.serverException = true;
+        this.expectionObject = error as IApiException;
+      }
+    },
+    async updateExistingDistrict() {
+      try {
+        const response = await DistrictsApi.updateDistrict(
+          this.district,
+          this.district.district_id
+        );
+        if (!Utilities.isAnApiError(response)) {
+          this.toast.display = true;
+          this.toast.msg = "District Updated";
+          window.scrollTo(0, 0);
+          setTimeout(() => {
+            this.redirect();
+          }, 2000);
+        }
+      } catch (error) {
+        this.serverException = true;
+        this.expectionObject = error as IApiException;
+      }
     },
     async populateFormData() {
       try {
@@ -432,8 +641,24 @@ export default defineComponent({
         this.district.district_details.ddfCalculation.pop();
       }
     },
+    async deleteFile(strorageInformation: StorageInformation) {
+      try {
+        const response = await UploadsApi.deleteADistrictReportUpload(
+          this.district.district_id,
+          strorageInformation
+        );
+        if (response) {
+          this.district = response as DistrictObject;
+          this.setformTypesList();
+        }
+      } catch (error) {
+        this.serverException = true;
+        this.expectionObject = error as IApiException;
+      }
+    },
     redirect() {
-      this.$router.push({ name: "AdminHome" });
+      this.$router.go(-1);
+      // this.$router.push({ name: "AdminHome" });
     },
   },
 
