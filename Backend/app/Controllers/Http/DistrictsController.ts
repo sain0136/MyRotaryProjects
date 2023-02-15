@@ -16,6 +16,7 @@ export default class DistrictsController {
    */
   public async index({ response }: HttpContextContract): Promise<void> {
     const districts: Districts[] = await Districts.all();
+
     return response.json(districts);
   }
 

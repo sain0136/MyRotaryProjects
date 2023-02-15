@@ -294,6 +294,12 @@ export default class UploadsController {
     return updatedDistrict;
   }
 
+  /**
+   * @desc Stores the project links in the database.
+   * @param  {Projects} project
+   * @param  {Array<{id:number;fileType:string;url:string;location:string;file?:MultipartFileContract;}>} storageInformationToBeStored
+   * @returns Promise
+   */
   private async storeProjectLinks(
     project: Projects,
     storageInformationToBeStored: Array<{
@@ -340,7 +346,12 @@ export default class UploadsController {
     return updated;
   }
 
-  private async saveAssetLogoImage(storageInformation: StorageInformation) {
+  /**
+   * @desc Saves the logo image to the database
+   * @param  {StorageInformation} storageInformation
+   * @returns Promise
+   */
+  private async saveAssetLogoImage(storageInformation: StorageInformation): Promise<Assets> {
     const assets = await Assets.findOrFail(1);
     let deleted: { main_logo: { location: string } } = assets.assets as any;
     await Drive.delete(deleted.main_logo.location);
@@ -398,4 +409,42 @@ export default class UploadsController {
       .save();
     return response.json(updatedProject.fileUploads);
   }
+
+  /**
+   * @desc Deletes an uploaded file from a district in the database
+   * @param  {} {request
+   * @param  {} response
+   * @param  {HttpContextContract} }
+   * @returns Promise
+   */
+  public async deleteUploadDistrictReport({
+    request,
+    response,
+  }: HttpContextContract): Promise<void> {
+    const districtId: number = request.input("district_id");
+    const uploadInformation: StorageInformation =
+      request.input("upload_information");
+    const districtToUpdated = await Districts.findOrFail(districtId);
+    const priorDistrictDetails =
+      districtToUpdated.districtDetails as unknown as DistrictDetails;
+    const indexToDelete = priorDistrictDetails.reportLinks.findIndex(
+      (storageInformation) => {
+        return storageInformation.id === uploadInformation.id;
+      }
+    );
+    await Drive.delete(
+      priorDistrictDetails.reportLinks[indexToDelete].location
+    );
+    priorDistrictDetails.reportLinks.splice(indexToDelete, 1);
+    await districtToUpdated
+      .merge({
+        districtDetails: JSON.stringify(priorDistrictDetails),
+      })
+      .save();
+    const updatedDistrict = await Districts.findOrFail(districtId);
+    return response.json(updatedDistrict);
+  }
+  // produce a dummy json below for testing of deleteUploadDistrictReport
+  // {
+  //   "district_id": 1,
 }

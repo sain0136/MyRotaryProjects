@@ -4,7 +4,7 @@ import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 import type { IDsgProject, IDmProject, IClubProject } from "@/utils/shared/interfaces/ProjectsInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
  export const FORM_MODE_PROP ={
-  EDIT:"EDIT",
+  EDIT:"UPDATE",
   CREATE:"CREATE",
   VIEW:"VIEW",
  } 
@@ -31,6 +31,11 @@ export interface IResizeImageOptions {
 export interface RotaryYearObject {
   allRotaryYears: Array<string>;
   currentRotaryYear: string;
+}
+
+export interface DistricReportFileUpload{
+  extra_label: string;
+  district_id: number;
 }
 
 export interface IApiError {

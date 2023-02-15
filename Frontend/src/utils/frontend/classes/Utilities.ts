@@ -24,6 +24,10 @@ export default class Utilities {
     return message;
   }
 
+  public static uncapitalize(str: string): string {
+    return str.charAt(0) + str.slice(1).toLowerCase();
+  }
+  
   /**
    * @description This function is used to get the validation message for a field
    * @param  {any} v$

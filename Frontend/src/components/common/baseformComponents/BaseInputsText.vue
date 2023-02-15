@@ -7,11 +7,13 @@
     >
     <input
       :value="modelValue"
-      type="text"
+      :type="formType"
       id="input_text"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)
       "
+     :inputmode="(inputMode as any)"
+
       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
     />
   </div>
@@ -34,6 +36,14 @@ export default defineComponent({
     divStyling: {
       type: String,
       default: "",
+    },
+    formType: {
+      type: String,
+      default: "text",
+    },
+    inputMode: {
+      type: String,
+      default: "text",
     },
   },
   data() {

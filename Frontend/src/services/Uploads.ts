@@ -4,6 +4,7 @@ import {
   type IApiError,
   type IApiException,
 } from "@/utils/frontend/interfaces/Frontend";
+import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 import type {
   StorageInformation,
   Uploads,
@@ -107,4 +108,28 @@ export default class UploadsApi {
     }
     return apiReponse as IApiError | Uploads;
   }
+
+//  write a deleteADistrictReportUpload function below that will delete a district report upload
+public static async deleteADistrictReportUpload( district_id: number, upload_information: StorageInformation): Promise<IApiError | IDistrict> {
+
+    const apiReponse = await fetch(API_ROUTE + "delete/district", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        district_id: district_id,
+        upload_information: upload_information,
+      }),
+    }).then(async (response) => {
+      return await response.json();
+    });
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as IApiError | IDistrict;
+  }
+
+
 }

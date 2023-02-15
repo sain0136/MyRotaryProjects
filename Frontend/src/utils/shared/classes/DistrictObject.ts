@@ -13,7 +13,7 @@ export default class RotaryDistrict implements IDistrict {
   site_url = "";
   districtlogo_url = "";
   district_details = {
-    ddfCalculation: ["District Club Contribution"] as String[],
+    ddfCalculation: [] as String[],
     ddfCapes: {
       dsgCap: 0,
       dsgFraction: 0,
