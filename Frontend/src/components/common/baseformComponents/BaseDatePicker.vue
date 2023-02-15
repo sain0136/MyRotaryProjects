@@ -1,5 +1,5 @@
 <template>
-    <div class=" my-4" :class="divStyling">
+    <div class=" my-2" :class="divStyling">
       <label
         :for="label"
         class="mb-2 block text-sm font-medium text-primary-black dark:text-white"

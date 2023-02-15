@@ -21,7 +21,9 @@ import type IUser from "@/utils/shared/interfaces/UserInterface";
   PARAGRAPHS:" text-primary-black text-lg",
   DIVROW:"flex flex-row justify-center items-center",
   DIVCOL:"flex flex-col justify-center items-center",
-  LABEL:"text-primary-black base-text font-bold", 
+  LABEL:"text-primary-black base-text font-bold ", 
+  A_LINK:"text-primary-black base-text font-bold  hover:text-primary-color",
+  SUCCESS:"text-primary-green base-text font-bold", 
  }
 export interface IResizeImageOptions {
   maxSize: number;
@@ -114,6 +116,8 @@ export const ErrorMessages = {
   INVALID_PASSWORD: "Password must be at least 6 characters long",
   INVALID_PASSWORD_CONFIRMATION: "Password confirmation does not match",
   PASSWORD_MIN_LENGTH: "Password must be at least 6 characters long",
+  REQURIED_NUM_MIN_LENGTH: "This field cant be zero",
+  NUMBER_MUST_FRAC: "This field must be a fraction",
 };
 
 export interface UserValidationApiResponse {

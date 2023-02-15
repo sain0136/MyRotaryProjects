@@ -16,14 +16,27 @@
             :options="formTypesList"
           />
           <input
+            v-if="currentFormChoice"
             class="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
             id="file_input"
             type="file"
+            @change="handleFileChange($event)"
+            accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           />
         </div>
+        <span :class="tailwind.SUCCESS">{{ uploadResponse }}</span>
         <div class="flex justify-end gap-4">
-          <RotaryButton label="Cancel" />
-          <RotaryButton label="Save" />
+          
+          <RotaryButton
+            v-if="currentFormChoice && file !== null"
+            @click="submit()"
+            label="Submit"
+          />
+          <RotaryButton
+            @click="$emit('update:modelValue', false)"
+            label="Cancel"
+            data-modal-hide="popup-modal"
+          />
         </div>
       </div>
     </div>
@@ -33,10 +46,12 @@
 <script lang="ts">
 import RotaryButton from "@/components/common/RotaryButton.vue";
 import BaseSelect from "@/components/common/baseformComponents/BaseSelect.vue";
+import UploadsApi from "@/services/Uploads";
 import {
   TAILWIND_COMMON_CLASSES,
   type DistricReportFileUpload,
 } from "@/utils/frontend/interfaces/Frontend";
+import DistrictObject from "@/utils/shared/classes/DistrictObject";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "DistrictUploadModal",
@@ -45,22 +60,32 @@ export default defineComponent({
     BaseSelect,
   },
   props: {
-    districReportFileUpload: {
-      type: Object as () => DistricReportFileUpload,
+    districtIdProp: {
+      type: Number,
+      required: true,
+    },
+    formTypesListProp: {
+      type: Array,
+      required: true,
+    },
+    modelValue: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
-      formTypesList: [
-        "",
-        "Dsg English",
-        "Dsg French",
-        "DM English",
-        "DM French",
-      ],
+      toast: {
+        display: false,
+        msg: "",
+        width: "w-1/2",
+        closeTimer: 4000,
+      },
+      uploadResponse: "",
       tailwind: TAILWIND_COMMON_CLASSES,
       currentFormChoice: "",
       file: null,
+      formTypesList: this.formTypesListProp,
     };
   },
   watch: {},
@@ -73,6 +98,44 @@ export default defineComponent({
       let file = files[0] as any;
       file = files[0] as any;
       this.file = file;
+    },
+    async submit() {
+      try {
+        const response = await UploadsApi.fileUpload({
+          file_report: [this.file as unknown as File],
+          districtId: this.districtIdProp,
+          extraLabel: this.currentFormChoice,
+        });
+        if (typeof response === "object") {
+          this.formTypesList.splice(
+            this.formTypesList.indexOf(this.currentFormChoice),
+            1
+          );
+          this.uploadResponse = "Upload Successful";
+          setTimeout(() => {
+            this.uploadResponse = "";
+          }, 2000);
+          const fileInput = document.getElementById(
+            "file_input"
+          ) as HTMLInputElement;
+          fileInput.value = "";
+          this.currentFormChoice = "";
+        } else {
+          this.uploadResponse = "Upload Failed";
+          const fileInput = document.getElementById(
+            "file_input"
+          ) as HTMLInputElement;
+
+          fileInput.value = "";
+          this.currentFormChoice = "";
+        }
+      } catch (error) {
+        this.toast.display = true;
+        this.toast.msg = "Server Error";
+        setTimeout(() => {
+          this.toast.display = false;
+        }, 4000);
+      }
     },
   },
   computed: {},

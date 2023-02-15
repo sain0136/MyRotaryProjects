@@ -1,5 +1,5 @@
 <template>
-  <div class=" my-4">
+  <div class=" my-2">
     <label
       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
       for="file_input"

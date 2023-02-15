@@ -202,9 +202,8 @@ export default class UploadsController {
           if (projectToBeUpdated) {
             fileCategoryIndicator = projectToBeUpdated.projectCode;
           } else if (districtReportExtraDetails) {
-            fileCategoryIndicator = districtReportExtraDetails.extraLabel;
+            fileCategoryIndicator = districtReportExtraDetails.extraLabel+"_"+districtReportExtraDetails.districtId+"_";
           }
-
           const newUUID = uuidv4();
           await file.moveToDisk(
             "./",

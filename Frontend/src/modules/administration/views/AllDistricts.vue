@@ -24,7 +24,7 @@
         <h1 class="text-center font-bold" :class="tailwind.H1">
           All Districts
         </h1>
-        <DistrictsTable @update:showConfirmModal="updateShowModal" />
+        <DistrictsTable @update:showConfirmModal="updateShowModal" :key="key"/>
         <h1 class="text-center font-bold" :class="tailwind.H1">
           Create a new District
         </h1>
@@ -91,6 +91,7 @@ export default defineComponent({
         width: "w-1/2",
         closeTimer: 4000,
       },
+      key: 0,
     };
   },
   watch: {
@@ -137,6 +138,7 @@ export default defineComponent({
       }
     },
     resetSet() {
+      this.key++;
       (this.showConfirmModal as any) = {
         showConfirmModal: false,
         confirmModalMessage: "",
