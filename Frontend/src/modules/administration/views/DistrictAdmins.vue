@@ -20,7 +20,7 @@
     />
     <section :class="tailwind.DIVCOL" class="gap-8">
       <h1 class="text-center" :class="tailwind.H1">Choose a District</h1>
-      <h3 class="text-center font-bold">All Districts</h3>
+      <h3 class="text-center font-bold" :class="tailwind.H3">All Districts</h3>
       <BaseSelect v-model="districtChosen" :options="districtNameList" />
       <h1 class="text-center" :class="tailwind.H1">Create a new admin</h1>
     </section>
@@ -29,23 +29,7 @@
       @update:showConfirmModal="updateShowModal"
     />
     <div class="button_wrapper">
-      <RotaryButton
-        label="Create"
-        @click="
-              () =>
-                $router.push({
-                  name: 'SiteAdminUsersForm',
-                  params: {
-                    adminRouteProp: 'ADMIN',
-                    editOrCreateProp: 'CREATE',
-                    userCreationTypeProp: 'DISTRICT_ADMIN',
-                    districtIdProp:'',
-                    districtNameListProp: districtNameList as string[],
-                    districtMapChosenDistrictToIDProp: JSON.stringify([...districtMapChosenDistrictToID]) 
-                  },
-                })
-            "
-      />
+      <RotaryButton label="Create" @click="createNewAdmin()" />
     </div>
   </div>
 </template>
@@ -55,6 +39,7 @@ import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
   type DistrictPagination,
+  FORM_MODE_PROP,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent, ref } from "vue";
 import BaseSelect from "@/components/common/baseformComponents/BaseSelect.vue";
@@ -67,6 +52,7 @@ import UserApi from "@/services/User";
 import ConfirmModal from "@/components/common/modals/ConfirmModal.vue";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
 import Toast from "@/components/common/toast/Toast.vue";
+import { useRotaryStore } from "@/stores/rotaryStore";
 export default defineComponent({
   name: "DistrictAdmins",
   components: {
@@ -78,6 +64,8 @@ export default defineComponent({
     Toast,
   },
   setup() {
+    const store = useRotaryStore();
+
     const showConfirmModal = ref({
       showConfirmModal: false,
       confirmModalMessage: "",
@@ -90,6 +78,7 @@ export default defineComponent({
     return {
       showConfirmModal,
       updateShowModal,
+      store,
     };
   },
   props: {},
@@ -110,6 +99,7 @@ export default defineComponent({
         width: "w-1/2",
         closeTimer: 4000,
       },
+      formMode: FORM_MODE_PROP,
     };
   },
   watch: {
@@ -151,6 +141,14 @@ export default defineComponent({
     }
   },
   methods: {
+    createNewAdmin() {
+      this.store.setUserFormProps({
+        formModeProp: "CREATE",
+      });
+      this.$router.push({
+        name: "SiteAdminUserForm",
+      });
+    },
     updateDeleteConfirm(value: boolean) {
       if (value) {
         this.deleteConfirm = value;
@@ -170,11 +168,10 @@ export default defineComponent({
           this.resetSet();
           this.deleteConfirm = false;
           this.toast.display = true;
-          this.toast.msg =
-            "Cannot delete this district admin ";
-       setTimeout(() => {
-          this.toast.display = false;
-        }, 4000);
+          this.toast.msg = "Cannot delete this district admin ";
+          setTimeout(() => {
+            this.toast.display = false;
+          }, 4000);
         }
       } catch (error) {
         this.serverException = true;

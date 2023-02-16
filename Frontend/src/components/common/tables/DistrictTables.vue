@@ -34,8 +34,8 @@
                 class="crud_buttons hover:text-primary-c"
                 @click="
                   () => {
-                    store.setCurrentProps({
-                      formModeProp: formMode.EDIT,
+                    store.setDistrictFormProps({
+                      formModeProp: formMode.UPDATE,
                       districtIdProp: district.district_id,
                     });
                     $router.push({

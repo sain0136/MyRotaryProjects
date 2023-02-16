@@ -66,7 +66,7 @@
 
         <div
           class="my-4 flex flex-col items-center gap-4"
-          v-if="store.$state.districtFormProps.formModeProp === formMode.EDIT &&
+          v-if="store.$state.districtFormProps.formModeProp === formMode.UPDATE &&
          formTypesList.length > 0"
         >
           <hr class="my-8 h-px w-full border-0 bg-gray-500" />
@@ -376,7 +376,6 @@ export default defineComponent({
       store,
     };
   },
-
   data() {
     return {
       districReportFileUpload: {
@@ -499,9 +498,9 @@ export default defineComponent({
   },
   async created() {
     if (
-      this.store.$state.districtFormProps.formModeProp === FORM_MODE_PROP.EDIT
+      this.store.$state.districtFormProps.formModeProp === FORM_MODE_PROP.UPDATE
     ) {
-      this.submitButtonmsg = Utilities.uncapitalize(FORM_MODE_PROP.EDIT);
+      this.submitButtonmsg = Utilities.uncapitalize(FORM_MODE_PROP.UPDATE);
       await this.populateFormData();
       this.setformTypesList();
     }
@@ -545,7 +544,7 @@ export default defineComponent({
         // }
         if (
           this.store.$state.districtFormProps.formModeProp ===
-          FORM_MODE_PROP.EDIT
+          FORM_MODE_PROP.UPDATE
         ) {
           this.updateExistingDistrict();
         } else {
@@ -562,10 +561,10 @@ export default defineComponent({
           this.districtCreated = true;
           this.showDistrictUploadModal = true;
           this.store.$state.districtFormProps.formModeProp =
-            FORM_MODE_PROP.EDIT;
+            FORM_MODE_PROP.UPDATE;
           this.store.$state.districtFormProps.districtIdProp =
             this.district.district_id;
-          this.submitButtonmsg = Utilities.uncapitalize(FORM_MODE_PROP.EDIT);
+          this.submitButtonmsg = Utilities.uncapitalize(FORM_MODE_PROP.UPDATE);
           this.toast.display = true;
           this.toast.msg =
             "District Created Successfully! Upload District Reports";

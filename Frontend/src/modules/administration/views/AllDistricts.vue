@@ -146,7 +146,7 @@ export default defineComponent({
       };
     },
     createRoute() {
-      this.store.setCurrentProps({
+      this.store.setDistrictFormProps({
         formModeProp: this.formMode.CREATE,
       });
       this.$router.push({

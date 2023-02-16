@@ -4,7 +4,7 @@ import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 import type { IDsgProject, IDmProject, IClubProject } from "@/utils/shared/interfaces/ProjectsInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
  export const FORM_MODE_PROP ={
-  EDIT:"UPDATE",
+  UPDATE:"UPDATE",
   CREATE:"CREATE",
   VIEW:"VIEW",
  } 
@@ -18,6 +18,7 @@ import type IUser from "@/utils/shared/interfaces/UserInterface";
  
  export const TAILWIND_COMMON_CLASSES = {
   H1:"text-2xl font-bold text-primary-black",
+  H3:"text-xl font-bold text-primary-black",
   PARAGRAPHS:" text-primary-black text-lg",
   DIVROW:"flex flex-row justify-center items-center",
   DIVCOL:"flex flex-col justify-center items-center",
