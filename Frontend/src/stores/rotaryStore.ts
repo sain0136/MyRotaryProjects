@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 
-import {
+import {  FORM_MODE_PROP,
   MyError,
   type IApiError,
   type UserValidationApiResponse,
+
 } from "@/utils/frontend/interfaces/Frontend";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
@@ -19,11 +20,21 @@ import {
 } from "@/utils/shared/interfaces/SharedInterface";
 import DistrictsApi from "@/services/Districts";
 import ValidationApi from "@/services/Validation";
+
 export interface IDistrictFormProps {
   formModeProp?: string;
   districtIdProp?: number;
 }
-export class districtFormPropsPojo implements IDistrictFormProps {
+
+export interface IUserFormProps {
+  formModeProp?: "UPDATE" | "CREATE" | "VIEW"  ;
+  userIdProp?: number;
+  clubIdProp?: number;
+  disrictIdProp?: number;
+  userCreationTypeProp?:"DISTRICT_ADMIN" | "CLUB_MEMBER" 
+}
+
+class districtFormPropsPojo implements IDistrictFormProps {
   formModeProp: string | undefined;
   districtIdProp: number | undefined;
   constructor(props: IDistrictFormProps) {
@@ -34,11 +45,25 @@ export class districtFormPropsPojo implements IDistrictFormProps {
   }
 }
 
+class userFormPropsPojo implements IUserFormProps {
+  formModeProp: "UPDATE" | "CREATE" | "VIEW"  | undefined;
+  userIdProp: number | undefined;
+  clubIdProp: number | undefined;
+  disrictIdProp: number | undefined;
+  userCreationTypeProp:"DISTRICT_ADMIN" | "CLUB_MEMBER" | undefined;
+  constructor(props: IUserFormProps) {
+    this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
+    this.userIdProp = props.userIdProp ? props.userIdProp : undefined;
+    this.clubIdProp = props.clubIdProp ? props.clubIdProp : undefined;
+    this.disrictIdProp = props.disrictIdProp;
+  }
+}
 export const useRotaryStore = defineStore("main", {
   //The Global state variabales
   state: () => {
     return {
       districtFormProps: {} as IDistrictFormProps,
+      userFormProps: {} as IUserFormProps,
       isSiteAdminLoggedIn: false,
       isDistrictAdminLoggedIn: false,
       isClubAdminLoggedIn: false,
@@ -164,9 +189,16 @@ export const useRotaryStore = defineStore("main", {
         throw new MyError((error as MyError).message);
       }
     },
-    async setCurrentProps(props: IDistrictFormProps) {
+    setDistrictFormProps(props: IDistrictFormProps) {
       let districtFormProps = new districtFormPropsPojo({ ...props });
       this.districtFormProps = districtFormProps;
+    },
+    setUserFormProps(props: IUserFormProps) {
+      let userFormProps = new userFormPropsPojo({ ...props });
+      this.userFormProps = userFormProps;
+    },
+    clearProps() {
+      this.districtFormProps = {} as IDistrictFormProps;
     },
   },
   persist: true,

@@ -32,19 +32,7 @@
               <button
                 title="Edit Admin"
                 class="crud_buttons hover:text-primary-c"
-                @click="
-                  () => {
-                    $router.push({
-                      name: 'SiteAdminUsersForm',
-                      params: {
-                        adminRouteProp: 'ADMIN',
-                        editOrCreateProp: 'EDIT',
-                        userIdProp: admin.user_id,
-                        userCreationTypeProp: 'DISTRICT_ADMIN',
-                      },
-                    });
-                  }
-                "
+                @click="updateAdmin(admin)"
               >
                 <font-awesome-icon
                   class="hover:text-primary-color"
@@ -137,17 +125,20 @@
 import DistrictsApi from "@/services/Districts";
 import Utilities from "@/utils/frontend/classes/Utilities";
 
-import type {
-  UserPagination,
+import {
+  FORM_MODE_PROP,
+  type UserPagination,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
 import { ref } from "vue";
 import type { SetupContext } from "vue";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
+import { useRotaryStore } from "@/stores/rotaryStore";
 
 export default defineComponent({
   name: "DistrictAdminsTable",
   setup(props, context: SetupContext) {
+    const store = useRotaryStore();
     function updateShowModal(
       show: boolean,
       adminName: string,
@@ -160,7 +151,7 @@ export default defineComponent({
       });
     }
     const key = ref(0);
-    return { key, updateShowModal };
+    return { key, updateShowModal, store };
   },
   components: {},
   props: {
@@ -175,6 +166,7 @@ export default defineComponent({
         last_page: 1,
         total: 0,
       },
+      formMode: FORM_MODE_PROP,
       message: "Choose a district from the dropdown",
     };
   },
@@ -187,6 +179,15 @@ export default defineComponent({
   },
   async created() {},
   methods: {
+    updateAdmin(admin: IUser) {
+      this.store.setUserFormProps({
+        formModeProp: "UPDATE",
+        userIdProp: admin.user_id,
+      });
+      this.$router.push({
+        name: "SiteAdminUserForm",
+      });
+    },
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
       this.getAllAdmins();
@@ -221,5 +222,4 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
-
 </style>

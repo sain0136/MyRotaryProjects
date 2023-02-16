@@ -5,6 +5,7 @@ import AllDistricts from "@/modules/administration/views/AllDistricts.vue";
 import ClubAdmin from "@/modules/administration/views/ClubAdmin.vue";
 import AllProjects from "@/modules/administration/views/AllProjects.vue";
 import SiteAdminDistrictForm from "@/components/common/forms/DistrictForm.vue";
+import SiteAdminUserForm from "@/components/common/forms/UserForm.vue";
 
 const route = {
   path: "/admin",
@@ -44,6 +45,12 @@ const route = {
       path: "/district-form/",
       component: SiteAdminDistrictForm,
       name: "SiteAdminDistrictForm",
+      props: true,
+    },
+    {
+      path: "/user-form/",
+      component: SiteAdminUserForm,
+      name: "SiteAdminUserForm",
       props: true,
     },
   ],
