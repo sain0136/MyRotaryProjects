@@ -2,6 +2,7 @@
   <div
     class="relative overflow-x-auto shadow-md sm:rounded-lg"
     v-if="admins.length != 0"
+    :key="keyProp"
   >
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
       <thead class="text-s bg-primary-black uppercase text-primary-white">
@@ -117,7 +118,9 @@
     </div>
   </div>
   <div v-else>
-    <p class="text-center font-bold text-gray-700">{{ message }}</p>
+    <p class="text-center font-bold text-gray-700">
+      {{ headerFormatter(message) }}
+    </p>
   </div>
 </template>
 
@@ -131,13 +134,14 @@ import {
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
 import { ref } from "vue";
-import type { SetupContext } from "vue";
+import type { defineEmits, SetupContext } from "vue";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
 import { useRotaryStore } from "@/stores/rotaryStore";
 
 export default defineComponent({
   name: "DistrictAdminsTable",
-  setup(props, context: SetupContext) {
+  emits: ["update-refresh"],
+  setup(emit, context: SetupContext) {
     const store = useRotaryStore();
     function updateShowModal(
       show: boolean,
@@ -150,15 +154,16 @@ export default defineComponent({
         idTobeDeleted: adminId,
       });
     }
-    const key = ref(0);
-    return { key, updateShowModal, store };
+    return { updateShowModal, store };
   },
   components: {},
   props: {
     districtIdProp: Number,
+    keyProp: Number,
   },
   data() {
     return {
+      headerFormatter: Utilities.headerFormater,
       admins: [] as IUser[],
       payload: {
         current_page: 1,
@@ -171,9 +176,14 @@ export default defineComponent({
     };
   },
   watch: {
+    keyProp: {
+      async handler() {
+        await this.getAllAdmins();
+      },
+    },
     districtIdProp: {
       async handler() {
-        this.getAllAdmins();
+        await this.getAllAdmins();
       },
     },
   },
@@ -183,6 +193,7 @@ export default defineComponent({
       this.store.setUserFormProps({
         formModeProp: "UPDATE",
         userIdProp: admin.user_id,
+        userCreationTypeProp: "DISTRICT_ADMIN",
       });
       this.$router.push({
         name: "SiteAdminUserForm",

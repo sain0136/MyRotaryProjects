@@ -131,7 +131,7 @@
     </div>
   </div>
   <div v-else>
-    <p class="text-center font-bold text-gray-700">No Districts to display</p>
+    <p class="text-center font-bold text-gray-700">{{ headerFormatter("No Districts to display") }}</p>
   </div>
 </template>
 
@@ -170,6 +170,7 @@ export default defineComponent({
   components: {},
   data() {
     return {
+      headerFormatter:Utilities.headerFormater,
       allDistricts: [] as IDistrict[],
       payload: {
         current_page: 1,

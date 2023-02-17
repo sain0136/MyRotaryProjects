@@ -1,20 +1,21 @@
 <template>
-  <div class=" my-2" :class="divStyling">
+  <div class="my-2" :class="divStyling">
     <label
       :for="label"
       class="mb-2 block text-sm font-medium text-primary-black dark:text-white"
       >{{ label }}</label
     >
     <input
-     :step="step"
+      :autocomplete="autoComplete"
+      :name="nameHtml"
+      :step="step"
       :value="modelValue"
       :type="formType"
-      id="input_text"
+      :id="randomId"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)
       "
-     :inputmode="(inputMode as any)"
-
+      :inputmode="(inputMode as any)"
       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900"
     />
   </div>
@@ -50,9 +51,21 @@ export default defineComponent({
       type: String,
       default: "1",
     },
+    autoComplete: {
+      type: String,
+      default: "off",
+    },
+    nameHtml: {
+      type: String,
+      default: "",
+    },
   },
   data() {
-    return {};
+    return {
+      randomId:
+        String.fromCharCode(97 + Math.floor(Math.random() * 26)) +
+        String(Math.floor(Math.random() * 5000) + 5000),
+    };
   },
   watch: {},
   async created() {},

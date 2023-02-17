@@ -30,7 +30,6 @@ interface IUser {
   fullName: string;
   role: Array<roles>;
   // creation or etc properties
-  [key: string]: any;
   role_type?: string;
 }
 export default IUser;

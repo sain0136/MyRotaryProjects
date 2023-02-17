@@ -26,7 +26,7 @@
         </h1>
         <DistrictsTable @update:showConfirmModal="updateShowModal" :key="key"/>
         <h1 class="text-center font-bold" :class="tailwind.H1">
-          Create a new District
+          {{headerFormatter("Create a new District")}}
         </h1>
       </section>
       <div class="button_wrapper">
@@ -80,6 +80,7 @@ export default defineComponent({
   },
   data() {
     return {
+      headerFormatter:Utilities.headerFormater,
       formMode: FORM_MODE_PROP,
       tailwind: TAILWIND_COMMON_CLASSES,
       serverException: false,

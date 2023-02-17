@@ -1,4 +1,4 @@
-interface roles {
+export interface Roles {
   club_id?: number;
   club_role?: string;
   district_id?: number;
@@ -28,7 +28,7 @@ interface IUser {
   user_id?: number;
   // computed properties
   fullName: string;
-  role: Array<roles>;
+  role: Array<Roles>;
   // creation or etc properties
   [key: string]: any;
   role_type?: string;

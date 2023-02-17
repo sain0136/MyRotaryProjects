@@ -24,6 +24,11 @@ export default class Users extends BaseModel {
   public get fullName() {
     return `${this.firstname} ${this.lastname}`;
   }
+
+  @computed()
+  public get role_type() {
+    return ""
+  }
   // added becasue I didnt write relationship many to many correctly in model
   @computed()
   public role?: string[];

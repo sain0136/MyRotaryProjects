@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 
-import {  FORM_MODE_PROP,
+import {
+  FORM_MODE_PROP,
   MyError,
   type IApiError,
   type UserValidationApiResponse,
-
 } from "@/utils/frontend/interfaces/Frontend";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
@@ -27,11 +27,11 @@ export interface IDistrictFormProps {
 }
 
 export interface IUserFormProps {
-  formModeProp?: "UPDATE" | "CREATE" | "VIEW"  ;
+  formModeProp?: "UPDATE" | "CREATE" | "VIEW";
   userIdProp?: number;
   clubIdProp?: number;
   disrictIdProp?: number;
-  userCreationTypeProp?:"DISTRICT_ADMIN" | "CLUB_MEMBER" 
+  userCreationTypeProp?: "DISTRICT_ADMIN" | "CLUB_MEMBER";
 }
 
 class districtFormPropsPojo implements IDistrictFormProps {
@@ -46,16 +46,17 @@ class districtFormPropsPojo implements IDistrictFormProps {
 }
 
 class userFormPropsPojo implements IUserFormProps {
-  formModeProp: "UPDATE" | "CREATE" | "VIEW"  | undefined;
+  formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
   userIdProp: number | undefined;
   clubIdProp: number | undefined;
   disrictIdProp: number | undefined;
-  userCreationTypeProp:"DISTRICT_ADMIN" | "CLUB_MEMBER" | undefined;
+  userCreationTypeProp: "DISTRICT_ADMIN" | "CLUB_MEMBER" | undefined;
   constructor(props: IUserFormProps) {
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
     this.userIdProp = props.userIdProp ? props.userIdProp : undefined;
     this.clubIdProp = props.clubIdProp ? props.clubIdProp : undefined;
     this.disrictIdProp = props.disrictIdProp;
+    this.userCreationTypeProp = props.userCreationTypeProp ? props.userCreationTypeProp : undefined;
   }
 }
 export const useRotaryStore = defineStore("main", {
@@ -194,7 +195,7 @@ export const useRotaryStore = defineStore("main", {
       this.districtFormProps = districtFormProps;
     },
     setUserFormProps(props: IUserFormProps) {
-      let userFormProps = new userFormPropsPojo({ ...props });
+      const userFormProps = new userFormPropsPojo({ ...props });
       this.userFormProps = userFormProps;
     },
     clearProps() {
