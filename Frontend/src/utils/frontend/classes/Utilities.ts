@@ -1,9 +1,9 @@
-import { ErrorMessages, type IResizeImageOptions } from "@/utils/frontend/interfaces/Frontend";
-
+import {
+  ErrorMessages,
+  type IResizeImageOptions,
+} from "@/utils/frontend/interfaces/Frontend";
 
 export default class Utilities {
-
-  
   /**
    * @param  {any} v$
    * @returns string
@@ -20,14 +20,21 @@ export default class Utilities {
         return;
       }
     });
-    
+
     return message;
   }
 
   public static uncapitalize(str: string): string {
     return str.charAt(0) + str.slice(1).toLowerCase();
   }
-  
+
+  public static headerFormater(str: string): string {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  }
+
   /**
    * @description This function is used to get the validation message for a field
    * @param  {any} v$

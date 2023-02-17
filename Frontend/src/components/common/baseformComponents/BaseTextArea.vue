@@ -9,7 +9,7 @@
       :value="modelValue"
       rows="5"
       cols="15"
-      id="input_text"
+      :id="randomId"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)
       "
@@ -34,7 +34,11 @@ export default defineComponent({
     },
   },
   data() {
-    return {};
+    return {
+      randomId:
+        String.fromCharCode(97 + Math.floor(Math.random() * 26)) +
+        String(Math.floor(Math.random() * 5000) + 5000),
+    };
   },
   watch: {},
   async created() {},

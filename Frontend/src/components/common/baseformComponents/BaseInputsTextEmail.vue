@@ -1,13 +1,15 @@
 <template>
-  <div class=" my-2">
+  <div class="my-2">
     <label
+      autocomplete="off"
       :for="label"
       class="mb-2 block text-sm font-medium text-primary-black dark:text-white"
       >{{ label }}</label
     >
     <input
+      autocomplete="off"
       :value="modelValue"
-      type="email"
+      type="text"
       id="input_text"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)

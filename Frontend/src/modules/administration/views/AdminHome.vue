@@ -1,5 +1,5 @@
 <template>
-  <div class="container min-w-full mb-8">
+  <div class="container mb-8 min-w-full">
     <Toast
       v-if="toast.display"
       :msg="toast.msg"
@@ -14,19 +14,23 @@
     />
     <div class="mt-8 flex flex-col items-center gap-8">
       <h1 class="text-center" :class="tailwind.H1">
-        Welcome to the admin portal!
+        {{ headerFormatter("Welcome to the admin portal!") }}
       </h1>
-      <div class="image_wrapper flex justify-center ">
+      <div class="image_wrapper flex justify-center">
         <img src="/admin-logo.png" alt="admin logo" />
       </div>
       <p class="text-center font-bold" :class="tailwind.PARAGRAPHS">
-        From this web portal you can manage the Rotary Projects website.
+        {{
+          headerFormatter(
+            "From this web portal you can manage the Rotary Projects website."
+          )
+        }}
         <br />
       </p>
       <div class="gap-4" :class="tailwind.DIVCOL">
-        <label :class="tailwind.LABEL" for="file_input"
-          >Upload Main Rotary Logo</label
-        >
+        <label :class="tailwind.LABEL" for="file_input">{{
+          headerFormatter("Upload Main Rotary Logo")
+        }}</label>
         <ErrorValidation
           v-if="v$.image.$error"
           errorMsg="Must Upload an image"
@@ -40,7 +44,7 @@
           accept="image/png, image/jpeg, image/gif"
         />
         <p :class="tailwind.PARAGRAPHS" class="font-bold" id="file_input_help">
-          PNG, JPG or GIF (MAX. 10 GB).
+          {{ headerFormatter("PNG, JPG or GIF (MAX. 10 GB).") }}
         </p>
       </div>
       <div :class="tailwind.DIVCOL">
@@ -63,6 +67,7 @@ import useVuelidate from "@vuelidate/core";
 import ErrorValidation from "@/components/common/baseformComponents/ErrorValidation.vue";
 import { requiredIf } from "@vuelidate/validators";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
+import Utilities from "@/utils/frontend/classes/Utilities";
 export default defineComponent({
   name: "AdminHome",
   components: {
@@ -77,6 +82,7 @@ export default defineComponent({
   props: {},
   data() {
     return {
+      headerFormatter: Utilities.headerFormater,
       tailwind: TAILWIND_COMMON_CLASSES,
       toast: {
         display: false,
@@ -101,7 +107,7 @@ export default defineComponent({
       this.v$.$validate();
       if (!this.v$.$error) {
         try {
-          this.v$.$reset()
+          this.v$.$reset();
           const response = await UploadsApi.fileUpload({
             image_assets: this.image as unknown as File,
           });

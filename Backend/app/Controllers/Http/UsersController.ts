@@ -144,34 +144,35 @@ export default class UsersController {
 
   public async store({ request, response }: HttpContextContract) {
     const newUser: IUser = request.input("new_user");
-    await Users.create({
+
+   const createdUser: Users = await Users.create({
       firstname: newUser.firstname,
       lastname: newUser.lastname,
       address: newUser.address,
-      userCity: newUser.userCity,
-      userPostal: newUser.userPostal,
-      userProvince: newUser.userProvince,
-      userCountry: newUser.userCountry,
+      userCity: newUser.user_city,
+      userPostal: newUser.user_postal,
+      userProvince: newUser.user_province,
+      userCountry: newUser.user_country,
       phone: newUser.phone,
       email: newUser.email,
       password: newUser.password,
-      clubId: newUser.clubId,
-      districtId: newUser.districtId,
-      userType: newUser.userType,
+      clubId: newUser.club_id,
+      districtId: newUser.district_id ? newUser.district_id : undefined ,
+      userType: newUser.user_type,
       extraDetails: JSON.stringify(newUser.extra_details),
     });
     if (newUser.user_type === "DISTRICT") {
       const district: Districts = await Districts.findOrFail(
         newUser.district_id
       );
-      await newUser.related("districtRole").attach({
+      await createdUser.related("districtRole").attach({
         [district.districtId]: {
           district_role: newUser.role_type,
         },
       });
     } else {
       const club: Clubs = await Clubs.findOrFail(newUser.club_id);
-      await newUser.related("clubRole").attach({
+      await createdUser.related("clubRole").attach({
         [club.clubId]: {
           club_role: newUser.role_type,
         },
@@ -186,51 +187,46 @@ export default class UsersController {
    * @param  {HttpContextContract} response}
    */
   public async update({ request, params, response }: HttpContextContract) {
-    const userId: number = parseInt(params.id);
-    const userToBeUpdated: Users = await Users.findOrFail(userId);
+    const userToBeUpdated: Users = await Users.findOrFail(parseInt(params.id));
     const currentUserInfo: IUser = request.input("user");
-    const roleChanged: IUser = request.input("role_change");
-
-    if (roleChanged) {
-      if (currentUserInfo.userType === "DISTRICT") {
-        await currentUserInfo.related("districtRole").detach();
+    const updatedUser: Users =  await userToBeUpdated
+      .merge({
+        firstname: currentUserInfo.firstname,
+        lastname: currentUserInfo.lastname,
+        address: currentUserInfo.address,
+        userCity: currentUserInfo.user_city,
+        userPostal: currentUserInfo.user_postal,
+        userProvince: currentUserInfo.user_province,
+        userCountry: currentUserInfo.user_country,
+        phone: currentUserInfo.phone,
+        email: currentUserInfo.email,
+        password: currentUserInfo.password,
+        clubId: currentUserInfo.club_id,
+        districtId: currentUserInfo.district_id ? currentUserInfo.district_id : undefined,
+        userType: currentUserInfo.user_type,
+        extraDetails: JSON.stringify(currentUserInfo.extra_details),
+      })
+      .save();
+      if (currentUserInfo.user_type === "DISTRICT") {
+        await updatedUser.related("districtRole").detach();
         const district: Districts = await Districts.findOrFail(
           currentUserInfo.district_id
         );
-        await currentUserInfo.related("districtRole").attach({
+        await updatedUser.related("districtRole").attach({
           [district.districtId]: {
             district_role: currentUserInfo.role_type,
           },
         });
       } else {
-        await currentUserInfo.related("clubRole").detach();
+        await updatedUser.related("clubRole").detach();
         const club: Clubs = await Clubs.findOrFail(currentUserInfo.club_id);
-        await currentUserInfo.related("clubRole").attach({
+        await updatedUser.related("clubRole").attach({
           [club.clubId]: {
             club_role: currentUserInfo.role_type,
           },
         });
       }
-    }
-    await userToBeUpdated
-      .merge({
-        firstname: currentUserInfo.firstname,
-        lastname: currentUserInfo.lastname,
-        address: currentUserInfo.address,
-        userCity: currentUserInfo.userCity,
-        userPostal: currentUserInfo.userPostal,
-        userProvince: currentUserInfo.userProvince,
-        userCountry: currentUserInfo.userCountry,
-        phone: currentUserInfo.phone,
-        email: currentUserInfo.email,
-        password: currentUserInfo.password,
-        clubId: currentUserInfo.clubId,
-        districtId: currentUserInfo.districtId,
-        userType: currentUserInfo.userType,
-        extraDetails: JSON.stringify(currentUserInfo.extra_details),
-      })
-      .save();
-
+    
     return response.json(true);
   }
 

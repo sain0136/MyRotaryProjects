@@ -19,14 +19,21 @@
       :closeTimer="toast.closeTimer"
     />
     <section :class="tailwind.DIVCOL" class="gap-8">
-      <h1 class="text-center" :class="tailwind.H1">Choose a District</h1>
-      <h3 class="text-center font-bold" :class="tailwind.H3">All Districts</h3>
+      <h1 class="text-center" :class="tailwind.H1">
+        {{ headerFormatter("Choose a District") }}
+      </h1>
+      <h3 class="text-center font-bold" :class="tailwind.H3">
+        {{ headerFormatter("All Districts") }}
+      </h3>
       <BaseSelect v-model="districtChosen" :options="districtNameList" />
-      <h1 class="text-center" :class="tailwind.H1">Create a new admin</h1>
+      <h1 class="text-center" :class="tailwind.H1">
+        {{ headerFormatter("Create a new admin") }}
+      </h1>
     </section>
     <DistrictAdminsTable
       :districtIdProp="districtId"
       @update:showConfirmModal="updateShowModal"
+      :keyProp="keyProp"
     />
     <div class="button_wrapper">
       <RotaryButton label="Create" @click="createNewAdmin()" />
@@ -65,7 +72,6 @@ export default defineComponent({
   },
   setup() {
     const store = useRotaryStore();
-
     const showConfirmModal = ref({
       showConfirmModal: false,
       confirmModalMessage: "",
@@ -74,16 +80,22 @@ export default defineComponent({
     function updateShowModal(newValue: any) {
       showConfirmModal.value = newValue;
     }
-
+    const keyProp = ref(0);
+    function keyPropRefresh() {
+      keyProp.value = keyProp.value + 1;
+    }
     return {
       showConfirmModal,
       updateShowModal,
       store,
+      keyProp,
+      keyPropRefresh,
     };
   },
   props: {},
   data() {
     return {
+      
       tailwind: TAILWIND_COMMON_CLASSES,
       serverException: false,
       expectionObject: {} as IApiException,
@@ -91,7 +103,7 @@ export default defineComponent({
       districtChosen: "",
       districtNameList: [] as string[],
       districtMapChosenDistrictToID: new Map<string, number>(),
-
+      headerFormatter: Utilities.headerFormater,
       deleteConfirm: null as any,
       toast: {
         display: false,
@@ -144,6 +156,7 @@ export default defineComponent({
     createNewAdmin() {
       this.store.setUserFormProps({
         formModeProp: "CREATE",
+        userCreationTypeProp: "DISTRICT_ADMIN",
       });
       this.$router.push({
         name: "SiteAdminUserForm",
@@ -164,11 +177,14 @@ export default defineComponent({
         );
         if (response === true) {
           this.resetSet();
+          this.deleteConfirm = false;
+          this.toast.display = true;
+          this.toast.msg = this.headerFormatter("District admin deleted successfully");
         } else {
           this.resetSet();
           this.deleteConfirm = false;
           this.toast.display = true;
-          this.toast.msg = "Cannot delete this district admin ";
+          this.toast.msg = this.headerFormatter("Cannot delete this district admin");
           setTimeout(() => {
             this.toast.display = false;
           }, 4000);
@@ -179,6 +195,7 @@ export default defineComponent({
       }
     },
     resetSet() {
+      this.keyPropRefresh();
       (this.showConfirmModal as any) = {
         showConfirmModal: false,
         confirmModalMessage: "",

@@ -20,7 +20,7 @@
           </h3>
         </div>
         <!-- Modal body -->
-        <div class="space-y-6 p-6">
+        <div class="space-y-6 p-6 break-all">
           <p
             class="text-center text-base leading-relaxed text-gray-900 dark:text-gray-400"
           >
