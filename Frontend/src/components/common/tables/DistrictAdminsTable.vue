@@ -1,7 +1,7 @@
 <template>
   <div
     class="relative overflow-x-auto shadow-md sm:rounded-lg"
-    v-if="admins.length != 0"
+    v-if="admins.length !== 0"
     :key="keyProp"
   >
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
@@ -140,7 +140,7 @@ import { useRotaryStore } from "@/stores/rotaryStore";
 
 export default defineComponent({
   name: "DistrictAdminsTable",
-  emits: ["update-refresh"],
+  // emits: ["update-refresh"],
   setup(emit, context: SetupContext) {
     const store = useRotaryStore();
     function updateShowModal(
