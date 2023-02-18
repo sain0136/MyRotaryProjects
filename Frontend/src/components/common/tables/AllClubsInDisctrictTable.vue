@@ -29,19 +29,7 @@
               <button
                 title="Edit Club"
                 class="crud_buttons hover:text-primary-c"
-                @click="
-                  () => {
-                    $router.push({
-                      name: 'SiteAdminUsersForm',
-                      params: {
-                        adminRouteProp: 'ADMIN',
-                        editOrCreateProp: 'EDIT',
-                        userIdProp: club.user_id,
-                        userCreationTypeProp: 'DISTRICT_ADMIN',
-                      },
-                    });
-                  }
-                "
+                @click="updateClub(club.club_id as number) "
               >
                 <font-awesome-icon
                   class="hover:text-primary-color"
@@ -126,10 +114,10 @@
     </div>
   </div>
   <div v-else>
-    <p class="text-center font-bold text-gray-700">{{ message }}</p>
+    <p class="text-center font-bold text-gray-700">{{ headerFormatter(message) }}</p>
   </div>
 </template>
-AllClubsInDisctrictTable
+
 <script lang="ts">
 import DistrictsApi from "@/services/Districts";
 import Utilities from "@/utils/frontend/classes/Utilities";
@@ -142,6 +130,7 @@ import { ref } from "vue";
 import type { SetupContext } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
+import { useRotaryStore } from "@/stores/rotaryStore";
 
 export default defineComponent({
   name: "AllClubsInDisctrictTable",
@@ -153,8 +142,9 @@ export default defineComponent({
         idTobeDeleted: clubId,
       });
     }
+    const store = useRotaryStore();
     const key = ref(0);
-    return { key, updateShowModal };
+    return { key, updateShowModal,store };
   },
   components: {},
   props: {
@@ -162,6 +152,7 @@ export default defineComponent({
   },
   data() {
     return {
+      headerFormatter:Utilities.headerFormater,
       allClubs: [] as IClub[],
       payload: {
         current_page: 1,
@@ -207,6 +198,13 @@ export default defineComponent({
         //   this.serverException = true;
         //   this.expectionObject = error as IApiException;
       }
+    },
+    updateClub(clubId: number) {
+      this.store.setClubFormProps({
+        formModeProp: "UPDATE",
+        clubIdProp: clubId,
+      })
+      this.$router.push({ name: "SiteAdminClubForm" });
     },
   },
   computed: {},

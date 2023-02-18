@@ -77,14 +77,14 @@ export default class ClubsApi {
    * @param  {IClub} creationObject
    */
   public static async createClub(
-    creationObject: IClub
+    newClub: IClub
   ): Promise<boolean | IApiError> {
     const apiReponse = await fetch(import.meta.env.VITE_API_URL + "club", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(creationObject),
+      body: JSON.stringify({club:newClub}),
     }).then(async (response) => {
       return await response.json();
     });
@@ -102,7 +102,7 @@ export default class ClubsApi {
    */
   public static async updateClub(
     id: number,
-    data: object
+    updatedClub: object
   ): Promise<boolean | IApiError> {
     const apiReponse = await fetch(
       import.meta.env.VITE_API_URL + "club/" + id,
@@ -111,7 +111,7 @@ export default class ClubsApi {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({club:updatedClub}),
       }
     ).then(async (response) => {
       return await response.json();

@@ -19,33 +19,23 @@
       :closeTimer="toast.closeTimer"
     />
     <section :class="tailwind.DIVCOL" class="gap-8">
-      <h1 class="text-center" :class="tailwind.H1">Choose a District</h1>
-      <h3 class="text-center font-bold">All Districts</h3>
+      <h1 class="text-center" :class="tailwind.H1">
+        {{ headerFormatter("Choose a District") }}
+      </h1>
+      <h3 class="text-center font-bold" :class="tailwind.H3">
+        {{ headerFormatter("All Districts") }}
+      </h3>
       <BaseSelect v-model="districtChosen" :options="districtNameList" />
-      <h1 class="text-center" :class="tailwind.H1">Create a new club</h1>
+      <h1 class="text-center" :class="tailwind.H1">
+        {{ headerFormatter("Create a new club") }}
+      </h1>
     </section>
     <DistrictClubsTable
       :districtIdProp="districtId"
       @update:showConfirmModal="updateShowModal"
     />
     <div class="button_wrapper">
-      <RotaryButton
-        label="Create"
-        @click="
-              () =>
-                $router.push({
-                  name: 'SiteAdminUsersForm',
-                  params: {
-                    adminRouteProp: 'ADMIN',
-                    editOrCreateProp: 'CREATE',
-                    userCreationTypeProp: 'CLUB_ADMIN',
-                    districtIdProp:'',
-                    districtNameListProp: districtNameList as string[],
-                    districtMapChosenDistrictToIDProp: JSON.stringify([...districtMapChosenDistrictToID]) 
-                  },
-                })
-            "
-      />
+      <RotaryButton label="Create" @click="createNewClub()" />
     </div>
   </div>
 </template>
@@ -67,6 +57,7 @@ import ConfirmModal from "@/components/common/modals/ConfirmModal.vue";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
 import Toast from "@/components/common/toast/Toast.vue";
 import ClubsApi from "@/services/Club";
+import { useRotaryStore } from "@/stores/rotaryStore";
 export default defineComponent({
   name: "ClubAdmin",
   components: {
@@ -78,6 +69,7 @@ export default defineComponent({
     Toast,
   },
   setup() {
+    const store = useRotaryStore();
     const showConfirmModal = ref({
       showConfirmModal: false,
       confirmModalMessage: "",
@@ -88,6 +80,7 @@ export default defineComponent({
     }
 
     return {
+      store,
       showConfirmModal,
       updateShowModal,
     };
@@ -95,6 +88,7 @@ export default defineComponent({
   props: {},
   data() {
     return {
+      headerFormatter: Utilities.headerFormater,
       tailwind: TAILWIND_COMMON_CLASSES,
       serverException: false,
       expectionObject: {} as IApiException,
@@ -178,6 +172,12 @@ export default defineComponent({
         this.serverException = true;
         this.expectionObject = error as IApiException;
       }
+    },
+    createNewClub() {
+      this.store.setClubFormProps({
+        formModeProp: "CREATE",
+      })
+      this.$router.push({ name: "SiteAdminClubForm" });
     },
     resetSet() {
       (this.showConfirmModal as any) = {

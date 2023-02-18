@@ -95,7 +95,6 @@ export default defineComponent({
   props: {},
   data() {
     return {
-      
       tailwind: TAILWIND_COMMON_CLASSES,
       serverException: false,
       expectionObject: {} as IApiException,

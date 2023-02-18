@@ -34,6 +34,20 @@ export interface IUserFormProps {
   userCreationTypeProp?: "DISTRICT_ADMIN" | "CLUB_MEMBER";
 }
 
+export interface IClubFormProps {
+  formModeProp?: "UPDATE" | "CREATE" | "VIEW";
+  clubIdProp?: number;
+}
+//  make a pojo class for IClubFormProps
+class clubFormPropsPojo implements IClubFormProps {
+  formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
+  clubIdProp: number | undefined;
+  constructor(props: IClubFormProps) {
+    this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
+    this.clubIdProp = props.clubIdProp ? props.clubIdProp : undefined;
+  }
+}
+
 class districtFormPropsPojo implements IDistrictFormProps {
   formModeProp: string | undefined;
   districtIdProp: number | undefined;
@@ -56,7 +70,9 @@ class userFormPropsPojo implements IUserFormProps {
     this.userIdProp = props.userIdProp ? props.userIdProp : undefined;
     this.clubIdProp = props.clubIdProp ? props.clubIdProp : undefined;
     this.disrictIdProp = props.disrictIdProp;
-    this.userCreationTypeProp = props.userCreationTypeProp ? props.userCreationTypeProp : undefined;
+    this.userCreationTypeProp = props.userCreationTypeProp
+      ? props.userCreationTypeProp
+      : undefined;
   }
 }
 export const useRotaryStore = defineStore("main", {
@@ -65,6 +81,7 @@ export const useRotaryStore = defineStore("main", {
     return {
       districtFormProps: {} as IDistrictFormProps,
       userFormProps: {} as IUserFormProps,
+      clubFormProps: {} as IClubFormProps,
       isSiteAdminLoggedIn: false,
       isDistrictAdminLoggedIn: false,
       isClubAdminLoggedIn: false,
@@ -198,6 +215,12 @@ export const useRotaryStore = defineStore("main", {
       const userFormProps = new userFormPropsPojo({ ...props });
       this.userFormProps = userFormProps;
     },
+    // make a setClubFormProps function below
+    setClubFormProps(props: IClubFormProps) {
+      const clubFormProps = new clubFormPropsPojo({ ...props });
+      this.clubFormProps = clubFormProps;
+    },
+
     clearProps() {
       this.districtFormProps = {} as IDistrictFormProps;
     },
