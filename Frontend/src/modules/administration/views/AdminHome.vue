@@ -111,7 +111,7 @@ export default defineComponent({
           const response = await UploadsApi.fileUpload({
             image_assets: this.image as unknown as File,
           });
-          if (response === true) {
+          if (!Utilities.isAnApiError(response)) {
             this.toast.display = true;
             this.toast.msg = "Image Uploaded Successfully";
             this.image = null;

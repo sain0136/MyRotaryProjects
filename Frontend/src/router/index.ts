@@ -1,16 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
-import LoginApp from "@/modules/administration/views/LoginApp.vue";
 import fourzerofour from "@/components/common/fourzerofour.vue";
 import SiteAdminRoutes from "@/modules/administration/routes/routes";
-
+import LoginApp from "@/modules/administration/views/LoginApp.vue";
+import LandingRoutes from "@/modules/home/routes/routes"
 const routes = [
   {
-    path: "/",
+    path: "/admin-login",
     component: LoginApp,
     mame: "LoginApp",
   },
+  
   { path: "/:pathMatch(.*)*", component: fourzerofour, name: "fourzzerofour" },
   SiteAdminRoutes,
+  LandingRoutes,
   // {
   //   path: '/about',
   //   name: 'about',

@@ -202,7 +202,11 @@ export default class UploadsController {
           if (projectToBeUpdated) {
             fileCategoryIndicator = projectToBeUpdated.projectCode;
           } else if (districtReportExtraDetails) {
-            fileCategoryIndicator = districtReportExtraDetails.extraLabel+"_"+districtReportExtraDetails.districtId+"_";
+            fileCategoryIndicator =
+              districtReportExtraDetails.extraLabel +
+              "_" +
+              districtReportExtraDetails.districtId +
+              "_";
           }
           const newUUID = uuidv4();
           await file.moveToDisk(
@@ -350,10 +354,15 @@ export default class UploadsController {
    * @param  {StorageInformation} storageInformation
    * @returns Promise
    */
-  private async saveAssetLogoImage(storageInformation: StorageInformation): Promise<Assets> {
+  private async saveAssetLogoImage(
+    storageInformation: StorageInformation
+  ): Promise<Assets> {
     const assets = await Assets.findOrFail(1);
-    let deleted: { main_logo: { location: string } } = assets.assets as any;
-    await Drive.delete(deleted.main_logo.location);
+    let deleted: { main_logo: StorageInformation} =
+      assets.assets as unknown as { main_logo: StorageInformation};
+    if (deleted.main_logo.location) {
+      await Drive.delete(deleted.main_logo.location);
+    }
     const updatedAssets = await assets
       .merge({
         assets: JSON.stringify({ main_logo: { ...storageInformation } }),

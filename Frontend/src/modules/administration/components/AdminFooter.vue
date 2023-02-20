@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gray-900 text-white py-8 flex-grow-0 mt-auto ">
+  <footer class="bg-gray-900 text-primary-white py-8 flex-grow-0 mt-auto ">
   <div class="container mx-auto px-6">
     <div class="flex items-center justify-between">
       <p class="text-sm">Copyright &copy; My RotaryProjects 2023</p>

@@ -1,6 +1,6 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
@@ -30,48 +30,52 @@ import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpRightFromSquare,
+  faAngleDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 library.add(
-    faArrowUpRightFromSquare,
-    faX,
-    faArrowRightFromBracket,
-    faFlag,
-    faCirclePlus,
-    faPersonCircleCheck,
-    faThumbsUp,
-    faPaperPlane,
-    faFileContract,
-    faDiagramProject,
-    faUserSecret,
-    faAt,
-    faEnvelope,
-    faPenToSquare,
-    faTrashCan,
-    faFacebook,
-    faTwitter,
-    faInstagram,
-    faAngleRight,
-    faEnvelopeCircleCheck,
-    faPhone,
-    faLocationDot,
-    faFacebookF,
-    faRightToBracket,
-    faArrowRight,
-    faCheck,
-    faUserLock,
-    faCircleDown
-  );
-import App from '@/App.vue'
-import router from '@/router'
+  faAngleDown,
+  faArrowUpRightFromSquare,
+  faX,
+  faArrowRightFromBracket,
+  faFlag,
+  faCirclePlus,
+  faPersonCircleCheck,
+  faThumbsUp,
+  faPaperPlane,
+  faFileContract,
+  faDiagramProject,
+  faUserSecret,
+  faAt,
+  faEnvelope,
+  faPenToSquare,
+  faTrashCan,
+  faFacebook,
+  faTwitter,
+  faInstagram,
+  faAngleRight,
+  faEnvelopeCircleCheck,
+  faPhone,
+  faLocationDot,
+  faFacebookF,
+  faRightToBracket,
+  faArrowRight,
+  faCheck,
+  faUserLock,
+  faCircleDown
+);
+import App from "@/App.vue";
+import router from "@/router";
 
-import '@/assets/base.css'
+import "@/assets/base.css";
 
-const app = createApp(App)
+const app = createApp(App);
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
-app.use(pinia)
-app.use(router)
+app.use(pinia);
+app.use(router);
 app.component("font-awesome-icon", FontAwesomeIcon);
-app.mount('#app')
+app.mount("#app");

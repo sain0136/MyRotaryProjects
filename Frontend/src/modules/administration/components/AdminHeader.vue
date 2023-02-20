@@ -53,7 +53,7 @@
           <li>
             <router-link
               class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
-              :to="{ name: 'AdminHome' }"
+              :to="{ path: '/' }"
               >Landing Page</router-link
             >
           </li>
@@ -158,7 +158,7 @@ export default defineComponent({
     try {
         if (this.store.$state.isSiteAdminLoggedIn) {
           await  this.store.signOut()
-          this.$router.push("/adminportal");
+          this.$router.push( '/admin-login');
         } else {
         }
     } catch (error) {

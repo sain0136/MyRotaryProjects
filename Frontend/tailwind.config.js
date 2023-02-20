@@ -26,6 +26,7 @@ module.exports = {
         "primary-white": "#F5F5FA",
         "primary-green": "#5cb85c",
         "primary-error": "#ff3333",
+        "primary-gray": "#777777",
       },
       fontFamily: {
         baseSans: [

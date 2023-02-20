@@ -26,4 +26,14 @@ tbody {
     }
   }
 
-  
+  .header_h1 {
+    text-transform: capitalize;
+    text-align: center;
+    background-color: #404040;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    font-weight: 800;
+    font-size: 4rem;
+    color: $nearWhite;
+    font-family: 'Montserrat', sans-serif;
+  }
