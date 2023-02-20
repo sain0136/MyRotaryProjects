@@ -3,7 +3,7 @@
     class="login_container flex w-11/12 flex-col items-center rounded-md bg-white py-8 px-4 sm:w-9/12 md:w-6/12 lg:w-4/12 xl:w-1/4 2xl:w-1/5"
   >
     <div class="mb-8 h-60">
-      <img class="h-full rounded-lg object-cover" :src="logo" alt="error" />
+      <img class="h-full rounded-lg object-contain" :src="logo" alt="error" />
     </div>
     <form class="w-full flex-col" @submit.prevent="submittFrmHandler()">
       <div class="flex flex-col">
@@ -130,7 +130,7 @@ export default defineComponent({
             this.password
           );
           if (response === true) {
-            this.$router.push({ name: "AdminApp" });
+            this.$router.push({ name: "AdminHome" });
           } else {
             setTimeout(() => {
               this.apiErrrorMessage = "";
