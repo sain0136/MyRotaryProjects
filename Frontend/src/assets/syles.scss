@@ -9,6 +9,7 @@ $tabletMaxScreen: 1023px;
 $desktopScreen: 1024px;
 $seventyPercent: 70%;
 
+
 // template media Queries
 @media screen and (max-width: $tabletMaxScreen) and (min-width: $tabletMinScreen) {
 }
@@ -25,7 +26,14 @@ tbody {
       }
     }
   }
-
+  @mixin genericFlexColumn {
+    display: flex;
+    flex-direction: column;
+  }
+  @mixin genericFlexRow {
+    display: flex;
+    flex-direction: row;
+  }
   .header_h1 {
     text-transform: capitalize;
     text-align: center;

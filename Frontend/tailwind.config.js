@@ -22,11 +22,13 @@ module.exports = {
       },
       colors: {
         "primary-color": "#ffb607",
+        "primary-dark-color": "#ec971f",
         "primary-black": "#212427",
         "primary-white": "#F5F5FA",
         "primary-green": "#5cb85c",
         "primary-error": "#ff3333",
         "primary-gray": "#777777",
+        "primary-dark-green": "#449d44",
       },
       fontFamily: {
         baseSans: [

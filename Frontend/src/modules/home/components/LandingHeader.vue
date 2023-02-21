@@ -22,7 +22,7 @@
               <li class="li_border">
                 <a href="https://www.facebook.com/rotary">
                   <font-awesome-icon
-                    class="text-2xl text-gray-300 hover:text-3xl hover:text-white"
+                    class="text-2xl  hover:text-3xl hover:text-white"
                     icon="fa-brands fa-facebook" />
                   <span class="fab fa-facebook"></span
                 ></a>
@@ -32,7 +32,7 @@
                   href="https://twitter.com/Rotary?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
                 >
                   <font-awesome-icon
-                    class="text-2xl text-gray-300 hover:text-3xl hover:text-white"
+                    class="text-2xl  hover:text-3xl hover:text-white"
                     icon="fa-brands fa-twitter" />
                   <span class="fab fa-twitter"></span
                 ></a>
@@ -40,7 +40,7 @@
               <li class="li_border">
                 <a href="https://www.instagram.com/rotaryinternational/?hl=en">
                   <font-awesome-icon
-                    class="text-2xl text-gray-300 hover:text-3xl hover:text-white"
+                    class="text-2xl  hover:text-3xl hover:text-white"
                     icon="fa-brands fa-instagram" />
                   <span class="fab fa-twitter"></span
                 ></a>
@@ -97,7 +97,32 @@
                 Home
               </router-link>
             </li>
+         
             <li>
+              <router-link
+                :to="{ path: '/' }"
+                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
+              >
+                About
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ path: '/' }"
+                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
+              >
+                Contact Us
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ path: '/' }"
+                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
+              >
+                Stats
+              </router-link>
+            </li>
+              <li>
               <button
                 id="dropdownNavbarLink"
                 data-dropdown-toggle="dropdownNavbar"
@@ -189,31 +214,6 @@
                 </ul>
               </div>
             </li>
-            <li>
-              <router-link
-                :to="{ path: '/' }"
-                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
-              >
-                About
-              </router-link>
-            </li>
-            <li>
-              <router-link
-                :to="{ path: '/' }"
-                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
-              >
-                Contact Us
-              </router-link>
-            </li>
-            <li>
-              <router-link
-                :to="{ path: '/' }"
-                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
-              >
-                Stats
-              </router-link>
-            </li>
-           
           </ul>
         </div>
       </div>

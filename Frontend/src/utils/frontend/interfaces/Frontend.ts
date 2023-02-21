@@ -1,31 +1,34 @@
-
 import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
-import type { IDsgProject, IDmProject, IClubProject } from "@/utils/shared/interfaces/ProjectsInterface";
+import type {
+  IDsgProject,
+  IDmProject,
+  IClubProject,
+} from "@/utils/shared/interfaces/ProjectsInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
- export const FORM_MODE_PROP ={
-  UPDATE:"UPDATE",
-  CREATE:"CREATE",
-  VIEW:"VIEW",
- } 
+export const FORM_MODE_PROP = {
+  UPDATE: "UPDATE",
+  CREATE: "CREATE",
+  VIEW: "VIEW",
+};
 
- export const DISTRIST_REPORT_TYPE = {
+export const DISTRIST_REPORT_TYPE = {
   DSG_EN: "DSG_EN",
   DSG_FR: "DSG_FR",
   DM_EN: "DM_EN",
   DM_FR: "DM_FR",
- }
- 
- export const TAILWIND_COMMON_CLASSES = {
-  H1:"text-2xl font-bold text-primary-black",
-  H3:"text-xl font-bold text-primary-black",
-  PARAGRAPHS:" text-primary-black text-lg",
-  DIVROW:"flex flex-row justify-center items-center",
-  DIVCOL:"flex flex-col justify-center items-center",
-  LABEL:"text-primary-black base-text font-bold ", 
-  A_LINK:"text-primary-black base-text font-bold  hover:text-primary-color",
-  SUCCESS:"text-primary-green base-text font-bold", 
- }
+};
+
+export const TAILWIND_COMMON_CLASSES = {
+  H1: "text-2xl font-bold text-primary-black",
+  H3: "text-xl font-bold text-primary-black",
+  PARAGRAPHS: " text-primary-black text-lg",
+  DIVROW: "flex flex-row justify-center items-center",
+  DIVCOL: "flex flex-col justify-center items-center",
+  LABEL: "text-primary-black base-text font-bold ",
+  A_LINK: "text-primary-black base-text font-bold  hover:text-primary-color",
+  SUCCESS: "text-primary-green base-text font-bold",
+};
 export interface IResizeImageOptions {
   maxSize: number;
   file: File;
@@ -36,7 +39,7 @@ export interface RotaryYearObject {
   currentRotaryYear: string;
 }
 
-export interface DistricReportFileUpload{
+export interface DistricReportFileUpload {
   extra_label: string;
   district_id: number;
 }
@@ -54,13 +57,17 @@ export interface IApiException {
   stack: string | undefined;
 }
 
-export class MyError extends Error implements IApiException{
+export class MyError extends Error implements IApiException {
   public stack: string | undefined;
   public code: string | number | undefined;
-  constructor(message?: string, exceptionStack?: string, code?: string | number | undefined) {
+  constructor(
+    message?: string,
+    exceptionStack?: string,
+    code?: string | number | undefined
+  ) {
     super(message);
-      this.stack = exceptionStack;
-      this.code = code;
+    this.stack = exceptionStack;
+    this.code = code;
   }
 }
 
@@ -79,18 +86,18 @@ export interface MainAssets {
     };
   };
 }
-interface meta{
-  
-    total: number;
-    per_page: number;
-    current_page: number;
-    last_page: number;
-    first_page: number;
-    first_page_url: string;
-    last_page_url: string;
-    next_page_url: string;
-    previous_page_url: string;
-  
+interface meta {
+  limit: number;
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+  first_page: number;
+  first_page_url: string;
+  last_page_url: string;
+  next_page_url: string;
+  previous_page_url: string;
+  noSearch?: boolean;
 }
 export interface DistrictPagination {
   meta: meta;

@@ -2,13 +2,12 @@
   <div
     id="defaultModal"
     tabindex="-1"
+    :class="hidden"
     class="fixed top-0 left-0 right-0 z-50 flex h-modal w-full justify-center overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full"
   >
     <div class="relative mt-auto mb-auto h-full w-full max-w-2xl md:h-auto">
       <!-- Modal content -->
-      <div
-        class="relative rounded-lg bg-gray-500  shadow dark:bg-gray-700"
-      >
+      <div class="relative rounded-lg bg-gray-500 shadow dark:bg-gray-700">
         <!-- Modal header -->
         <div
           class="flex justify-center rounded-t border-b p-4 dark:border-gray-600"
@@ -20,7 +19,7 @@
           </h3>
         </div>
         <!-- Modal body -->
-        <div class="space-y-6 p-6 break-all">
+        <div class="space-y-6 break-all p-6">
           <p
             class="text-center text-base leading-relaxed text-gray-900 dark:text-gray-400"
           >
@@ -32,7 +31,7 @@
             Stack Trace: {{ stackTrace }}
           </p>
           <p
-            class="text-center text-base leading-relaxed text-primary-error font-semibold dark:text-gray-400"
+            class="text-center text-base font-semibold leading-relaxed text-primary-error dark:text-gray-400"
           >
             Contact us at rotary@gmail.com with above errors!
           </p>
@@ -77,6 +76,7 @@ export default defineComponent({
   data() {
     return {
       toggle: this.toggleModal,
+      hidden: "",
     };
   },
   watch: {},
@@ -85,7 +85,8 @@ export default defineComponent({
   },
   methods: {
     redirect() {
-      this.$router.push("/");
+      this.hidden = "";
+      this.$router.go(0);
     },
   },
   computed: {},

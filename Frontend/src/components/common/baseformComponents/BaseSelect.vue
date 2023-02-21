@@ -1,19 +1,15 @@
 <template>
-  <div class=" my-2">
-    <label
-      :for="label"
-      class="mb-2 block text-sm font-medium text-primary-black dark:text-white"
-      >{{ label }}</label
-    >
+  <div class="my-2">
+    <label :for="label" :class="labelStyling">{{ label }}</label>
     <select
       :value="modelValue"
       :id="randomId"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)
       "
-      class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+      :class="selectStyling"
     >
-    <option
+      <option
         v-for="option in options"
         :value="option"
         :key="(option as number)"
@@ -42,6 +38,15 @@ export default defineComponent({
     options: {
       type: Array,
       required: true,
+    },
+    selectStyling: {
+      type: String,
+      default:
+        "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900",
+    },
+    labelStyling: {
+      type: String,
+      default: "mb-2 block text-sm font-medium text-primary-black",
     },
   },
   data() {

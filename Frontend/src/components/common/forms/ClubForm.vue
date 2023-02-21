@@ -32,51 +32,53 @@
         class="flex w-2/4 flex-col p-8"
         novalidate
       >
-      <BaseSelect
-        v-if="store.$state.clubFormProps.formModeProp === formMode.CREATE"
-        v-model="districtChosen"
-        label="Assign To District"
-        :options="districtNameList"
-      />
-      <ErrorValidation
-        v-if="v$.districtChosen.$error"
-        :errorMsg="v$.districtChosen.$errors[0].$message"
-      />
-      <BaseInputsText v-model="club.club_name" label="Name" />
-      <ErrorValidation
-        v-if="v$.club.club_name.$error"
-        :errorMsg="v$.club.club_name.$errors[0].$message"
-      />
-      <BaseInputsText v-model="club.club_address" label="Address" />
-      <ErrorValidation
-        v-if="v$.club.club_address.$error"
-        :errorMsg="v$.club.club_address.$errors[0].$message"
-      />
-      <BaseInputsText v-model="club.club_city" label="City" />
-      <ErrorValidation
-        v-if="v$.club.club_city.$error"
-        :errorMsg="v$.club.club_city.$errors[0].$message"
-      />
-      <BaseSelect v-model="club.club_country" label="Country"
-      :options="countryList"
-      />
-      <ErrorValidation
-        v-if="v$.club.club_country.$error"
-        :errorMsg="v$.club.club_country.$errors[0].$message"
-      />
-      <BaseInputsText v-model="club.club_email" label="Email" />
-      <ErrorValidation
-        v-if="v$.club.club_email.$error"
-        :errorMsg="v$.club.club_email.$errors[0].$message"
-      />
-      <div class="button_row mt-4 flex justify-center gap-4">
-            <RotaryButton
-              :label="headerFormatter(submitButtonmsg)"
-              @click="validateClubForm()"
-            />
-            <RotaryButton label="Cancel" @click="redirect()" />
-          </div>
-  </form>
+        <BaseSelect
+          v-if="store.$state.clubFormProps.formModeProp === formMode.CREATE"
+          v-model="districtChosen"
+          label="Assign To District"
+          :options="districtNameList"
+        />
+        <ErrorValidation
+          v-if="v$.districtChosen.$error"
+          :errorMsg="v$.districtChosen.$errors[0].$message"
+        />
+        <BaseInputsText v-model="club.club_name" label="Name" />
+        <ErrorValidation
+          v-if="v$.club.club_name.$error"
+          :errorMsg="v$.club.club_name.$errors[0].$message"
+        />
+        <BaseInputsText v-model="club.club_address" label="Address" />
+        <ErrorValidation
+          v-if="v$.club.club_address.$error"
+          :errorMsg="v$.club.club_address.$errors[0].$message"
+        />
+        <BaseInputsText v-model="club.club_city" label="City" />
+        <ErrorValidation
+          v-if="v$.club.club_city.$error"
+          :errorMsg="v$.club.club_city.$errors[0].$message"
+        />
+        <BaseSelect
+          v-model="club.club_country"
+          label="Country"
+          :options="countryList"
+        />
+        <ErrorValidation
+          v-if="v$.club.club_country.$error"
+          :errorMsg="v$.club.club_country.$errors[0].$message"
+        />
+        <BaseInputsText v-model="club.club_email" label="Email" />
+        <ErrorValidation
+          v-if="v$.club.club_email.$error"
+          :errorMsg="v$.club.club_email.$errors[0].$message"
+        />
+        <div class="button_row mt-4 flex justify-center gap-4">
+          <RotaryButton
+            :label="headerFormatter(submitButtonmsg)"
+            @click="validateClubForm()"
+          />
+          <RotaryButton label="Cancel" @click="redirect()" />
+        </div>
+      </form>
     </div>
   </div>
 </template>
