@@ -1,10 +1,10 @@
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
-MyError,
+  MyError,
   type IApiError,
   type ProjectPagination,
   type RotaryYearObject,
-type IApiException,
+  type IApiException,
 } from "@/utils/frontend/interfaces/Frontend";
 import type {
   IClubProject,
@@ -21,7 +21,7 @@ export default class ProjectsApi {
    */
   public static async getRotaryYear(): Promise<RotaryYearObject | IApiError> {
     const apiReponse = await fetch(API_ROUTE + "year", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -44,10 +44,10 @@ export default class ProjectsApi {
    * @returns Promise
    */
   public static async getAllProjectsPaginated(
-    id_type: string,
-    id: number,
     current_page: number,
-    limit: number
+    limit: number,
+    id_type?: string,
+    id?: number
   ): Promise<ProjectPagination | IApiError> {
     const apiReponse = await fetch(API_ROUTE + "paginate", {
       method: "POST",
@@ -79,10 +79,9 @@ export default class ProjectsApi {
    * @returns Promise
    */
   public static async getProjectsFilterdPaginated(
-    id_type: string,
-    id: number,
     current_page: number,
-    limit: number
+    limit: number,
+    filters: { [key: string]: string | number | boolean | undefined} = {}
   ): Promise<ProjectPagination | IApiError> {
     const apiReponse = await fetch(API_ROUTE + "filter", {
       method: "POST",
@@ -90,10 +89,11 @@ export default class ProjectsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id_type: id_type,
-        id: id,
-        current_page: current_page,
-        limit: limit,
+        search_criteria: {
+          current_page: current_page,
+          limit: limit,
+          ...filters,
+        },
       }),
     }).then(async (response) => {
       return await response.json();
@@ -170,11 +170,7 @@ export default class ProjectsApi {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as
-      | IApiError
-      | IDmProject
-      | IDsgProject
-      | IClubProject;
+    return apiReponse as IApiError | IDmProject | IDsgProject | IClubProject;
   }
 
   /**

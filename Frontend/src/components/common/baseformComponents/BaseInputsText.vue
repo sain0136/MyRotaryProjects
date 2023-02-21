@@ -2,7 +2,7 @@
   <div class="my-2" :class="divStyling">
     <label
       :for="label"
-      class="mb-2 block text-sm font-medium text-primary-black dark:text-white"
+      :class="labelStyling"
       >{{ label }}</label
     >
     <input
@@ -16,7 +16,7 @@
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)
       "
       :inputmode="(inputMode as any)"
-      class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900"
+      :class="inputStyling"
     />
   </div>
 </template>
@@ -58,6 +58,14 @@ export default defineComponent({
     nameHtml: {
       type: String,
       default: "",
+    },
+    labelStyling: {
+      type: String,
+      default: "mb-2 block text-sm font-medium text-primary-black",
+    },
+    inputStyling: {
+      type: String,
+      default: "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-primary-black",
     },
   },
   data() {

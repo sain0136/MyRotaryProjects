@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="rounded-lg py-2 px-4 font-medium" :class="theme">
+    <button :class="theme">
       {{ label }}
     </button>
   </div>
@@ -19,7 +19,7 @@ export default defineComponent({
     theme: {
       type: String,
       default:
-        "bg-primary-black text-primary-white  hover:bg-primary-color hover:text-primary-black",
+        "rounded-lg py-2 px-4 font-medium bg-primary-black text-primary-white  hover:bg-primary-color hover:text-primary-black",
     },
   },
   data() {

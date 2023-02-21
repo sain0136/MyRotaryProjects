@@ -11,6 +11,16 @@ class ResourceLists {
     }
   });
 
+  static areaOfFocus: Array<string> = [
+    "Peace Conflict Prevention",
+    "Disease Prevention And Treatment",
+    "Water And Sanitation",
+    "Maternal And Child Health",
+    "Basic Education And Literacy",
+    "Economic And Community Development",
+    "Environment",
+  ];
+  
   static clubRoles: Array<string> = ["Club Admin", "Standard Member"];
 
   static canadaProvinceList: Array<string> = [
@@ -408,8 +418,8 @@ class ResourceLists {
     "Documents/Materials Collections",
   ];
 
-  static statusList: Array<string> = Object.keys(ProjectStatus);
-  static grantTypeList: Array<string> = Object.keys(GrantType);
+  static statusList: Array<string> = Object.values(ProjectStatus);
+  static grantTypeList: Array<string> = Object.values(GrantType);
 
   static searchTermConversionMap() {
     const searchTermConversionMap: Map<string, string> = new Map();

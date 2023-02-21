@@ -94,7 +94,10 @@ export const useRotaryStore = defineStore("main", {
       loggedInUsersDistrict: {} as IDistrict,
       loggedInUsersClub: {} as IClub,
       //the project focused on for CRUD
-      currentLoadedProjectData: {} as IDmProject | IDsgProject | IClubProject,
+      currentLoadedProjectExtraDetails: {} as
+        | IDmProject
+        | IDsgProject
+        | IClubProject,
     };
   },
   //Used to manipulate state variable without changing the States themseleves
@@ -223,6 +226,23 @@ export const useRotaryStore = defineStore("main", {
 
     clearProps() {
       this.districtFormProps = {} as IDistrictFormProps;
+    },
+    setCurrentLoadedProjectExtraDetails(
+      reset: boolean,
+      project?: IDmProject | IDsgProject | IClubProject
+    ) {
+      if (reset) {
+        this.currentLoadedProjectExtraDetails = {} as
+          | IDmProject
+          | IDsgProject
+          | IClubProject;
+      } else {
+        if (project) {
+          this.currentLoadedProjectExtraDetails = project;
+        } else {
+          throw new MyError("Project not loades");
+        }
+      }
     },
   },
   persist: true,

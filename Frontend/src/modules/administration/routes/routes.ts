@@ -59,12 +59,10 @@ const route = {
       name: "SiteAdminUserForm",
       props: true,
     },
+
     {
-      path: "/club-form/",
-      component: SiteAdminClubForm,
-      name: "SiteAdminClubForm",
-      props: true,
-    },
+      path: "/district-form/:id",
+    }
   ],
   
 };
