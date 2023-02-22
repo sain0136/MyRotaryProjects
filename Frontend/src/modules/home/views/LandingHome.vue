@@ -1,5 +1,5 @@
 <template>
-  <div class="container mb-8 min-w-full">
+  <div class="container mb-8 min-w-full ">
     <Toast
       v-if="toast.display"
       :msg="toast.msg"
@@ -15,14 +15,14 @@
     <div class="landing_header">
       <h1 class="header_h1">Our Projects</h1>
     </div>
-    <div class="mt-8 mr-16 flex justify-end">
+    <div class="mt-8 mr-24 flex justify-end">
       <RotaryButton
         :label="viewTypeString"
         :theme="buttonTheme"
         @click="toogleView"
       />
     </div>
-    <div class="landing_grid mt-8">
+    <div class="landing_grid mt-8 px-24 pb-24">
       <div class="filter_tab pb-8">
         <h1 class="py-8 text-center text-2xl font-bold text-primary-gray">
           {{ headerFormatter("PROJECT SEARCH") }}

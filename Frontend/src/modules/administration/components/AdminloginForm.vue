@@ -39,7 +39,7 @@
         <RotaryButton
           type="submit"
           label="Login"
-          theme=" bg-primary-color text-primary-white hover:bg-primary-black "
+          theme="rounded-lg py-2 px-4 bg-primary-color text-primary-white hover:bg-primary-black "
         />
       </div>
     </form>

@@ -1,4 +1,9 @@
-import type { IApiError } from "@/utils/frontend/interfaces/Frontend";
+import Utilities from "@/utils/frontend/classes/Utilities";
+import {
+  MyError,
+  type IApiError,
+  type IApiException,
+} from "@/utils/frontend/interfaces/Frontend";
 
 export default class MailerApi {
   /**
@@ -24,7 +29,14 @@ export default class MailerApi {
           body: body,
         }),
       }
-    );
+    ).then(async (response) => {
+      return await response.json();
+    });
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+
     return apiReponse as unknown as IApiError | boolean;
   }
 }

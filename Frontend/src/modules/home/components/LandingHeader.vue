@@ -1,9 +1,9 @@
 <template>
-  <header class="landing_header header-type-one top-0 w-full bg-white ">
+  <header class="landing_header header-type-one top-0 w-full bg-white">
     <!--Header Top-->
     <div class="header_top bg-primary-color py-4">
       <div class="auto_container px-64">
-        <div class="sm:flex-col justify-between  md:flex md:flex-row">
+        <div class="justify-between sm:flex-col md:flex md:flex-row">
           <div class="top-left">
             <ul class="flex justify-center">
               <li class="text-primary-white">
@@ -22,7 +22,7 @@
               <li class="li_border">
                 <a href="https://www.facebook.com/rotary">
                   <font-awesome-icon
-                    class="text-2xl  hover:text-3xl hover:text-white"
+                    class="text-2xl hover:text-3xl hover:text-white"
                     icon="fa-brands fa-facebook" />
                   <span class="fab fa-facebook"></span
                 ></a>
@@ -32,7 +32,7 @@
                   href="https://twitter.com/Rotary?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
                 >
                   <font-awesome-icon
-                    class="text-2xl  hover:text-3xl hover:text-white"
+                    class="text-2xl hover:text-3xl hover:text-white"
                     icon="fa-brands fa-twitter" />
                   <span class="fab fa-twitter"></span
                 ></a>
@@ -40,7 +40,7 @@
               <li class="li_border">
                 <a href="https://www.instagram.com/rotaryinternational/?hl=en">
                   <font-awesome-icon
-                    class="text-2xl  hover:text-3xl hover:text-white"
+                    class="text-2xl hover:text-3xl hover:text-white"
                     icon="fa-brands fa-instagram" />
                   <span class="fab fa-twitter"></span
                 ></a>
@@ -97,10 +97,10 @@
                 Home
               </router-link>
             </li>
-         
+
             <li>
               <router-link
-                :to="{ path: '/' }"
+                :to="{ name: 'AboutUs' }"
                 class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
               >
                 About
@@ -108,7 +108,7 @@
             </li>
             <li>
               <router-link
-                :to="{ path: '/' }"
+                :to="{ name: 'ContactUs' }"
                 class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
               >
                 Contact Us
@@ -116,27 +116,45 @@
             </li>
             <li>
               <router-link
-                :to="{ path: '/' }"
+                :to="{ name: 'Stats' }"
                 class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
               >
                 Stats
               </router-link>
             </li>
-              <li>
+            <li>
+              <router-link
+                v-if="!isUserLoggedIn"
+                :to="{ name: 'UserLogin' }"
+                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
+              >
+                Sign In
+              </router-link>
+              <a
+                v-else
+                @click="signOut()"
+                class=" cursor-pointer block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
+                >Sign Out</a
+              >
+            </li>
+            <li v-if="isUserLoggedIn">
               <button
                 id="dropdownNavbarLink"
                 data-dropdown-toggle="dropdownNavbar"
                 class="flex w-full items-center justify-between py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
-                @mouseover="toggleDropdown()"
                 @click="toggleDropdown()"
               >
-                Admin <font-awesome-icon icon="fa-solid fa-angle-down" class=" ml-1 mt-1"/>
+                Admin
+                <font-awesome-icon
+                  icon="fa-solid fa-angle-down"
+                  class="ml-1 mt-1"
+                />
               </button>
               <div
                 id="dropdownNavbar"
-                class="z-10  bg-primary-gray"
+                class="z-10 bg-primary-gray"
                 :class="revealDropdown"
-                @mouseleave="toggleDropdown()"
+                @click="toggleDropdown()"
               >
                 <ul class="whitespace-nowrap text-sm">
                   <li>
@@ -222,9 +240,14 @@
 </template>
 
 <script lang="ts">
+import { useRotaryStore } from "@/stores/rotaryStore";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "LandingHeader",
+  setup() {
+    const store = useRotaryStore();
+    return { store };
+  },
   components: {},
   props: {
     title: {
@@ -240,6 +263,10 @@ export default defineComponent({
   watch: {},
   async created() {},
   methods: {
+    async signOut() {
+      await this.store.signOut();
+      this.$router.push('/');
+    },
     toggleDropdown() {
       if (this.revealDropdown == "hidden") {
         this.revealDropdown = "";
@@ -248,11 +275,18 @@ export default defineComponent({
       }
     },
   },
-  computed: {},
+  computed: {
+    isUserLoggedIn() {
+      const state = this.store.$state;
+      return (
+        state.isClubUserLoggedIn ||
+        state.isClubAdminLoggedIn ||
+        state.isDistrictAdminLoggedIn ||
+        state.isSiteAdminLoggedIn
+      );
+    },
+  },
 });
 </script>
 
-<style scoped lang="scss">
-.li_border {
-}
-</style>
+<style scoped lang="scss"></style>
