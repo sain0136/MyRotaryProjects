@@ -1,5 +1,5 @@
 <template>
-  <div class="container min-w-full gap-8 pb-24" :class="tailwind.DIVCOL">
+  <!-- <div class="container min-w-full gap-8 pb-24" :class="tailwind.DIVCOL">
     <Toast
       v-if="toast.display"
       :msg="toast.msg"
@@ -12,10 +12,10 @@
       :stackTrace="expectionObject.stack"
       :toggleModel="true"
     />
-  </div>
+  </div> -->
 </template>
 
-<script lang="ts">
+<!-- <script lang="ts">
 import { PieChart, BarChart } from "vue-chart-3";
 
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
@@ -265,8 +265,9 @@ export default defineComponent({
     },
   },
 });
+</script> -->
+<script lang="ts">
 </script>
-
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
 </style>
