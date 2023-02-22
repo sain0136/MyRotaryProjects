@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -37,6 +38,7 @@ import {
 
 library.add(
   faAngleDown,
+  faLocationDot,
   faArrowUpRightFromSquare,
   faX,
   faArrowRightFromBracket,

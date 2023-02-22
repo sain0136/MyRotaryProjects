@@ -235,7 +235,7 @@ export default class ProjectsController {
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
           completionDate: convertedCompletionDate as unknown as DateTime,
-          fundingGoal: newProject.funding_goal,
+          fundingGoal: (newProject.funding_goal),
           anticipatedFunding: newProject.anticipated_funding,
           startDate: convertedStartDate as unknown as DateTime,
           createdBy: newProject.created_by,

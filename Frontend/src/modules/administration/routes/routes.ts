@@ -59,10 +59,6 @@ const route = {
       name: "SiteAdminUserForm",
       props: true,
     },
-
-    {
-      path: "/district-form/:id",
-    }
   ],
   
 };

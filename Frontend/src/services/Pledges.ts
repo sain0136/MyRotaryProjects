@@ -52,7 +52,7 @@ export default class PledgesApi {
   public static async createPledge(
     newPledge: Pledge
   ): Promise<IApiError | IDmProject | IDsgProject | IClubProject> {
-    const apiReponse = await fetch(API_ROUTE + '/create', {
+    const apiReponse = await fetch(API_ROUTE + 'create', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

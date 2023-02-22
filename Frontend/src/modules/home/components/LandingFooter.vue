@@ -103,7 +103,7 @@
           </ul>
         </div>
 
-        <div class="col-span-1 flex flex-col">
+        <div class="col-span-1 flex flex-col justify-center">
           <h2 class="mb-4 text-lg">Our Address</h2>
           <ul class="list-style-one flex gap-4">
             <font-awesome-icon
