@@ -1,9 +1,9 @@
 <template>
-  <div class="container  min-w-full gap-8 pb-24" :class="tailwind.DIVCOL">
+  <div class="container  min-w-full gap-8 " :class="tailwind.DIVCOL">
     <div class="landing_header w-full">
       <h1 class="header_h1">About Us</h1>
     </div>
-    <div class="container mx-16 mb-8 gap-12" :class="tailwind.DIVCOL">
+    <div class="container px-24 pb-24 gap-12" :class="tailwind.DIVCOL">
       <section class="about_section w-4/5">
         <div class="about_items flex flex-col items-center">
           <h1 class="py-8 text-4xl font-bold text-primary-black">

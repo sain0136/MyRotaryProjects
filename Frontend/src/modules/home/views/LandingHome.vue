@@ -395,7 +395,7 @@ export default defineComponent({
         ) {
           (response as RotaryYearObject).allRotaryYears.forEach((ele) => {
             this.datesList.push(ele);
-            this.longYearToYear.set(ele + "-" + (parseInt(ele) + 1), ele);
+            this.longYearToYear.set(ele.replace(/-\d{4}$/, ""), ele);
           });
           this.year = this.datesList[this.datesList.length - 1];
         }

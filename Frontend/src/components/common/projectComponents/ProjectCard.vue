@@ -12,7 +12,9 @@
       </div>
       <div class="p-5">
         <a @click="foward()">
-          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 hover:text-primary-color cursor-pointer">
+          <h5
+            class="mb-2 cursor-pointer text-2xl font-bold tracking-tight text-gray-900 hover:text-primary-color"
+          >
             {{ projectLoaded.project_name }}
           </h5>
         </a>
@@ -102,7 +104,6 @@ export default defineComponent({
   },
   watch: {},
   async created() {
-    this.randomPictureSelector = Math.floor(Math.random() * 24);
     this.setupCard();
   },
   methods: {
@@ -116,6 +117,13 @@ export default defineComponent({
       for (let index = 1; index < 25; index++) {
         this.pictureArray.push("/sample-cause" + index + ".jpg");
       }
+      // Shuffle the array using the Fisher-Yates algorithm
+      for (let i = this.pictureArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [this.pictureArray[i], this.pictureArray[j]] = [this.pictureArray[j], this.pictureArray[i]];
+      }
+      this.randomPictureSelector = (this.randomPictureSelector + 1) % this.pictureArray.length;
+
       this.truncatedDesc =
         this.projectLoaded.project_description.slice(0, 150) + "...";
       this.percentage = Math.trunc(
@@ -134,9 +142,12 @@ export default defineComponent({
       });
       return formatter.format(amount);
     },
-    foward(){
-      this.$router.push({name: 'CardDetails', params: {id: this.projectLoaded.project_id} })
-    }
+    foward() {
+      this.$router.push({
+        name: "CardDetails",
+        params: { id: this.projectLoaded.project_id },
+      });
+    },
   },
   computed: {},
 });
