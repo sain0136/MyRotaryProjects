@@ -1,5 +1,5 @@
 <template>
-  <div class="container mb-8 min-w-full">
+  <div class="container mb-8 min-w-full ">
     <ExceptionModal
       v-if="serverException"
       :message="expectionObject.message"
@@ -19,7 +19,7 @@
       {{ loadedProject.project_name }}
     </h1>
 
-    <div class="card_details px-8">
+    <div class="card_details px-24 pb-24">
       <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
       <div class="upper_box mt-4 flex justify-between">
         <div class="basic_info flex flex-col">
