@@ -6,15 +6,16 @@ import ClubAdmin from "@/modules/administration/views/ClubAdmin.vue";
 import AllProjects from "@/modules/administration/views/AllProjects.vue";
 import SiteAdminDistrictForm from "@/components/common/forms/DistrictForm.vue";
 import SiteAdminUserForm from "@/components/common/forms/UserForm.vue";
-import { useRotaryStore } from "@/stores/rotaryStore";
+import SiteAdminClubForm from "@/components/common/forms/ClubForm.vue";
+import { useRotaryStore as store } from "@/stores/rotaryStore";
 
 const route = {
   path: "/admin",
   component: AdminApp,
   name: "AdminApp",
   beforeEnter: () => {
-    if (!useRotaryStore().$state.isSiteAdminLoggedIn) {
-      return "/admin-login";
+    if (!store().$state.isSiteAdminLoggedIn) {
+      return  '/admin-login' ;
     }
   },
   children: [
@@ -59,5 +60,6 @@ const route = {
       props: true,
     },
   ],
+  
 };
 export default route;
