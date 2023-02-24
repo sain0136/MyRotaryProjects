@@ -1,5 +1,5 @@
 <template>
-  <div class="container min-w-full gap-8 " :class="tailwind.DIVCOL">
+  <div class="container min-w-full gap-8" :class="tailwind.DIVCOL">
     <Toast
       v-if="toast.display"
       :msg="toast.msg"
@@ -16,7 +16,7 @@
       <h1 class="header_h1">Contact Us</h1>
     </div>
     <section>
-      <div class="container py-24 px-24 ">
+      <div class="container py-24 px-24">
         <div class="contact_us flex flex-col gap-8 md:flex-row md:gap-16">
           <div class="email_section flex flex-1 flex-col">
             <h1 class="mb-4 text-5xl font-bold" :class="tailwind.H1">

@@ -22,7 +22,7 @@
         {{
           store.$state.userFormProps.formModeProp === formMode.CREATE
             ? "Create User"
-            : "Update User:" + " " + user.fullName
+            : "Update:" + " " + user.fullName
         }}
       </h1>
 
@@ -63,6 +63,7 @@
           </div>
         </div>
         <BaseSelect
+          v-if="!userformProps.myProfileViewProp"
           label="Role"
           v-model="user.role_type"
           :options="rolesList"
@@ -233,8 +234,12 @@ export default defineComponent({
     ErrorValidation,
     BaseInputsPassword,
   },
-
-  props: {},
+  props: {
+    test: {
+      type: String,
+      default: "test",
+    },
+  },
   data() {
     return {
       headerFormatter: Utilities.headerFormater,
@@ -518,8 +523,7 @@ export default defineComponent({
           } else if (
             this.userformProps.formModeProp === FORM_MODE_PROP.UPDATE
           ) {
-  
-            response = await UserApi.updateUser(this.user );
+            response = await UserApi.updateUser(this.user);
             this.toast.msg = this.headerFormatter("User updated successfully");
           } else {
             throw new Error("Invalid form mode");

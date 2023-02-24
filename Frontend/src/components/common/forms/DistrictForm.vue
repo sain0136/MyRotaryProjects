@@ -356,7 +356,12 @@ export default defineComponent({
     DistrictUploadModal,
     ErrorValidation,
   },
-  props: {},
+  props: {
+    test: {
+      type: String,
+      default: "",
+    },
+  },
   setup() {
     const store = useRotaryStore();
     const showConfirmModal = ref({

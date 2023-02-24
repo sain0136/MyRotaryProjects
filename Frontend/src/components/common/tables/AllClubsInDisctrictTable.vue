@@ -27,9 +27,21 @@
           <td class="px-6 py-4 text-primary-black">
             <div class="buttons_container2 flex gap-2">
               <button
+                v-if="!districtAdminViewProp"
                 title="Edit Club"
                 class="crud_buttons hover:text-primary-c"
-                @click="updateClub(club.club_id as number) "
+                @click="updateClub(club.club_id as number)"
+              >
+                <font-awesome-icon
+                  class="hover:text-primary-color"
+                  icon="fa-solid fa-pen-to-square"
+                />
+              </button>
+              <button
+                v-else
+                title="Edit Club"
+                class="crud_buttons hover:text-primary-c"
+                @click="updateClubAsDistrictAdmin(club.club_id as number)"
               >
                 <font-awesome-icon
                   class="hover:text-primary-color"
@@ -114,7 +126,9 @@
     </div>
   </div>
   <div v-else>
-    <p class="text-center font-bold text-gray-700">{{ headerFormatter(message) }}</p>
+    <p class="text-center font-bold text-gray-700">
+      {{ headerFormatter(message) }}
+    </p>
   </div>
 </template>
 
@@ -122,9 +136,7 @@
 import DistrictsApi from "@/services/Districts";
 import Utilities from "@/utils/frontend/classes/Utilities";
 
-import type {
-  ClubPagination,
-} from "@/utils/frontend/interfaces/Frontend";
+import type { ClubPagination } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
 import { ref } from "vue";
 import type { SetupContext } from "vue";
@@ -144,15 +156,16 @@ export default defineComponent({
     }
     const store = useRotaryStore();
     const key = ref(0);
-    return { key, updateShowModal,store };
+    return { key, updateShowModal, store };
   },
   components: {},
   props: {
     districtIdProp: Number,
+    districtAdminViewProp: Number,
   },
   data() {
     return {
-      headerFormatter:Utilities.headerFormater,
+      headerFormatter: Utilities.headerFormater,
       allClubs: [] as IClub[],
       payload: {
         current_page: 1,
@@ -170,16 +183,21 @@ export default defineComponent({
       },
     },
   },
-  async created() {},
+  async created() {
+    if (this.districtAdminViewProp) {
+      this.getAllClubsInDistrict(this.districtAdminViewProp || 0);
+    }
+  },
   methods: {
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
       this.getAllClubsInDistrict();
     },
-    async getAllClubsInDistrict() {
+    async getAllClubsInDistrict(id?: number) {
       try {
+        const districtId = id ? id : this.districtIdProp;
         let response = await DistrictsApi.getAllClubsInDistrictPagination(
-          this.districtIdProp as number,
+          districtId as number,
           this.payload.current_page,
           this.payload.limit
         );
@@ -203,10 +221,18 @@ export default defineComponent({
       this.store.setClubFormProps({
         formModeProp: "UPDATE",
         clubIdProp: clubId,
-      })
+      });
       this.$router.push({ name: "SiteAdminClubForm" });
     },
+    updateClubAsDistrictAdmin(clubId: number) {
+      this.store.setClubFormProps({
+        formModeProp: "UPDATE",
+        clubIdProp: clubId,
+      });
+      this.$router.push({ name: "DistrictAdminClubForm" });
+    },
   },
+
   computed: {},
 });
 </script>
@@ -214,7 +240,7 @@ export default defineComponent({
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
 
-#all_clubs_in_district_table{
+#all_clubs_in_district_table {
   min-width: 25%;
 }
 </style>
