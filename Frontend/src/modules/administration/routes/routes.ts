@@ -13,11 +13,11 @@ const route = {
   path: "/admin",
   component: AdminApp,
   name: "AdminApp",
-  beforeEnter: () => {
-    if (!store().$state.isSiteAdminLoggedIn) {
-      return  '/admin-login' ;
-    }
-  },
+  // beforeEnter: () => {
+  //   if (!store().$state.isSiteAdminLoggedIn) {
+  //     return  '/admin-login' ;
+  //   }
+  // },
   children: [
     {
       path: "home",

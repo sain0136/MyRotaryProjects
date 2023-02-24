@@ -3,6 +3,8 @@ import fourzerofour from "@/components/common/fourzerofour.vue";
 import SiteAdminRoutes from "@/modules/administration/routes/routes";
 import LoginApp from "@/modules/administration/views/LoginApp.vue";
 import LandingRoutes from "@/modules/home/routes/routes"
+import type { RouteRecordRaw } from 'vue-router';
+
 const routes = [
   {
     path: "/admin-login",
@@ -24,7 +26,8 @@ const routes = [
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: routes as RouteRecordRaw[]
+
 });
 router.beforeEach((to, from, next) => {
   // Scroll to top of page on route change
