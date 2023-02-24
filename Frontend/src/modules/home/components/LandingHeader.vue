@@ -133,7 +133,7 @@
               <a
                 v-else
                 @click="signOut()"
-                class=" cursor-pointer block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
+                class="block cursor-pointer rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
                 >Sign Out</a
               >
             </li>
@@ -159,31 +159,39 @@
                 <ul class="whitespace-nowrap text-sm">
                   <li>
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: 'MyProfile' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       My Profile
                     </router-link>
                   </li>
-                  <li>
+                  <li
+                    v-if="
+                      store.$state.isDistrictAdminLoggedIn ||
+                      store.$state.isSiteAdminLoggedIn
+                    "
+                  >
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: 'DistrictSettings' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       District Settings
                     </router-link>
                   </li>
-                  <li>
+                  <li
+                  v-if="
+                    store.$state.isDistrictAdminLoggedIn "
+                  >
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: 'DistrictAdminClubs' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Add/Edit Clubs
                     </router-link>
                   </li>
-                  <li>
+                  <li v-if="store.$state.isClubAdminLoggedIn">
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: 'ClubSettings' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       My Club Settings
@@ -191,7 +199,7 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: '' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Create/Edit My Projects
@@ -199,7 +207,7 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: '' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       View/Edit District Projects
@@ -207,7 +215,7 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: '' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Edit Clubs Projects
@@ -215,7 +223,7 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: '' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Project Approvals
@@ -223,7 +231,7 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ path: '/' }"
+                      :to="{ name: '' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Report Approvals
@@ -265,7 +273,7 @@ export default defineComponent({
   methods: {
     async signOut() {
       await this.store.signOut();
-      this.$router.push('/');
+      this.$router.push("/");
     },
     toggleDropdown() {
       if (this.revealDropdown == "hidden") {

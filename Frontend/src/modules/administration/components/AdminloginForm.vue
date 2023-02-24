@@ -73,7 +73,7 @@ export default defineComponent({
     BaseInputsTextEmail,
   },
   props: {
-    sts: {
+    test: {
       type: String,
       default: "true",
     },

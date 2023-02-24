@@ -2,10 +2,20 @@ import LandingHome from "@/modules/home/views/LandingHome.vue";
 import LandingApp from "@/modules/home/views/LandingApp.vue";
 import CardDetails from "@/components/common/projectComponents/CardDetails.vue";
 import PledgeForm from "@/components/common/forms/PledgeForm.vue";
-import AboutUs from "@/modules/home/views/AboutUs.vue"
-import ContactUs from "@/modules/home/views/ContactUs.vue"
-import Stats from "@/modules/home/views/Stats.vue"
-import UserLogin from "@/modules/home/views/UserLogin.vue"
+import AboutUs from "@/modules/home/views/AboutUs.vue";
+import ContactUs from "@/modules/home/views/ContactUs.vue";
+import Stats from "@/modules/home/views/Stats.vue";
+import UserLogin from "@/modules/home/views/UserLogin.vue";
+import MyProfile from "@/modules/home/views/adminviews/MyProfile.vue";
+import MyProjects from "@/modules/home/views/adminviews/MyProjects.vue";
+import DistrictAdminClubs from "@/modules/home/views/adminviews/DistrictAdminClubs.vue";
+import ClubProjects from "@/modules/home/views/adminviews/ClubProjects.vue";
+import ClubSettings from "@/modules/home/views/adminviews/ClubSettings.vue";
+import DistrictProjects from "@/modules/home/views/adminviews/DistrictProjects.vue";
+import DistrictSettings from "@/modules/home/views/adminviews/DistrictSettings.vue";
+import ProjectApprovals from "@/modules/home/views/adminviews/ProjectApprovals.vue";
+import ReportApprovals from "@/modules/home/views/adminviews/ReportApprovals.vue";
+import DistrictAdminClubForm from "@/components/common/forms/ClubForm.vue";
 const route = {
   path: "/",
   component: LandingApp,
@@ -43,6 +53,56 @@ const route = {
       path: "/login",
       component: UserLogin,
       name: "UserLogin",
+    },
+    {
+      path: "/myprofile",
+      component: MyProfile,
+      name: "MyProfile",
+    },
+    {
+      path: "/myprojects",
+      component: MyProjects,
+      name: "MyProjects",
+    },
+    {
+      path: "/clubadmin",
+      component: DistrictAdminClubs,
+      name: "DistrictAdminClubs",
+    },
+    {
+      path: "/clubform",
+      component: DistrictAdminClubForm,
+      name: "DistrictAdminClubForm",
+    },
+    {
+      path: "/clubprojects",
+      component: ClubProjects,
+      name: "ClubProjects",
+    },
+    {
+      path: "/clubsettings",
+      component: ClubSettings,
+      name: "ClubSettings",
+    },
+    {
+      path: "/districtprojects",
+      component: DistrictProjects,
+      name: "DistrictProjects",
+    },
+    {
+      path: "/districtsettings",
+      component: DistrictSettings,
+      name: "DistrictSettings",
+    },
+    {
+      path: "/projectapprovals",
+      component: ProjectApprovals,
+      name: "ProjectApprovals",
+    },
+    {
+      path: "/reportapprovals",
+      component: ReportApprovals,
+      name: "ReportApprovals",
     },
   ],
 };

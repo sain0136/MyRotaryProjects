@@ -32,6 +32,7 @@ export interface IUserFormProps {
   clubIdProp?: number;
   disrictIdProp?: number;
   userCreationTypeProp?: "DISTRICT_ADMIN" | "CLUB_MEMBER";
+  myProfileViewProp?: true;
 }
 
 export interface IClubFormProps {
@@ -65,6 +66,7 @@ class userFormPropsPojo implements IUserFormProps {
   clubIdProp: number | undefined;
   disrictIdProp: number | undefined;
   userCreationTypeProp: "DISTRICT_ADMIN" | "CLUB_MEMBER" | undefined;
+  myProfileViewProp: true | undefined;
   constructor(props: IUserFormProps) {
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
     this.userIdProp = props.userIdProp ? props.userIdProp : undefined;
@@ -73,7 +75,7 @@ class userFormPropsPojo implements IUserFormProps {
     this.userCreationTypeProp = props.userCreationTypeProp
       ? props.userCreationTypeProp
       : undefined;
-  }
+    this.myProfileViewProp = props.myProfileViewProp ? props.myProfileViewProp : undefined;  }
 }
 export const useRotaryStore = defineStore("main", {
   //The Global state variabales
