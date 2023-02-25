@@ -417,14 +417,14 @@ export default class ProjectsController {
     request,
     response,
   }: HttpContextContract) {
-    const conditional: number = request.input("conditional");
-    const id: number = request.input("id");
+    const conditional: number | string= request.input("conditional");
+    const value: number | string | boolean = request.input("value");
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
 
     const projects: Projects[] = await Projects.query()
       .select()
-      .where({ [conditional]: id })
+      .where({ [conditional]: value })
       .orderBy("project_id", "desc")
       .paginate(currentPage, limit);
     return response.json(projects);

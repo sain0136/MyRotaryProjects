@@ -1,5 +1,5 @@
 <template>
-  <div class="admin_container border-t-2">
+  <div class="admin_container ">
     <h1>Hello World</h1>
   </div>
 </template>

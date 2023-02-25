@@ -217,7 +217,7 @@ export default class ProjectsApi {
    * @returns Promise
    */
   public static async getProjectsByConditional(
-    id: number,
+    value: number | string | boolean,
     current_page: number,
     limit: number,
     conditional: string
@@ -228,7 +228,7 @@ export default class ProjectsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: id,
+        value: value,
         current_page: current_page,
         limit: limit,
         conditional: conditional,

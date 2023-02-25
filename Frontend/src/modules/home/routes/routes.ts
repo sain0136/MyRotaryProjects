@@ -16,6 +16,7 @@ import DistrictSettings from "@/modules/home/views/adminviews/DistrictSettings.v
 import ProjectApprovals from "@/modules/home/views/adminviews/ProjectApprovals.vue";
 import ReportApprovals from "@/modules/home/views/adminviews/ReportApprovals.vue";
 import DistrictAdminClubForm from "@/components/common/forms/ClubForm.vue";
+import UserFormForAdmins from "@/components/common/forms/UserForm.vue";
 const route = {
   path: "/",
   component: LandingApp,
@@ -103,6 +104,11 @@ const route = {
       path: "/reportapprovals",
       component: ReportApprovals,
       name: "ReportApprovals",
+    },
+    {
+      path: "/userform/admin",
+      component: UserFormForAdmins,
+      name: "UserFormForAdmins",
     },
   ],
 };

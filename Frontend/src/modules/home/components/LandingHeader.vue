@@ -1,5 +1,5 @@
 <template>
-  <header class="landing_header header-type-one top-0 w-full bg-white">
+  <header class="landing_header header-type-one top-0 w-full bg-white border-b-2">
     <!--Header Top-->
     <div class="header_top bg-primary-color py-4">
       <div class="auto_container px-64">
@@ -223,7 +223,7 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ name: '' }"
+                      :to="{ name: 'ProjectApprovals' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Project Approvals
@@ -231,7 +231,7 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ name: '' }"
+                      :to="{ name: 'ReportApprovals' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Report Approvals

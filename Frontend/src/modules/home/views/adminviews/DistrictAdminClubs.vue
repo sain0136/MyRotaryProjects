@@ -1,6 +1,6 @@
 <template>
   <div
-    class="admin_container flex flex-col items-center gap-8 border-t-2 py-24 px-24"
+    class="admin_container flex flex-col items-center gap-8  py-24 px-24"
   >
     <ExceptionModal
       v-if="serverException"
@@ -21,26 +21,37 @@
       :closeTimer="toast.closeTimer"
     />
     <h1 class="text-center font-bold" :class="tailwind.H1">
-      Distrct Club Admin
+      District Club Admin
     </h1>
 
     <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
     <DistrictClubsTable
-      class="w-1/2"
       :districtAdminViewProp="districtAdminViewProp"
       @update:showConfirmModal="updateShowModal"
+      @update:clubId="updateClubId"
     />
     <div class="button_wrapper">
       <RotaryButton label="Create" @click="createNewClub()" />
     </div>
+    <AllClubMembersTable
+      v-if="clubId !== 0"
+      :clubIdProp="clubId"
+      @update:showConfirmModal="updateShowModal"
+      :key="clubId"
+    />
+    <RotaryButton  v-if="clubId !== 0" label="Create Member" @click="createNewClubMember()" />
   </div>
 </template>
 
 <script lang="ts">
+import AllClubMembersTable from "@/components/common/tables/AllClubMembersTable.vue";
 import { defineComponent, ref } from "vue";
 import DistrictClubsTable from "@/components/common/tables/AllClubsInDisctrictTable.vue";
 import { useRotaryStore } from "@/stores/rotaryStore";
-import { TAILWIND_COMMON_CLASSES, type IApiException } from "@/utils/frontend/interfaces/Frontend";
+import {
+  TAILWIND_COMMON_CLASSES,
+  type IApiException,
+} from "@/utils/frontend/interfaces/Frontend";
 import ClubsApi from "@/services/Club";
 import ConfirmModal from "@/components/common/modals/ConfirmModal.vue";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
@@ -50,6 +61,10 @@ import RotaryButton from "@/components/common/RotaryButton.vue";
 export default defineComponent({
   name: "DistrictAdminClubs",
   setup() {
+    const clubId = ref(0);
+    const updateClubId = (newValue: number) => {
+      clubId.value = newValue;
+    };
     const store = useRotaryStore();
     const showConfirmModal = ref({
       showConfirmModal: false,
@@ -61,12 +76,15 @@ export default defineComponent({
     }
 
     return {
+      clubId,
       store,
       showConfirmModal,
       updateShowModal,
+      updateClubId,
     };
   },
   components: {
+    AllClubMembersTable,
     DistrictClubsTable,
     ConfirmModal,
     ExceptionModal,
@@ -98,12 +116,12 @@ export default defineComponent({
     updateDeleteConfirm(value: boolean) {
       if (value) {
         this.deleteConfirm = value;
-        this.deleteAdminConfirm();
+        this.deleteMemberConfirm();
       } else {
-        this.deleteConfirm = value;
+        this.showConfirmModal.showConfirmModal = value;
       }
     },
-    async deleteAdminConfirm() {
+    async deleteMemberConfirm() {
       try {
         let response = await ClubsApi.deleteClub(
           (this.showConfirmModal as any).idTobeDeleted
@@ -114,7 +132,7 @@ export default defineComponent({
           this.resetSet();
           this.deleteConfirm = false;
           this.toast.display = true;
-          this.toast.msg = "Cannot delete clubs with projects";
+          this.toast.msg = "Cannot delete member with projects";
           setTimeout(() => {
             this.toast.display = false;
           }, 4000);
@@ -137,6 +155,13 @@ export default defineComponent({
       });
       this.$router.push({ name: "DistrictAdminClubForm" });
     },
+    createNewClubMember(){
+      this.store.setUserFormProps({
+        formModeProp: "CREATE",
+        userCreationTypeProp: "CLUB_MEMBER",
+      });
+      this.$router.push({ name: 'UserFormForAdmins'})
+    }
   },
 
   computed: {},
