@@ -7,7 +7,18 @@
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
       <thead class="text-s bg-primary-black uppercase text-primary-white">
         <tr>
-          <th scope="col" class="px-6 py-3">Club Name</th>
+          <th scope="col" class="px-6 py-3">
+            Club Name
+            <font-awesome-icon
+              class="ml-2 text-primary-color cursor-pointer"
+              data-te-toggle="tooltip"
+              data-te-placement="top"
+              data-te-ripple-init
+              data-te-ripple-color="light"
+              title="Select a row to view and add club memebers"
+              icon="fa-solid fa-question"
+            />
+          </th>
           <th scope="col" class="px-6 py-3">Actions</th>
         </tr>
       </thead>
@@ -17,8 +28,10 @@
           id="admin_info"
           v-for="club in allClubs"
           :key="club.user_id"
+          @click="viewClubMembers(club.club_id as number)"
         >
           <th
+            id="table_header"
             scope="row"
             class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
           >
@@ -159,9 +172,11 @@ export default defineComponent({
     return { key, updateShowModal, store };
   },
   components: {},
+  emits: ['update:clubId'],
   props: {
     districtIdProp: Number,
     districtAdminViewProp: Number,
+    clubId: Number,
   },
   data() {
     return {
@@ -174,6 +189,7 @@ export default defineComponent({
         total: 0,
       },
       message: "Choose a district from the dropdown",
+   
     };
   },
   watch: {
@@ -231,8 +247,10 @@ export default defineComponent({
       });
       this.$router.push({ name: "DistrictAdminClubForm" });
     },
+    async viewClubMembers(clubId:number){
+      this.$emit('update:clubId', clubId);
+    }
   },
-
   computed: {},
 });
 </script>
@@ -242,5 +260,12 @@ export default defineComponent({
 
 #all_clubs_in_district_table {
   min-width: 25%;
+}
+
+#admin_info {
+  &:hover {
+    cursor: pointer;
+    background-color: #5cb85c !important;
+  }
 }
 </style>

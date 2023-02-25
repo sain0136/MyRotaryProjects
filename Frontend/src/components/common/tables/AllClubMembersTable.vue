@@ -1,60 +1,41 @@
 <template>
   <div
+    id="all_club_members"
     class="relative overflow-x-auto shadow-md sm:rounded-lg"
-    v-if="allProjects.length != 0"
+    v-if="allClubMemebers.length != 0"
   >
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-      <thead
-        class="t_head text-s bg-primary-black uppercase text-primary-white"
-      >
+      <thead class="text-s bg-primary-black uppercase text-primary-white">
         <tr>
-          <th>Project Name</th>
-          <th>Code</th>
-          <th>Project Type</th>
-          <th>Project Status</th>
-          <th>Actions</th>
+          <th scope="col" class="px-6 py-3">Name</th>
+          <th scope="col" class="px-6 py-3">Role</th>
+          <th scope="col" class="px-6 py-3">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr
           class="border-b bg-white"
           id="admin_info"
-          v-for="project in allProjects"
-          :key="project.project_id"
+          v-for="clubMember in allClubMemebers"
+          :key="clubMember.user_id"
         >
           <th
             scope="row"
             class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
           >
-            {{ project.project_name }}
+            {{ clubMember.fullName }}
           </th>
-          <td class="px-6 py-4 text-primary-black">
-            {{ project.project_code }}
-          </td>
-          <td class="px-6 py-4 text-primary-black">
-            {{ project.grant_type }}
-          </td>
-          <td class="px-6 py-4 text-primary-black">
-            {{ project.project_status }}
+          <td
+            class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+          >
+            {{ clubMember.role[0].club_role }}
           </td>
           <td class="px-6 py-4 text-primary-black">
             <div class="buttons_container2 flex gap-2">
               <button
-                title="Edit Project"
+                title="Edit Member"
                 class="crud_buttons hover:text-primary-c"
-                @click="
-                  () => {
-                    $router.push({
-                      name: 'SiteAdminUsersForm',
-                      params: {
-                        adminRouteProp: 'ADMIN',
-                        editOrCreateProp: 'EDIT',
-                        userIdProp: project.project_id,
-                        userCreationTypeProp: 'DISTRICT_ADMIN',
-                      },
-                    });
-                  }
-                "
+                @click="editClubMember(clubMember.user_id as number)"
               >
                 <font-awesome-icon
                   class="hover:text-primary-color"
@@ -62,14 +43,13 @@
                 />
               </button>
               <button
-                v-if="!siteAdminViewProp && !forApprovalViewProp"
-                title="Delete Project"
+                title="Delete Member"
                 class="crud_buttons hover:text-primary-c"
                 @click="
                   updateShowModal(
                     true,
-                    project.project_name,
-                    project.project_id as number
+                    clubMember.fullName,
+                    clubMember.user_id as number
                   )
                 "
               >
@@ -93,7 +73,7 @@
           }}</span>
           of
           <span class="font-semibold text-gray-900 dark:text-white">{{
-            payload.total
+            allClubMemebers.length
           }}</span>
           Results
         </span>
@@ -144,128 +124,105 @@
     </div>
   </div>
   <div v-else>
-    <p class="text-center font-bold text-gray-700">{{ message }}</p>
+    <p class="text-center font-bold text-gray-700">
+      {{ headerFormatter(message) }}
+    </p>
   </div>
 </template>
 
 <script lang="ts">
+import ClubsApi from "@/services/Club";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
-import type { ProjectPagination } from "@/utils/frontend/interfaces/Frontend";
-import { defineComponent } from "vue";
-import { ref } from "vue";
-import type { SetupContext } from "vue";
 import type {
-  IClubProject,
-  IDmProject,
-  IDsgProject,
-} from "@/utils/shared/interfaces/ProjectsInterface";
-import ProjectsApi from "@/services/Projects";
+  IApiException,
+  UserPagination,
+} from "@/utils/frontend/interfaces/Frontend";
+import type IUser from "@/utils/shared/interfaces/UserInterface";
+import { defineComponent, type SetupContext } from "vue";
 export default defineComponent({
-  name: "AllProjectsTable",
+  name: "AllClubMembersTable",
   setup(props, context: SetupContext) {
+   const store = useRotaryStore()
     function updateShowModal(
       show: boolean,
-      projectName: string,
-      projectId: number
+      memberName: string,
+      userId: number
     ) {
       context.emit("update:showConfirmModal", {
         showConfirmModal: show,
-        confirmModalMessage: `Are you sure you want to delete ${projectName} district admin?`,
-        idTobeDeleted: projectId,
+        confirmModalMessage: `Are you sure you want to delete member ${memberName}?`,
+        idTobeDeleted: userId,
       });
     }
-    const key = ref(0);
-    return { key, updateShowModal };
+    return { updateShowModal, store };
   },
   components: {},
   props: {
-    siteAdminViewProp: Boolean,
-    findProjectsForClubProp: Number,
-    forApprovalViewProp: Boolean,
-    reportApprovalProp: Boolean,
+    clubIdProp: Number,
   },
   data() {
     return {
-      allProjects: [] as IDmProject[] | IDsgProject[] | IClubProject[],
+      headerFormatter: Utilities.headerFormater,
+      message: "",
+      allClubMemebers: [] as UserPagination["data"],
       payload: {
         current_page: 1,
         limit: 10,
         last_page: 1,
         total: 0,
       },
-      message: "",
+      serverException: false,
+      expectionObject: {} as IApiException,
     };
   },
   watch: {},
   async created() {
-    if (this.forApprovalViewProp) {
-      await this.getAllProjects();
-
-    } else {
-      await this.getAllProjects();
-    }
+    this.getAllClubMemebers(this.clubIdProp || 0);
   },
   methods: {
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
-      this.getAllProjects();
+      this.getAllClubMemebers(this.clubIdProp || 0);
     },
-    async getAllProjects() {
-      if (!this.findProjectsForClubProp) {
-        try {
-          let response = null;
-          if (!this.forApprovalViewProp) {
-            response = await ProjectsApi.getProjectsByConditional(
-              this.findProjectsForClubProp as number,
-              this.payload.current_page,
-              this.payload.limit,
-              "club_id"
-            );
-          } else {
-            let value = this.reportApprovalProp
-              ? "Reports Due"
-              : "Pending Approval";
-            response = await ProjectsApi.getProjectsByConditional(
-              value,
-              this.payload.current_page,
-              this.payload.limit,
-              "project_status"
-            );
-          }
-          if (
-            !Utilities.isAnApiError(response) &&
-            (response as ProjectPagination).data.length > 0
-          ) {
-            this.allProjects = (response as ProjectPagination).data as
-              | IDmProject[]
-              | IDsgProject[]
-              | IClubProject[];
-            this.payload.total = (response as ProjectPagination).meta.total;
-            this.payload.last_page = (
-              response as ProjectPagination
-            ).meta.last_page;
-          } else {
-            this.allProjects = [];
-            this.message = "No Projects Found";
-          }
-        } catch (error) {
-          //   this.serverException = true;
-          //   this.expectionObject = error as IApiException;
+    async getAllClubMemebers(clubId: number) {
+      try {
+        const response = await ClubsApi.AllClubMembersPaginted(
+          clubId,
+          this.payload.current_page,
+          this.payload.limit
+        );
+        if (
+          !Utilities.isAnApiError(response) &&
+          (response as UserPagination).data.length > 0
+        ) {
+          this.allClubMemebers = (response as UserPagination).data.filter(
+            (member: IUser) => {
+              return member.user_type === "CLUB";
+            }
+          );
+          this.payload.total = (response as UserPagination).meta.total;
+          this.payload.last_page = (response as UserPagination).meta.last_page;
+        } else {
+          this.allClubMemebers = [];
+          this.message = "No club members found";
         }
+      } catch (error) {
+        //   this.serverException = true;
+        //   this.expectionObject = error as IApiException;
       }
+    },
+    editClubMember(memberId: number) {
+      this.store.setUserFormProps({
+        formModeProp: "UPDATE",
+        userIdProp: memberId,
+        userCreationTypeProp: "CLUB_MEMBER",
+      });
+      this.$router.push({ name: 'UserFormForAdmins'})
     },
   },
   computed: {},
 });
 </script>
 
-<style scoped lang="scss">
-@import "@/assets/syles.scss";
-.t_head {
-  height: 50px;
-  th {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
-</style>
+<style scoped lang="scss"></style>

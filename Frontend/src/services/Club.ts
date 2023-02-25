@@ -1,14 +1,19 @@
 import Utilities from "@/utils/frontend/classes/Utilities";
-import { MyError, type IApiError, type IApiException } from "@/utils/frontend/interfaces/Frontend";
+import {
+  MyError,
+  type IApiError,
+  type IApiException,
+  type UserPagination,
+} from "@/utils/frontend/interfaces/Frontend";
 import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
-
+const API_ROUTE = import.meta.env.VITE_API_URL + "club";
 export default class ClubsApi {
   /**
    * @returns Promise
    */
   public static async getAllClubs(): Promise<IApiError | IClub[]> {
-    const apiReponse = await fetch(import.meta.env.VITE_API_URL + "club", {
+    const apiReponse = await fetch(API_ROUTE, {
       method: "GET",
     }).then(async (response) => {
       return await response.json();
@@ -25,18 +30,15 @@ export default class ClubsApi {
    * @returns Promise
    */
   public static async getOneClubById(id: number): Promise<IClub | IApiError> {
-    const apiReponse = await fetch(
-      `${import.meta.env.VITE_API_URL}club/${id}`,
-      {
-        method: "GET",
-      }
-    ).then(async (response) => {
+    const apiReponse = await fetch(`${API_ROUTE}/${id}`, {
+      method: "GET",
+    }).then(async (response) => {
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
-    };
+    }
     return apiReponse as IApiError | IClub;
   }
 
@@ -49,42 +51,37 @@ export default class ClubsApi {
     club_id: number,
     current_page: number,
     limit: number
-  ): Promise<IApiError | IUser[]> {
-    const apiReponse = await fetch(
-      import.meta.env.VITE_API_URL + "/club/members",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          club_id: club_id,
-          current_page: current_page,
-          limit: limit,
-        }),
-      }
-    ).then(async (response) => {
+  ): Promise<IApiError | UserPagination> {
+    const apiReponse = await fetch(API_ROUTE + "/members", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        club_id: club_id,
+        current_page: current_page,
+        limit: limit,
+      }),
+    }).then(async (response) => {
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
-    };
-    return apiReponse as IApiError | Array<IUser>;
+    }
+    return apiReponse as IApiError | UserPagination;
   }
 
   /**
    * @param  {IClub} creationObject
    */
-  public static async createClub(
-    newClub: IClub
-  ): Promise<boolean | IApiError> {
-    const apiReponse = await fetch(import.meta.env.VITE_API_URL + "club", {
+  public static async createClub(newClub: IClub): Promise<boolean | IApiError> {
+    const apiReponse = await fetch(API_ROUTE, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({club:newClub}),
+      body: JSON.stringify({ club: newClub }),
     }).then(async (response) => {
       return await response.json();
     });
@@ -104,22 +101,19 @@ export default class ClubsApi {
     id: number,
     updatedClub: object
   ): Promise<boolean | IApiError> {
-    const apiReponse = await fetch(
-      import.meta.env.VITE_API_URL + "club/" + id,
-      {
-        method: "Put",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({club:updatedClub}),
-      }
-    ).then(async (response) => {
+    const apiReponse = await fetch(API_ROUTE + `/${id}`, {
+      method: "Put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ club: updatedClub }),
+    }).then(async (response) => {
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
-    };
+    }
     return apiReponse as IApiError | boolean;
   }
 
@@ -129,7 +123,7 @@ export default class ClubsApi {
    */
   public static async deleteClub(id: number): Promise<boolean | IApiError> {
     const apiReponse = await fetch(
-      `${import.meta.env.VITE_API_URL}club/${id}`,
+      `${API_ROUTE}/${id}`,
       {
         method: "DELETE",
       }
@@ -139,7 +133,7 @@ export default class ClubsApi {
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
-    };
+    }
     return apiReponse as IApiError | boolean;
   }
 }
