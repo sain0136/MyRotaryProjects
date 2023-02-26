@@ -29,14 +29,17 @@
           populateFormData();
         "
       />
-      <h1 class="text-center font-bold" :class="tailwind.H1">
+      <h1
+        v-if="!store.$state.districtFormProps.districtSettingsView === true"
+        class="text-center font-bold"
+        :class="tailwind.H1"
+      >
         {{
           store.$state.districtFormProps.formModeProp === formMode.CREATE
             ? "Create New District"
             : "Update District"
         }}
       </h1>
-      <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
       <form @submit.prevent="" class="flex w-2/4 flex-col p-8" novalidate>
         <BaseInputsText
           label="District Number"
@@ -66,8 +69,10 @@
 
         <div
           class="my-4 flex flex-col items-center gap-4"
-          v-if="store.$state.districtFormProps.formModeProp === formMode.UPDATE &&
-         formTypesList.length > 0"
+          v-if="
+            store.$state.districtFormProps.formModeProp === formMode.UPDATE &&
+            formTypesList.length > 0
+          "
         >
           <hr class="my-8 h-px w-full border-0 bg-gray-500" />
           <h1 class="text-center font-bold" :class="tailwind.H1">

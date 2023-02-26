@@ -173,7 +173,12 @@ export default defineComponent({
     ErrorValidation,
     BaseInputsPassword,
   },
-  props: {},
+  props: {
+    test: {
+      type: String,
+      default: "test",
+    },
+  },
   data() {
     return {
       headerFormatter: Utilities.headerFormater,

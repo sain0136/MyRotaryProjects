@@ -1,7 +1,8 @@
 <template>
-  <div
-    class="admin_container flex flex-col items-center gap-8  py-24 px-24"
-  >
+  <div class="landing_header w-full">
+    <h1 class="header2_h1">District Clubs</h1>
+  </div>
+  <div class="admin_container flex flex-col items-center gap-8 py-24 px-24">
     <ExceptionModal
       v-if="serverException"
       :message="expectionObject.message"
@@ -20,6 +21,7 @@
       :width="toast.width"
       :closeTimer="toast.closeTimer"
     />
+
     <h1 class="text-center font-bold" :class="tailwind.H1">
       District Club Admin
     </h1>
@@ -39,7 +41,11 @@
       @update:showConfirmModal="updateShowModal"
       :key="clubId"
     />
-    <RotaryButton  v-if="clubId !== 0" label="Create Member" @click="createNewClubMember()" />
+    <RotaryButton
+      v-if="clubId !== 0"
+      label="Create Member"
+      @click="createNewClubMember()"
+    />
   </div>
 </template>
 
@@ -126,17 +132,17 @@ export default defineComponent({
         let response = await ClubsApi.deleteClub(
           (this.showConfirmModal as any).idTobeDeleted
         );
+        this.toast.display = true;
         if (response === true) {
-          this.resetSet();
+          this.toast.msg = "Member deleted successfully";
         } else {
-          this.resetSet();
           this.deleteConfirm = false;
-          this.toast.display = true;
           this.toast.msg = "Cannot delete member with projects";
-          setTimeout(() => {
-            this.toast.display = false;
-          }, 4000);
         }
+        setTimeout(() => {
+          this.toast.display = false;
+          this.resetSet();
+        }, 4000);
       } catch (error) {
         this.serverException = true;
         this.expectionObject = error as IApiException;
@@ -155,17 +161,19 @@ export default defineComponent({
       });
       this.$router.push({ name: "DistrictAdminClubForm" });
     },
-    createNewClubMember(){
+    createNewClubMember() {
       this.store.setUserFormProps({
         formModeProp: "CREATE",
         userCreationTypeProp: "CLUB_MEMBER",
       });
-      this.$router.push({ name: 'UserFormForAdmins'})
-    }
+      this.$router.push({ name: "UserFormForAdmins" });
+    },
   },
 
   computed: {},
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "@/assets/syles.scss";
+</style>

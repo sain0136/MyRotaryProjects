@@ -20,10 +20,18 @@ import {
 } from "@/utils/shared/interfaces/SharedInterface";
 import DistrictsApi from "@/services/Districts";
 import ValidationApi from "@/services/Validation";
+import Utilities from "@/utils/frontend/classes/Utilities";
+import ClubsApi from "@/services/Club";
 
 export interface IDistrictFormProps {
   formModeProp?: string;
   districtIdProp?: number;
+  districtSettingsView?: boolean;
+}
+
+export interface IFocusedProjectsTableProps {
+  tableViewProp?: "MYPROJECTS" | "DISTRICT" | "CLUB";
+  conditionalIdProp?: number;
 }
 
 export interface IUserFormProps {
@@ -39,7 +47,18 @@ export interface IClubFormProps {
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
   clubIdProp?: number;
 }
-//  make a pojo class for IClubFormProps
+
+class focusedProjectsTablePojo implements IFocusedProjectsTableProps {
+  tableViewProp: "MYPROJECTS" | "DISTRICT" | "CLUB" | undefined;
+  conditionalIdProp: number | undefined;
+  constructor(props: IFocusedProjectsTableProps) {
+    this.tableViewProp = props.tableViewProp ? props.tableViewProp : undefined;
+    this.conditionalIdProp = props.conditionalIdProp
+      ? props.conditionalIdProp
+      : undefined;
+  }
+}
+
 class clubFormPropsPojo implements IClubFormProps {
   formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
   clubIdProp: number | undefined;
@@ -52,10 +71,15 @@ class clubFormPropsPojo implements IClubFormProps {
 class districtFormPropsPojo implements IDistrictFormProps {
   formModeProp: string | undefined;
   districtIdProp: number | undefined;
+  districtSettingsView: boolean | undefined;
+
   constructor(props: IDistrictFormProps) {
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
     this.districtIdProp = props.districtIdProp
       ? props.districtIdProp
+      : undefined;
+    this.districtSettingsView = props.districtSettingsView
+      ? props.districtSettingsView
       : undefined;
   }
 }
@@ -75,12 +99,16 @@ class userFormPropsPojo implements IUserFormProps {
     this.userCreationTypeProp = props.userCreationTypeProp
       ? props.userCreationTypeProp
       : undefined;
-    this.myProfileViewProp = props.myProfileViewProp ? props.myProfileViewProp : undefined;  }
+    this.myProfileViewProp = props.myProfileViewProp
+      ? props.myProfileViewProp
+      : undefined;
+  }
 }
 export const useRotaryStore = defineStore("main", {
   //The Global state variabales
   state: () => {
     return {
+      focusedProjectsTableProps: {} as IFocusedProjectsTableProps,
       districtFormProps: {} as IDistrictFormProps,
       userFormProps: {} as IUserFormProps,
       clubFormProps: {} as IClubFormProps,
@@ -162,30 +190,36 @@ export const useRotaryStore = defineStore("main", {
         } else throw new MyError("User role not found");
       }
       try {
-        this.setDistrictData(user.district);
-        this.setClubData(user.club);
+        this.setDistrictData(user.district_id);
+        this.setClubData(user.club_id);
       } catch (error) {
         throw new MyError((error as MyError).message);
       }
     },
 
     /**
-     * @param  {IDistrict} district
-     * @returns void
+     * @param  {number|null} district_id
+     * @returns Promise
      */
-    setDistrictData(district: IDistrict): void {
-      if (district !== null) {
-        this.loggedInUsersDistrict = district;
+    async setDistrictData(district_id: number | null): Promise<void> {
+      if (district_id !== null) {
+        try {
+          const response = await DistrictsApi.getDistrictById(district_id);
+          this.loggedInUsersDistrict = response as IDistrict;
+        } catch (error) {
+          throw new MyError((error as MyError).message);
+        }
       } else throw new MyError("District data was not set");
     },
 
-    /**
-     * @param  {IClub} club
-     * @returns void
-     */
-    setClubData(club: IClub): void {
-      if (club !== null) {
-        this.loggedInUsersClub = club;
+    async setClubData(club_id: number | null): Promise<void> {
+      if (club_id !== null) {
+        try {
+          const response = await ClubsApi.getOneClubById(club_id);
+          this.loggedInUsersClub = response as IClub;
+        } catch (error) {
+          throw new MyError((error as MyError).message);
+        }
       } else throw new MyError("Club data was not set");
     },
 
@@ -242,8 +276,30 @@ export const useRotaryStore = defineStore("main", {
         if (project) {
           this.currentLoadedProjectExtraDetails = project;
         } else {
-          throw new MyError("Project not loades");
+          throw new MyError("Project could not be set");
         }
+      }
+    },
+    // Make a set forcused IFocusedProjectsTableProps function below
+    setFocusedProjectsTableProps(props: IFocusedProjectsTableProps) {
+      const focusedProjectsTableProps = new focusedProjectsTablePojo({
+        ...props,
+      });
+      this.focusedProjectsTableProps = focusedProjectsTableProps;
+    },
+    async reloadDistrictDates() {
+      try {
+        let box = this.loggedInUsersDistrict;
+        const response = await DistrictsApi.getDistrictById(
+          this.loggedInUsersDistrict.district_id
+        );
+        if (!Utilities.isAnApiError(response)) {
+          this.loggedInUsersDistrict = response as IDistrict;
+        } else {
+          throw new MyError((response as IApiError).message);
+        }
+      } catch (error) {
+        throw new MyError("District info could not be reset");
       }
     },
   },

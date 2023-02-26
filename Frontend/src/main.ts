@@ -34,7 +34,7 @@ import { faX } from "@fortawesome/free-solid-svg-icons";
 import {
   faArrowUpRightFromSquare,
   faAngleDown,
-  faQuestion
+  faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
