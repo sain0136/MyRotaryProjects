@@ -280,7 +280,7 @@ export default class ProjectsApi {
    */
   public static async deleteProject(
     project_id: number,
-    override: string
+    override?: string
   ): Promise<IApiError | boolean> {
     const apiReponse = await fetch(API_ROUTE + "delete", {
       method: "POST",

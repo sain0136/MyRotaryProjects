@@ -1,5 +1,8 @@
 <template>
   <div class="admin_container ">
+    <div class="landing_header w-full">
+      <h1 class="header2_h1">District Settings</h1>
+    </div>
     <DistrictForm/>
   </div>
 </template>
@@ -34,4 +37,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "@/assets/syles.scss";
+
+</style>

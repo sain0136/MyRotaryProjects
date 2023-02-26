@@ -152,7 +152,7 @@
                 <font-awesome-icon icon="fa-solid fa-check" class="mt-1" />
                 <span class=" font-semibold">{{
                   headerFormatter(
-                    "When the project is fully funded and approved you will be contacted by the Projects's creators!"
+                    "When the project is Fully Funded and approved you will be contacted by the Projects's creators!"
                   )
                 }}</span>
               </li>

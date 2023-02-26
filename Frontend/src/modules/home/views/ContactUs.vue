@@ -28,30 +28,30 @@
               make a pledge or how to use/navigate this site. We are excited to
               hear from you.
             </div>
-            <form class="email_form flex flex-col gap-8">
+            <form class="email_form flex flex-col gap-8" @submit.prevent="">
               <div class="mt-8 flex flex-col gap-8 md:flex-row">
                 <div class="input_wraper">
                   <BaseInputsText v-model="name" label="Name" />
                   <ErrorValidation
                     v-if="v$.name.$error"
-                    :error="v$.name.$errors"
+                    :errorMsg="v$.name.$errors[0].$message"
                   />
                 </div>
                 <div class="input_wraper">
                   <BaseInputsTextEmail v-model="senderEmail" label="Email" />
                   <ErrorValidation
                     v-if="v$.senderEmail.$error"
-                    :error="v$.senderEmail.$errors"
+                    :errorMsg="v$.senderEmail.$errors[0].$message"
                   />
                 </div>
               </div>
-              <BaseTextArea v-model="emailBody" label="Your Email" />
+              <BaseTextArea v-model="emailBody" label="Message" />
               <ErrorValidation
                 v-if="v$.emailBody.$error"
-                :error="v$.emailBody.$errors"
+                :errorMsg="v$.emailBody.$errors[0].$message"
               />
               <RotaryButton
-                @click="sendEmail"
+                @click="submitForm()"
                 theme="rounded-lg py-2 px-4 bg-primary-color text-primary-white hover:bg-primary-black "
                 label="Send Message"
               />
@@ -173,27 +173,41 @@ export default defineComponent({
 
   async created() {},
   methods: {
+    async submitForm() {
+      await this.v$.$validate();
+      if (this.v$.$error) {
+        window.scrollTo(0, 0);
+        this.toast.display = true;
+        this.toast.msg = "Fix Form Errors";
+        setTimeout(() => {
+          this.toast.display = false;
+        }, 4000);
+        return;
+      }
+      this.sendEmail();
+    },
     async sendEmail() {
       try {
+        window.scroll(0, 0);
         const response = await MailerApi.contactMailer(
           this.senderEmail,
           this.name,
           this.emailBody
         );
-        if (!Utilities.isAnApiError(response)) this.toast.display = true;
-        this.toast.msg = "Email sent successfully";
+        this.name = "";
+        this.senderEmail = "";
+        this.emailBody = "";
+        this.toast.display = true;
+        if (!Utilities.isAnApiError(response) && response === true) {
+          this.toast.msg = "Email sent successfully";
+        } else this.toast.msg = "Email not sent Contact Admin";
         setTimeout(() => {
-          window.scroll(0, 0);
           this.toast.display = false;
         }, 3000);
       } catch (error) {
         this.serverException = true;
         this.expectionObject = error as IApiException;
       }
-      this.redirect();
-    },
-    redirect() {
-      this.$router.go(0);
     },
   },
   computed: {},

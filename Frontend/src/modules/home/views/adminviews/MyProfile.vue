@@ -1,5 +1,8 @@
 <template>
   <div class="admin_container ">
+    <div class=" w-full">
+      <h1 class="header2_h1">My Profile</h1>
+    </div>
     <UserForm/>
   </div>
 </template>
@@ -36,4 +39,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang='scss'>
+@import "@/assets/syles.scss";
+
 </style>

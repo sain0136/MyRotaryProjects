@@ -18,15 +18,13 @@
         :modelValue="confirmNavigation"
         :question="showConfirmModal.confirmModalMessage"
       />
-      <h1 class="text-center font-bold" :class="tailwind.H1">
+      <h1 v-if="!store.$state.userFormProps.myProfileViewProp" class="text-center font-bold" :class="tailwind.H1">
         {{
           store.$state.userFormProps.formModeProp === formMode.CREATE
             ? "Create User"
             : "Update:" + " " + user.fullName
         }}
       </h1>
-
-      <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
       <form
         @submit.prevent=""
         autocomplete="off"

@@ -1,5 +1,7 @@
 <template>
-  <header class="landing_header header-type-one top-0 w-full bg-white border-b-2">
+  <header
+    class="landing_header header-type-one top-0 w-full border-b-2 bg-white"
+  >
     <!--Header Top-->
     <div class="header_top bg-primary-color py-4">
       <div class="auto_container px-64">
@@ -165,23 +167,16 @@
                       My Profile
                     </router-link>
                   </li>
-                  <li
-                    v-if="
-                      store.$state.isDistrictAdminLoggedIn ||
-                      store.$state.isSiteAdminLoggedIn
-                    "
-                  >
+                  <li v-if="store.$state.isDistrictAdminLoggedIn">
                     <router-link
                       :to="{ name: 'DistrictSettings' }"
+                      @click="setDisrictForm()"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       District Settings
                     </router-link>
                   </li>
-                  <li
-                  v-if="
-                    store.$state.isDistrictAdminLoggedIn "
-                  >
+                  <li v-if="store.$state.isDistrictAdminLoggedIn">
                     <router-link
                       :to="{ name: 'DistrictAdminClubs' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
@@ -189,7 +184,12 @@
                       Add/Edit Clubs
                     </router-link>
                   </li>
-                  <li v-if="store.$state.isClubAdminLoggedIn">
+                  <li
+                    v-if="
+                      store.$state.isClubAdminLoggedIn ||
+                      store.$state.isSiteAdminLoggedIn
+                    "
+                  >
                     <router-link
                       :to="{ name: 'ClubSettings' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
@@ -199,23 +199,32 @@
                   </li>
                   <li>
                     <router-link
-                      :to="{ name: '' }"
+                      :to="{ name: 'MyProjects' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Create/Edit My Projects
                     </router-link>
                   </li>
-                  <li>
+                  <li
+                    v-if="
+                      store.$state.isDistrictAdminLoggedIn ||
+                      store.$state.isSiteAdminLoggedIn
+                    "
+                  >
                     <router-link
-                      :to="{ name: '' }"
+                      :to="{ name: 'DistrictProjects' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       View/Edit District Projects
                     </router-link>
                   </li>
-                  <li>
+                  <li
+                    v-if="
+                      store.$state.isClubAdminLoggedIn
+                    "
+                  >
                     <router-link
-                      :to="{ name: '' }"
+                      :to="{ name: 'ClubProjects' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
                       Edit Clubs Projects
@@ -223,6 +232,12 @@
                   </li>
                   <li>
                     <router-link
+                      v-if="
+                        store.$state.loggedInUserData.role[0].district_role ===
+                          'District Admin' ||
+                        store.$state.loggedInUserData.role[0].district_role ===
+                          'District Grants Chair'
+                      "
                       :to="{ name: 'ProjectApprovals' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
@@ -231,6 +246,16 @@
                   </li>
                   <li>
                     <router-link
+                      v-if="
+                        store.$state.loggedInUserData.role[0].district_role ===
+                          'District Admin' ||
+                        store.$state.loggedInUserData.role[0].district_role ===
+                          'District Grants Chair' ||
+                        store.$state.loggedInUserData.role[0].district_role ===
+                          'District Foundations Chair' ||
+                        store.$state.loggedInUserData.role[0].district_role ===
+                          'District International Chair'
+                      "
                       :to="{ name: 'ReportApprovals' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
                     >
@@ -271,6 +296,13 @@ export default defineComponent({
   watch: {},
   async created() {},
   methods: {
+    setDisrictForm() {
+      this.store.setDistrictFormProps({
+        formModeProp: "UPDATE",
+        districtIdProp: this.store.$state.loggedInUserData.districtId,
+        districtSettingsView: true,
+      });
+    },
     async signOut() {
       await this.store.signOut();
       this.$router.push("/");

@@ -53,7 +53,7 @@ export const GrantType = {
 
 export const ProjectStatus = {
   LOOKINGFORFUNDING: "Looking For Funding",
-  FULLYFUNDED: "Fully funded",
+  FULLYFUNDED: "Fully Funded",
   PENDINGAPPROVAL: "Pending Approval",
   APPROVED: "Approved",
   REPORTSDUE: "Reports Due",

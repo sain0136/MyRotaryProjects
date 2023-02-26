@@ -1,7 +1,7 @@
 <template>
   <div
     class="relative overflow-x-auto shadow-md sm:rounded-lg"
-    v-if="allProjects.length != 0"
+    v-if="focusedProjects.length != 0"
   >
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
       <thead
@@ -19,7 +19,7 @@
         <tr
           class="border-b bg-white"
           id="admin_info"
-          v-for="project in allProjects"
+          v-for="project in focusedProjects"
           :key="project.project_id"
         >
           <th
@@ -42,19 +42,7 @@
               <button
                 title="Edit Project"
                 class="crud_buttons hover:text-primary-c"
-                @click="
-                  () => {
-                    $router.push({
-                      name: 'SiteAdminUsersForm',
-                      params: {
-                        adminRouteProp: 'ADMIN',
-                        editOrCreateProp: 'EDIT',
-                        userIdProp: project.project_id,
-                        userCreationTypeProp: 'DISTRICT_ADMIN',
-                      },
-                    });
-                  }
-                "
+                @click=""
               >
                 <font-awesome-icon
                   class="hover:text-primary-color"
@@ -62,7 +50,40 @@
                 />
               </button>
               <button
-                v-if="!siteAdminViewProp && !forApprovalViewProp"
+                v-if="
+                  project.project_status === 'Fully Funded' &&
+                  store.$state.focusedProjectsTableProps.tableViewProp ==
+                    'MYPROJECTS'
+                "
+                title="Submit Project "
+                class="crud_buttons hover:text-primary-c"
+                @click=""
+              >
+                <font-awesome-icon
+                  icon="fa-solid fa-thumbs-up"
+                  class="hover:text-primary-color"
+                />
+              </button>
+              <button
+                v-if="
+                  project.project_status === 'Reports Due' &&
+                  store.$state.focusedProjectsTableProps.tableViewProp ==
+                    'MYPROJECTS'
+                "
+                title="Submit Reports"
+                class="crud_buttons hover:text-primary-c"
+                @click=""
+              >
+                <font-awesome-icon
+                  icon="fa-solid fa-flag"
+                  class="hover:text-primary-color"
+                />
+              </button>
+              <button
+                v-if="
+                  store.$state.focusedProjectsTableProps.tableViewProp ==
+                  'MYPROJECTS'
+                "
                 title="Delete Project"
                 class="crud_buttons hover:text-primary-c"
                 @click="
@@ -160,9 +181,11 @@ import type {
   IDsgProject,
 } from "@/utils/shared/interfaces/ProjectsInterface";
 import ProjectsApi from "@/services/Projects";
+import { useRotaryStore } from "@/stores/rotaryStore";
 export default defineComponent({
-  name: "AllProjectsTable",
+  name: "FocusedProjectsTable",
   setup(props, context: SetupContext) {
+    const store = useRotaryStore();
     function updateShowModal(
       show: boolean,
       projectName: string,
@@ -170,22 +193,21 @@ export default defineComponent({
     ) {
       context.emit("update:showConfirmModal", {
         showConfirmModal: show,
-        confirmModalMessage: `Are you sure you want to delete ${projectName} district admin?`,
+        confirmModalMessage: `Are you sure you want to delete ${projectName} ?`,
         idTobeDeleted: projectId,
       });
     }
-    return {updateShowModal };
+    return { store, updateShowModal };
   },
   components: {},
   props: {
-    siteAdminViewProp: Boolean,
-    findProjectsForClubProp: Number,
-    forApprovalViewProp: Boolean,
-    reportApprovalProp: Boolean,
+    test: {
+      type: String,
+    },
   },
   data() {
     return {
-      allProjects: [] as IDmProject[] | IDsgProject[] | IClubProject[],
+      focusedProjects: [] as IDmProject[] | IDsgProject[] | IClubProject[],
       payload: {
         current_page: 1,
         limit: 10,
@@ -197,61 +219,46 @@ export default defineComponent({
   },
   watch: {},
   async created() {
-    if (this.forApprovalViewProp) {
-      await this.getAllProjects();
-
-    } else {
-      await this.getAllProjects();
-    }
+    this.getFocusedProjects();
   },
   methods: {
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
-      this.getAllProjects();
+      this.getFocusedProjects();
     },
-    async getAllProjects() {
-      if (!this.findProjectsForClubProp) {
-        try {
-          let response = null;
-          if (!this.forApprovalViewProp) {
-            response = await ProjectsApi.getProjectsByConditional(
-              this.findProjectsForClubProp as number,
-              this.payload.current_page,
-              this.payload.limit,
-              "club_id"
-            );
-          } else {
-            let value = this.reportApprovalProp
-              ? "Reports Due"
-              : "Pending Approval";
-            response = await ProjectsApi.getProjectsByConditional(
-              value,
-              this.payload.current_page,
-              this.payload.limit,
-              "project_status"
-            );
-          }
-          if (
-            !Utilities.isAnApiError(response) &&
-            (response as ProjectPagination).data.length > 0
-          ) {
-            this.allProjects = (response as ProjectPagination).data as
-              | IDmProject[]
-              | IDsgProject[]
-              | IClubProject[];
-            this.payload.total = (response as ProjectPagination).meta.total;
-            this.payload.last_page = (
-              response as ProjectPagination
-            ).meta.last_page;
-          } else {
-            this.allProjects = [];
-            this.message = "No Projects Found";
-          }
-        } catch (error) {
-          //   this.serverException = true;
-          //   this.expectionObject = error as IApiException;
+    async getFocusedProjects() {
+      let apiCondtitionalMap = new Map();
+      apiCondtitionalMap.set("MYPROJECTS", "created_by");
+      apiCondtitionalMap.set("CLUB", "club_id");
+      apiCondtitionalMap.set("DISTRICT", "district_id");
+      let apiCondtional = apiCondtitionalMap.get(
+        this.store.$state.focusedProjectsTableProps.tableViewProp
+      );
+      try {
+        const response = await ProjectsApi.getProjectsByConditional(
+          this.store.$state.focusedProjectsTableProps
+            .conditionalIdProp as number,
+          this.payload.current_page,
+          this.payload.limit,
+          apiCondtional
+        );
+        if (
+          !Utilities.isAnApiError(response) &&
+          (response as ProjectPagination).data.length > 0
+        ) {
+          this.focusedProjects = (response as ProjectPagination).data as
+            | IDmProject[]
+            | IDsgProject[]
+            | IClubProject[];
+          this.payload.total = (response as ProjectPagination).meta.total;
+          this.payload.last_page = (
+            response as ProjectPagination
+          ).meta.last_page;
+        } else {
+          this.focusedProjects = [];
+          this.message = "No Projects Found";
         }
-      }
+      } catch (error) {}
     },
   },
   computed: {},
