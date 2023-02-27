@@ -126,6 +126,7 @@ export default defineComponent({
     if (todaysDate < startDate || todaysDate > closeDate) {
       this.isProjectsOpen = false;
     }
+    console.log("ayy");
   },
   async updated() {
     await this.store.reloadDistrictDates();
