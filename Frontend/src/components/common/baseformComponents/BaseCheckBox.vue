@@ -1,13 +1,13 @@
 <template>
   <div class="my-2 flex items-center">
-    <!-- <input
+    <input
       :checked="modelValue"
+      @change="handleChange"
       id="default-checkbox"
-      @change="$emit('update:modelValue', $event.target.checked)"
       type="checkbox"
       value=""
-      class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-    /> -->
+      class="h-4 w-4 rounded border-gray-300 bg-gray-100"
+    />
     <label
       for="default-checkbox"
       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -19,6 +19,16 @@
 <script lang="ts">
 export default {
   name: "BaseCheckBox",
+  setup(props, { emit }) {
+    const handleChange = (event: Event) => {
+      console.log("object");
+      const isChecked = (event.target as HTMLInputElement).checked;
+      emit("update:modelValue", isChecked);
+    };
+    return {
+      handleChange,
+    };
+  },
   props: {
     label: {
       type: String,
@@ -32,5 +42,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

@@ -6,16 +6,16 @@ import Pledges from "../../Models/Pledges";
 import Projects from "../../Models/Projects";
 import Users from "../../Models/Users";
 import RotaryYear from "Contracts/util/backend/classes/RotaryYear";
-
-import { DateTime } from "luxon/src/datetime";
-import moment from "moment";
 import CustomReponse from "Contracts/util/backend/classes/CustomReponse";
 import ProjectCodeGenerator from "Contracts/util/backend/classes/ProjectCodeGenerator";
-import ClubProject from "Contracts/util/sharedUtility/classes/ClubProject";
-import DmProject from "Contracts/util/sharedUtility/classes/DmProject";
-import DsgProject from "Contracts/util/sharedUtility/classes/DsgProject";
-import { ProjectDetails, IDmProject, IDsgProject, IClubProject } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
+import {
+  ProjectDetails,
+  IDmProject,
+  IDsgProject,
+  IClubProject,
+} from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
 import { SearchCriteria } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
+import { DateTime } from "luxon";
 
 export default class ProjectsController {
   /**
@@ -221,10 +221,16 @@ export default class ProjectsController {
   }: HttpContextContract): Promise<void> {
     const newProject: IDmProject | IDsgProject | IClubProject =
       request.input("project");
-    const convertedStartDate = moment(newProject.start_date, "D");
-    const convertedCompletionDate = moment(newProject.completion_date, "D");
+    const convertedStartDate = DateTime.fromFormat(
+      newProject.start_date,
+      "yyyy-MM-dd"
+    );
+    const convertedCompletionDate = DateTime.fromFormat(
+      newProject.completion_date,
+      "yyyy-MM-dd"
+    );
 
-    if (newProject instanceof ClubProject) {
+    if (newProject.grant_type === "Club Project") {
       try {
         const projectNumber: number = await ProjectCodeGenerator.getProjectCode(
           "clubIntial"
@@ -234,18 +240,18 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate as unknown as DateTime,
-          fundingGoal: (newProject.funding_goal),
+          completionDate: convertedCompletionDate ,
+          fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
-          startDate: convertedStartDate as unknown as DateTime,
+          startDate: convertedStartDate ,
           createdBy: newProject.created_by,
           region: newProject.region,
-          rotaryYear: newProject.rotary_year,
+          rotaryYear: RotaryYear.getCurrentYear(),
           clubId: newProject.club_id,
           country: newProject.country,
           districtId: newProject.district_id,
           projectStatus: newProject.project_status,
-          imageLink: newProject.image_link,
+          imageLink: JSON.stringify(newProject.image_link),
           totalPledges: newProject.total_pledges,
           projectNumber: projectNumber,
           projectCode: "CP-" + projectNumber.toString(),
@@ -262,13 +268,13 @@ export default class ProjectsController {
             return response.json(new CustomReponse(error));
           }
         }
-        return response.json(true);
+        return response.json(createdProject.projectId);
       } catch (error) {
-        return response.json(new CustomReponse(error));
+        return response.json(new CustomReponse(error.message));
       }
     }
 
-    if (newProject instanceof DsgProject) {
+    if (newProject.grant_type === "District Simplified Project") {
       try {
         const projectNumber: number = await ProjectCodeGenerator.getProjectCode(
           "dsgIntial"
@@ -278,8 +284,8 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate as unknown as DateTime,
-          startDate: convertedStartDate as unknown as DateTime,
+          completionDate: convertedCompletionDate ,
+          startDate: convertedStartDate ,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
           createdBy: newProject.created_by,
@@ -289,18 +295,20 @@ export default class ProjectsController {
           country: newProject.country,
           districtId: newProject.district_id,
           projectStatus: newProject.project_status,
-          imageLink: newProject.image_link,
+          imageLink: JSON.stringify(newProject.image_link),
           totalPledges: newProject.total_pledges,
           projectNumber: projectNumber,
           projectCode: "DS-" + projectNumber.toString(),
-          coOperatingOrganisationContribution:
-            newProject.co_operating_organisation_contribution,
-          districtSimplifiedGrantRequest:
-            newProject.district_simplified_grant_request,
-          intialSponsorClubContribution:
-            newProject.intial_sponsor_club_contribution,
+          coOperatingOrganisationContribution: (newProject as IDsgProject)
+            .co_operating_organisation_contribution,
+          districtSimplifiedGrantRequest: (newProject as IDsgProject)
+            .district_simplified_grant_request,
+          intialSponsorClubContribution: (newProject as IDsgProject)
+            .intial_sponsor_club_contribution,
           extraDescriptions: JSON.stringify(newProject.extra_descriptions),
-          itemizedBudget: JSON.stringify(newProject.itemized_budget),
+          itemizedBudget: JSON.stringify(
+            (newProject as IDsgProject).itemized_budget
+          ),
           fileUploads: JSON.stringify(newProject.file_uploads),
         });
         if (createdProject.projectId) {
@@ -313,13 +321,13 @@ export default class ProjectsController {
             return response.json(new CustomReponse(error));
           }
         }
-        return response.json(true);
+        return response.json(createdProject.projectId);
       } catch (error) {
         return response.json(new CustomReponse(error));
       }
     }
 
-    if (newProject instanceof DmProject) {
+    if (newProject.grant_type === "District Matching Grant") {
       try {
         const projectNumber: number = await ProjectCodeGenerator.getProjectCode(
           "dmIntial"
@@ -329,8 +337,8 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate as unknown as DateTime,
-          startDate: convertedStartDate as unknown as DateTime,
+          completionDate: convertedCompletionDate ,
+          startDate: convertedStartDate ,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
           createdBy: newProject.created_by,
@@ -340,20 +348,24 @@ export default class ProjectsController {
           country: newProject.country,
           districtId: newProject.district_id,
           projectStatus: newProject.project_status,
-          imageLink: newProject.image_link,
+          imageLink: JSON.stringify(newProject.image_link),
           totalPledges: newProject.total_pledges,
           projectNumber: projectNumber,
           projectCode: "DM-" + projectNumber.toString(),
-          coOperatingOrganisationContribution:
-            newProject.co_operating_organisation_contribution,
-          districtSimplifiedGrantRequest:
-            newProject.district_simplified_grant_request,
-          intialSponsorClubContribution:
-            newProject.intial_sponsor_club_contribution,
+          coOperatingOrganisationContribution: (newProject as IDmProject)
+            .co_operating_organisation_contribution,
+          districtSimplifiedGrantRequest: (newProject as IDmProject)
+            .district_simplified_grant_request,
+          intialSponsorClubContribution: (newProject as IDmProject)
+            .intial_sponsor_club_contribution,
           extraDescriptions: JSON.stringify(newProject.extra_descriptions),
-          itemizedBudget: JSON.stringify(newProject.itemized_budget),
+          itemizedBudget: JSON.stringify(
+            (newProject as IDmProject).itemized_budget
+          ),
           fileUploads: JSON.stringify(newProject.file_uploads),
-          hostclubInformation: JSON.stringify(newProject.hostclub_information),
+          hostclubInformation: JSON.stringify(
+            (newProject as IDmProject).hostclub_information
+          ),
         });
         if (createdProject.projectId) {
           try {
@@ -365,7 +377,7 @@ export default class ProjectsController {
             return response.json(new CustomReponse(error));
           }
         }
-        return response.json(true);
+        return response.json(createdProject.projectId);
       } catch (error) {
         return response.json(new CustomReponse(error));
       }
@@ -417,7 +429,7 @@ export default class ProjectsController {
     request,
     response,
   }: HttpContextContract) {
-    const conditional: number | string= request.input("conditional");
+    const conditional: number | string = request.input("conditional");
     const value: number | string | boolean = request.input("value");
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
@@ -456,34 +468,32 @@ export default class ProjectsController {
       oldProjectImformation.project_id
     );
 
-    const convertedStartDate = moment(oldProjectImformation.start_date, "D");
-    const convertedCompletionDate = moment(
+    const convertedStartDate = DateTime.fromFormat(
+      oldProjectImformation.start_date,
+      "yyyy-MM-dd"
+    );
+    const convertedCompletionDate = DateTime.fromFormat(
       oldProjectImformation.completion_date,
-      "D"
+      "yyyy-MM-dd"
     );
 
-    if (oldProjectImformation instanceof ClubProject) {
+    if (oldProjectImformation.grant_type === "Club Project") {
       const updatedProject = await projectToBeUpdateds
         .merge({
           projectName: oldProjectImformation.project_name,
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate as unknown as DateTime,
+          completionDate: convertedCompletionDate,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
-          startDate: convertedStartDate as unknown as DateTime,
-          createdBy: oldProjectImformation.created_by,
+          startDate: convertedStartDate,
           region: oldProjectImformation.region,
           rotaryYear: oldProjectImformation.rotary_year,
-          clubId: oldProjectImformation.club_id,
           country: oldProjectImformation.country,
-          districtId: oldProjectImformation.district_id,
           projectStatus: oldProjectImformation.project_status,
-          imageLink: oldProjectImformation.image_link,
+          imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
-          projectNumber: oldProjectImformation.project_number,
-          projectCode: oldProjectImformation.project_code,
           extraDescriptions: JSON.stringify(
             oldProjectImformation.extra_descriptions
           ),
@@ -493,79 +503,85 @@ export default class ProjectsController {
       return response.json(await this.addComputed(updatedProject));
     }
 
-    if (oldProjectImformation instanceof DsgProject) {
+    if (oldProjectImformation.grant_type === "District Simplified Project") {
       const updatedProject = await projectToBeUpdateds
         .merge({
           projectName: oldProjectImformation.project_name,
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate as unknown as DateTime,
-          startDate: convertedStartDate as unknown as DateTime,
+          completionDate: convertedCompletionDate ,
+          startDate: convertedStartDate ,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
-          createdBy: oldProjectImformation.created_by,
           region: oldProjectImformation.region,
           rotaryYear: oldProjectImformation.rotary_year,
-          clubId: oldProjectImformation.club_id,
+          
           country: oldProjectImformation.country,
-          districtId: oldProjectImformation.district_id,
+          
           projectStatus: oldProjectImformation.project_status,
-          imageLink: oldProjectImformation.image_link,
+          imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
-          projectNumber: oldProjectImformation.project_number,
-          projectCode: oldProjectImformation.project_code,
-          coOperatingOrganisationContribution:
-            oldProjectImformation.co_operating_organisation_contribution,
-          districtSimplifiedGrantRequest:
-            oldProjectImformation.district_simplified_grant_request,
-          intialSponsorClubContribution:
-            oldProjectImformation.intial_sponsor_club_contribution,
+          
+          
+          coOperatingOrganisationContribution: (
+            oldProjectImformation as IDsgProject
+          ).co_operating_organisation_contribution,
+          districtSimplifiedGrantRequest: (oldProjectImformation as IDsgProject)
+            .district_simplified_grant_request,
+          intialSponsorClubContribution: (oldProjectImformation as IDsgProject)
+            .intial_sponsor_club_contribution,
           extraDescriptions: JSON.stringify(
             oldProjectImformation.extra_descriptions
           ),
-          itemizedBudget: JSON.stringify(oldProjectImformation.itemized_budget),
-          fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
+          itemizedBudget: JSON.stringify(
+            (oldProjectImformation as IDsgProject).itemized_budget
+          ),
+          fileUploads: JSON.stringify(
+            (oldProjectImformation as IDsgProject).file_uploads
+          ),
         })
         .save();
       return response.json(await this.addComputed(updatedProject));
     }
 
-    if (oldProjectImformation instanceof DmProject) {
+    if ((oldProjectImformation.grant_type = "District Matching Project")) {
       const updatedProject = await projectToBeUpdateds
         .merge({
           projectName: oldProjectImformation.project_name,
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate as unknown as DateTime,
-          startDate: convertedStartDate as unknown as DateTime,
+          completionDate: convertedCompletionDate ,
+          startDate: convertedStartDate ,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
-          createdBy: oldProjectImformation.created_by,
           region: oldProjectImformation.region,
           rotaryYear: oldProjectImformation.rotary_year,
-          clubId: oldProjectImformation.club_id,
+          
           country: oldProjectImformation.country,
-          districtId: oldProjectImformation.district_id,
+          
           projectStatus: oldProjectImformation.project_status,
-          imageLink: oldProjectImformation.image_link,
+          imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
-          projectNumber: oldProjectImformation.project_number,
-          projectCode: oldProjectImformation.project_code,
-          coOperatingOrganisationContribution:
-            oldProjectImformation.co_operating_organisation_contribution,
-          districtSimplifiedGrantRequest:
-            oldProjectImformation.district_simplified_grant_request,
-          intialSponsorClubContribution:
-            oldProjectImformation.intial_sponsor_club_contribution,
+          
+          
+          coOperatingOrganisationContribution: (
+            oldProjectImformation as IDmProject
+          ).co_operating_organisation_contribution,
+          districtSimplifiedGrantRequest: (oldProjectImformation as IDmProject)
+            .district_simplified_grant_request,
+          intialSponsorClubContribution: (oldProjectImformation as IDmProject)
+            .intial_sponsor_club_contribution,
           extraDescriptions: JSON.stringify(
-            oldProjectImformation.extra_descriptions
+            (oldProjectImformation as IDmProject).extra_descriptions
           ),
-          itemizedBudget: JSON.stringify(oldProjectImformation.itemized_budget),
+          itemizedBudget: JSON.stringify(
+            (oldProjectImformation as IDmProject).itemized_budget
+          ),
           fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
           hostclubInformation: JSON.stringify(
-            oldProjectImformation.hostclub_information
+            (oldProjectImformation as IDmProject).hostclub_information
           ),
         })
         .save();

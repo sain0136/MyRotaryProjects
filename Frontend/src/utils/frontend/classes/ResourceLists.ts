@@ -1,4 +1,8 @@
-import { RotaryRoles, ProjectStatus, GrantType } from "@/utils/shared/interfaces/SharedInterface";
+import {
+  RotaryRoles,
+  ProjectStatus,
+  GrantType,
+} from "@/utils/shared/interfaces/SharedInterface";
 
 class ResourceLists {
   // List and common data needed
@@ -11,6 +15,16 @@ class ResourceLists {
     }
   });
 
+  static areaFocusImages: Array<string> = [
+    "/1-Peace-and-Conflict.png",
+    "/2-Disease_Prevention.png",
+    "/3-Water_and_Sanitation.png",
+    "/4-Maternal_and_Child_Health.png",
+    "/5-Basic_Education_and_Literacy.png",
+    "/6-Economic_and_Community.png",
+    "/7-Environment.png",
+  ];
+
   static areaOfFocus: Array<string> = [
     "Peace Conflict Prevention",
     "Disease Prevention And Treatment",
@@ -20,7 +34,7 @@ class ResourceLists {
     "Economic And Community Development",
     "Environment",
   ];
-  
+
   static clubRoles: Array<string> = ["Club Admin", "Standard Member"];
 
   static canadaProvinceList: Array<string> = [
@@ -133,6 +147,7 @@ class ResourceLists {
   ];
 
   static countryList: Array<string> = [
+    "Canada",
     "United States",
     "Afghanistan",
     "Albania",
@@ -173,7 +188,6 @@ class ResourceLists {
     "Cabo Verde",
     "Cambodia",
     "Cameroon",
-    "Canada",
     "Cayman Islands (the)",
     "Central African Republic (the)",
     "Chad",

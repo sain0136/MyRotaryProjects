@@ -10,9 +10,9 @@ export default class ProjectCodeGenerator {
     public static async getProjectCode(type: string): Promise<number> {
       let assets = await Assets.findOrFail(1);
       let code: number = 0;
-      Object.entries(assets).forEach((k: string | any, v: number): void => {
-        if (k === type) {
-          code = v;
+      Object.entries(assets.$attributes).forEach((k: string | any, ): void => {
+        if (k[0] === type) {
+          code = k[1] + 1;
           return;
         }
       });
@@ -37,7 +37,7 @@ export default class ProjectCodeGenerator {
         ) {
           await assets
             .merge({
-              [type]: code + 1,
+              [type]: code,
             })
             .save();
         } else {

@@ -3,12 +3,12 @@
     <div class="max-w-sm border-gray-200 bg-white shadow">
       <div class="h-1/2" @click="foward()">
         <img
-          v-if="Object.values(projectLoaded.image_link).length < 1"
+          v-if="!projectLoaded.image_link.url"
           class="w-full cursor-pointer object-cover"
           :src="pictureArray[randomPictureSelector]"
           alt=""
         />
-        <img v-else :src="projectLoaded.image_link" alt="Cover" />
+        <img v-else :src="projectLoaded.image_link.url" alt="Cover" />
       </div>
       <div class="p-5">
         <a @click="foward()">
@@ -18,7 +18,7 @@
             {{ projectLoaded.project_name }}
           </h5>
         </a>
-        <p class="font-normal text-gray-700">
+        <p class="desc font-normal text-gray-700 overflow-hidden">
           {{ truncatedDesc }}
         </p>
         <div class="status mt-4 flex gap-4">
@@ -126,6 +126,7 @@ export default defineComponent({
 
       this.truncatedDesc =
         this.projectLoaded.project_description.slice(0, 150) + "...";
+     
       this.percentage = Math.trunc(
         (this.projectLoaded.anticipated_funding /
           this.projectLoaded.funding_goal) *
@@ -155,6 +156,11 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
+.desc{
+  line-height: 1.2em;
+  max-height: 6em;
+  overflow: hidden;
+}
 img {
   aspect-ratio: 1/0.7;
   image-rendering: smooth;
@@ -229,5 +235,6 @@ img {
     border: 2px solid #ffb607;
     font-family: "Lato", sans-serif;
   }
+
 }
 </style>

@@ -26,6 +26,7 @@ export default class UploadsApi {
     image_assets?: File;
     extraLabel?: string;
     districtId?: number;
+    project_id?: number;
   }) {
     let fd = new FormData();
 
@@ -58,6 +59,10 @@ export default class UploadsApi {
     if (uploadData.image_assets) {
       fd.append("image_assets", uploadData.image_assets);
     }
+    if (uploadData.project_id) {
+      fd.append("project_id", uploadData.project_id.toString());
+    }
+    
     try {
       const apiReponse = await Axios.post(API_ROUTE, fd, {
         headers: {

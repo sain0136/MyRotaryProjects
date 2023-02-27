@@ -126,6 +126,11 @@ export const ErrorMessages = {
   PASSWORD_MIN_LENGTH: "Password must be at least 6 characters long",
   REQURIED_NUM_MIN_LENGTH: "This field cant be zero",
   NUMBER_MUST_FRAC: "This field must be a fraction",
+  MAX_AMOUNT: "This field must be less than $10,000,000",
+  LOWER_THAN_FUNDING_GOAL: "This field must be less than funding goal",
+  ONE_MUST_BE_SELECTED:"At least one Area Of Focus must be selected",
+  DATE_AFTER_START_DATE: "This field must be after start date",
+  IMAGE_NOT_UPLOADED: "Please upload an image",
 };
 
 export interface UserValidationApiResponse {

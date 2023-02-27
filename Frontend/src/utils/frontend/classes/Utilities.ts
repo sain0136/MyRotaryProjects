@@ -73,7 +73,7 @@ export default class Utilities {
    * @param  {object} error
    * @returns boolean
    */
-  public static isAnApiError(error: object | boolean): boolean {
+  public static isAnApiError(error: object | boolean | number): boolean {
     if (typeof error !== "object") {
       return false;
     }
