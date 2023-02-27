@@ -270,8 +270,8 @@ export default class extends BaseSeeder {
       projectName: "Test Club DSG",
       grantType: GrantType.DISTRICTSIMPLIFIEDPROJECT,
       projectStatus: ProjectStatus.LOOKINGFORFUNDING,
-      projectNumber: 4000001,
-      projectCode: "DSG-4000001",
+      projectNumber: 5000001,
+      projectCode: "DSG-5000001",
       projectDescription:
         "It works by capitalizing the very first letter in each sentence, and will then go on to transform the rest of the text into lowercase as well as converting i’s into I’s. Every letter after a full stop will get converted into an upper case letter.",
       country: "Italy",
@@ -309,8 +309,8 @@ export default class extends BaseSeeder {
       projectName: "Test Club DM",
       grantType: GrantType.DISTRICTMATCHINGPROJECT,
       projectStatus: ProjectStatus.LOOKINGFORFUNDING,
-      projectNumber: 6000001,
-      projectCode: "DM-6000001",
+      projectNumber: 8000001,
+      projectCode: "DM-8000001",
       projectDescription:
         "It works by capitalizing the very first letter in each sentence, and will then go on to transform the rest of the text into lowercase as well as converting i’s into I’s. Every letter after a full stop will get converted into an upper case letter.",
       country: "Italy",

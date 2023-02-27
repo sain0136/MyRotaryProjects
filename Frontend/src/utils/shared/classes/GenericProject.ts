@@ -8,7 +8,7 @@ export default class GenericProject implements IGenericProject {
   project_name = "";
   project_theme = "";
   grant_type = "";
-  project_status = "";
+  project_status = "Looking For Funding";
   project_number = 0;
   project_code = "";
   project_description = "";
@@ -37,10 +37,10 @@ export default class GenericProject implements IGenericProject {
     evidence_files: [] as StorageInformation[],
   };
   rotary_year = "";
-  image_link = "";
+  image_link = {} as StorageInformation;
   created_by = 0;
-  club_id = 0
-  district_id = 0
+  club_id = 0;
+  district_id = 0;
   image = null;
   file = null;
   mulitFile = [];

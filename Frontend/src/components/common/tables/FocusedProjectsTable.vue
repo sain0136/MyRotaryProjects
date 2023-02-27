@@ -42,7 +42,7 @@
               <button
                 title="Edit Project"
                 class="crud_buttons hover:text-primary-c"
-                @click=""
+                @click="updateProject(project.project_id, project.grant_type)"
               >
                 <font-awesome-icon
                   class="hover:text-primary-color"
@@ -72,7 +72,6 @@
                 "
                 title="Submit Reports"
                 class="crud_buttons hover:text-primary-c"
-                @click=""
               >
                 <font-awesome-icon
                   icon="fa-solid fa-flag"
@@ -182,6 +181,7 @@ import type {
 } from "@/utils/shared/interfaces/ProjectsInterface";
 import ProjectsApi from "@/services/Projects";
 import { useRotaryStore } from "@/stores/rotaryStore";
+import { GrantType } from "@/utils/shared/interfaces/SharedInterface";
 export default defineComponent({
   name: "FocusedProjectsTable",
   setup(props, context: SetupContext) {
@@ -222,6 +222,23 @@ export default defineComponent({
     this.getFocusedProjects();
   },
   methods: {
+    updateProject(projectId: number, projectType: string) {
+      switch (projectType) {
+        case "DM":
+          break;
+        case "DSG":
+          break;
+        case `${GrantType.CLUBPROJECT}`:
+          this.store.setClubProjectFormProps({
+            formModeProp: "UPDATE",
+            porjectIdProp: projectId,
+          });
+          this.$router.push({
+            name: "ClubProjectFormLandingView",
+          });
+          break;
+      }
+    },
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
       this.getFocusedProjects();

@@ -48,6 +48,20 @@ export interface IClubFormProps {
   clubIdProp?: number;
 }
 
+export interface IClubProjectFormProps {
+  porjectIdProp?: number;
+  formModeProp?: "UPDATE" | "CREATE" | "VIEW";
+}
+
+class clubProjectFormPropsPojo implements IClubProjectFormProps {
+  porjectIdProp: number | undefined;
+  formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
+  constructor(props: IClubProjectFormProps) {
+    this.porjectIdProp = props.porjectIdProp ? props.porjectIdProp : undefined;
+    this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
+  }
+}
+
 class focusedProjectsTablePojo implements IFocusedProjectsTableProps {
   tableViewProp: "MYPROJECTS" | "DISTRICT" | "CLUB" | undefined;
   conditionalIdProp: number | undefined;
@@ -112,6 +126,7 @@ export const useRotaryStore = defineStore("main", {
       districtFormProps: {} as IDistrictFormProps,
       userFormProps: {} as IUserFormProps,
       clubFormProps: {} as IClubFormProps,
+      clubProjectFormProps: {} as IClubProjectFormProps,
       isSiteAdminLoggedIn: false,
       isDistrictAdminLoggedIn: false,
       isClubAdminLoggedIn: false,
@@ -280,12 +295,17 @@ export const useRotaryStore = defineStore("main", {
         }
       }
     },
-    // Make a set forcused IFocusedProjectsTableProps function below
     setFocusedProjectsTableProps(props: IFocusedProjectsTableProps) {
       const focusedProjectsTableProps = new focusedProjectsTablePojo({
         ...props,
       });
       this.focusedProjectsTableProps = focusedProjectsTableProps;
+    },
+    setClubProjectFormProps(props: IClubProjectFormProps) {
+      const clubProjectFormProps = new clubProjectFormPropsPojo({
+        ...props,
+      });
+      this.clubProjectFormProps = clubProjectFormProps;
     },
     async reloadDistrictDates() {
       try {

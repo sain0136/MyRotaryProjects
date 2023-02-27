@@ -112,7 +112,7 @@ export default class ProjectsApi {
    */
   public static async createNewProject(
     newProject: IDmProject | IDsgProject | IClubProject
-  ): Promise<IApiError | boolean> {
+  ): Promise<IApiError |  number> {
     const apiReponse = await fetch(API_ROUTE, {
       method: "POST",
       headers: {
@@ -126,7 +126,7 @@ export default class ProjectsApi {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as IApiError | boolean;
+    return apiReponse as IApiError | number;
   }
 
   /**

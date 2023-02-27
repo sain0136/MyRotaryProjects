@@ -31,7 +31,10 @@
         <strong class="text-primary-green">{{ closeDate }}</strong>
       </h3>
       <div class="my flex gap-8">
-        <RotaryButton label="Create Club Project" @click="" />
+        <RotaryButton
+          label="Create Club Project"
+          @click="createClubProject()"
+        />
         <RotaryButton
           v-if="isProjectsOpen == true"
           label="Create Dsg Project"
@@ -128,6 +131,14 @@ export default defineComponent({
     await this.store.reloadDistrictDates();
   },
   methods: {
+    async createClubProject() {
+      this.store.setClubProjectFormProps({
+        formModeProp: "CREATE",
+      });
+      this.$router.push({
+        name: "ClubProjectFormLandingView",
+      });
+    },
     updateDeleteConfirm(value: boolean) {
       if (value) {
         this.deleteConfirm = value;
@@ -145,14 +156,15 @@ export default defineComponent({
         if (response === true) {
           this.toast.msg = this.headerFormatter("Project deleted successfully");
           this.myKey = this.myKey + 1;
+          this.resetSet();
         } else {
           this.toast.msg = this.headerFormatter(
             "Unable to delete project. It contains pledges or is currently in progress."
           );
         }
+        this.resetSet();
         setTimeout(() => {
           this.toast.display = false;
-          this.resetSet();
         }, 4000);
       } catch (error) {
         this.serverException = true;

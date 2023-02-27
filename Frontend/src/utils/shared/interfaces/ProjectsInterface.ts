@@ -160,7 +160,7 @@ export interface IGenericProject {
   total_pledges: number;
   file_uploads: Uploads;
   rotary_year: string;
-  image_link: string;
+  image_link: StorageInformation;
   created_by: number;
   club_id: number;
   district_id: number;
