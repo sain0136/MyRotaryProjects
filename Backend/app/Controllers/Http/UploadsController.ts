@@ -244,7 +244,6 @@ export default class UploadsController {
               storageInformation.extraLabel =
                 districtReportExtraDetails.extraLabel;
             }
-            delete storageInformation.file;
             storageInformationToBeStored.push(storageInformation);
           } else
             throw new Error(
@@ -319,8 +318,22 @@ export default class UploadsController {
 
     for await (const storageInformation of storageInformationToBeStored) {
       const { fieldName } = storageInformation.file as MultipartFileContract;
+      delete storageInformation.file;
+
       if (fieldName.includes(FileType.IMAGE_COVER)) {
-        project.imageLink = JSON.stringify(storageInformation);
+        try {
+          const oldImagelink: StorageInformation = JSON.parse(
+            project.imageLink
+          );
+          if (oldImagelink.location) {
+            await Drive.delete(oldImagelink.location);
+          }
+          project.imageLink = JSON.stringify(storageInformation);
+        } catch (error) {
+          throw new Error(
+            "Upload of one of the files did not complete. Contact the webmaster."
+          );
+        }
       }
       if (fieldName.includes(FileType.FILE_EVIDENCE)) {
         fileUploads.evidence_files.push(storageInformation);
@@ -358,8 +371,8 @@ export default class UploadsController {
     storageInformation: StorageInformation
   ): Promise<Assets> {
     const assets = await Assets.findOrFail(1);
-    let deleted: { main_logo: StorageInformation} =
-      assets.assets as unknown as { main_logo: StorageInformation};
+    let deleted: { main_logo: StorageInformation } =
+      assets.assets as unknown as { main_logo: StorageInformation };
     if (deleted.main_logo.location) {
       await Drive.delete(deleted.main_logo.location);
     }

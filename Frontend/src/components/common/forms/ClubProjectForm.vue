@@ -33,6 +33,36 @@
         Pdf
       </h1>
     </li>
+    <li class="mr-2">
+      <h1
+        v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+        @click="setTab(4)"
+        :class="activeTab4"
+        class="inline-block cursor-pointer rounded-t-lg p-4 text-primary-black hover:bg-gray-200 hover:text-gray-600"
+      >
+        Pledges
+      </h1>
+    </li>
+    <li class="mr-2">
+      <h1
+        v-if="
+          store.$state.clubProjectFormProps.formModeProp === 'UPDATE' &&
+          (store.$state.loggedInUserData.role[0].district_role ===
+            'District Admin' ||
+            store.$state.loggedInUserData.role[0].district_role ===
+              'District Grants Chair' ||
+            store.$state.loggedInUserData.role[0].district_role ===
+              'District Foundations Chair' ||
+            store.$state.loggedInUserData.role[0].district_role ===
+              'District International Chair')
+        "
+        @click="setTab(5)"
+        :class="activeTab5"
+        class="inline-block cursor-pointer rounded-t-lg p-4 text-primary-black hover:bg-gray-200 hover:text-gray-600"
+      >
+        Approvals
+      </h1>
+    </li>
   </ul>
   <div class="form_tab" v-if="activeTab1">
     <div class="container my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
@@ -111,6 +141,10 @@
             :errorMsg="
               v$.projectToUpdateOrCreate.anticipated_funding.$errors[0].$message
             "
+          />
+          <ErrorValidation
+            v-if="v$.projectToUpdateOrCreate.$error"
+            :error-msg="formatter(projectToUpdateOrCreate.total_pledges)"
           />
           <BaseDatePicker
             v-model="projectToUpdateOrCreate.start_date"
@@ -263,10 +297,70 @@
       </h1>
     </div>
   </div>
-  <div class="pdf_section"></div>
+  <div class="pdf_tab" v-if="activeTab3">
+    <ClubProjectPdf
+      v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+      :projectProp="projectToUpdateOrCreate"
+    />
+    <div v-else>
+      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+        <span class="">{{
+          headerFormatter("Please submit this project first")
+        }}</span>
+      </h1>
+    </div>
+  </div>
+  <div class="pledge_tab" v-if="activeTab4">
+    <AllPledgesTable :pledgesProp="projectToUpdateOrCreate.pledgesAssociated" />
+  </div>
+  <div class="approval_tab" v-if="activeTab5">
+    <Toast
+          v-if="toast.display"
+          :msg="toast.msg"
+          :width="toast.width"
+          :closeTimer="toast.closeTimer"
+        />
+    <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+      Approve Project
+    </h1>
+    <div class="details my-8 flex flex-col items-center gap-8">
+      <h6 class="mt-4 text-center font-bold">Project Administrator</h6>
+      <ul class="border border-primary-color p-4">
+        <li>
+          <strong>Name:</strong>
+          {{ projectToUpdateOrCreate.projectDetails.creatorData.fullName }}
+        </li>
+        <li>
+          <strong>Email:</strong>
+          {{ projectToUpdateOrCreate.projectDetails.creatorData.email }}
+        </li>
+        <li>
+          <strong>Phone:</strong>
+          {{ projectToUpdateOrCreate.projectDetails.creatorData.phone }}
+        </li>
+      </ul>
+      <ErrorValidation v-if="projectApproval" :errorMsg="projectApproval" />
+      <RotaryButton
+        v-if="
+          store.$state.loggedInUserData.role[0].district_role ===
+            'District Admin' ||
+          store.$state.loggedInUserData.role[0].district_role ===
+            'District Grants Chair'
+        "
+        label="Approve"
+        @click="approveProject()"
+      />
+
+      <h6 v-else class="mt-4 text-center font-bold">
+        Must be a District Admin / Grants Chair to approve
+      </h6>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
+import AllPledgesTable from "@/components/common/tables/AllPledgesTable.vue";
+import ClubProjectPdf from "@/components/common/pdf/ClubProjectPdf.vue";
 import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
@@ -294,7 +388,6 @@ import Toast from "@/components/common/toast/Toast.vue";
 import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import ErrorValidation from "@/components/common/baseformComponents/ErrorValidation.vue";
-import DistrictsApi from "@/services/Districts";
 import type {
   IClubProject,
   IDmProject,
@@ -311,7 +404,10 @@ import {
 import UploadsApi from "@/services/Uploads";
 import ProjectsApi from "@/services/Projects";
 import ClubProject from "@/utils/shared/classes/ClubProject";
-import { GrantType } from "@/utils/shared/interfaces/SharedInterface";
+import {
+  GrantType,
+  ProjectStatus,
+} from "@/utils/shared/interfaces/SharedInterface";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 export default defineComponent({
   name: "ClubProjectForm",
@@ -324,6 +420,7 @@ export default defineComponent({
     };
   },
   components: {
+    AllPledgesTable,
     RotaryButton,
     BaseFileUpload,
     BaseSelect,
@@ -338,15 +435,19 @@ export default defineComponent({
     DistrictUploadModal,
     ErrorValidation,
     UploadForm,
+    ClubProjectPdf,
   },
   props: {},
   data() {
     return {
+      projectApproval: "",
       headerFormatter: Utilities.headerFormater,
       projectToUpdateOrCreate: {} as IClubProject,
       activeTab1: "",
       activeTab2: "",
       activeTab3: "",
+      activeTab4: "",
+      activeTab5: "",
       submitButtonmsg: "Submit",
       tailwind: TAILWIND_COMMON_CLASSES,
       expectionObject: {} as IApiException,
@@ -419,6 +520,25 @@ export default defineComponent({
               }
             }
           ),
+          cantBelowerThanPledgesTotal: helpers.withMessage(
+            ErrorMessages.CANT_BE_LOWER_THAN_PLEDGES_TOTAL,
+            () => {
+              if (
+                parseFloat(
+                  this.projectToUpdateOrCreate
+                    .anticipated_funding as unknown as string
+                ) >=
+                parseFloat(
+                  this.projectToUpdateOrCreate
+                    .total_pledges as unknown as string
+                )
+              ) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+          ),
         },
         start_date: {
           required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
@@ -467,6 +587,43 @@ export default defineComponent({
     }
   },
   methods: {
+    async approveProject() {
+      if (
+        this.projectToUpdateOrCreate.project_status !==
+        ProjectStatus.PENDINGAPPROVAL
+      ) {
+        this.projectApproval = "Project has not been submitted for approval.";
+        setTimeout(() => {
+          this.projectApproval = "";
+        }, 3000);
+        return;
+      }
+      try {
+        const response = await ProjectsApi.updateProjectStatus(
+          this.projectToUpdateOrCreate.project_id as number,
+          ProjectStatus.APPROVED
+        );
+        if (!Utilities.isAnApiError(response) && response === true) {
+          debugger;
+          window.scrollTo(0, 0);
+          this.toast.display = true;
+          this.toast.msg = this.headerFormatter("Project Approved");
+          setTimeout(async () => {
+            this.toast.display = false;
+            this.$router.push("/");
+          }, 4000);
+        } else {
+          throw new MyError(
+            (response as IApiError).message,
+            (response as IApiError).stack,
+            (response as IApiError).code
+          );
+        }
+      } catch (error) {
+        this.expectionObject = error as IApiException;
+        this.serverException = true;
+      }
+    },
     async createClubProject() {
       try {
         const response = await ProjectsApi.createNewProject(
@@ -564,19 +721,53 @@ export default defineComponent({
           this.activeTab1 = "bg-gray-200";
           this.activeTab2 = "";
           this.activeTab3 = "";
+          this.activeTab4 = "";
+          this.activeTab5 = "";
           break;
         case 2:
           this.activeTab1 = "";
           this.activeTab2 = "bg-gray-200";
           this.activeTab3 = "";
+          this.activeTab4 = "";
+          this.activeTab5 = "";
           break;
         case 3:
           this.activeTab1 = "";
           this.activeTab2 = "";
           this.activeTab3 = "bg-gray-200";
+          this.activeTab4 = "";
+          this.activeTab5 = "";
           break;
+        case 4:
+          this.activeTab1 = "";
+          this.activeTab2 = "";
+          this.activeTab3 = "";
+          this.activeTab4 = "bg-gray-200";
+          this.activeTab5 = "";
+          break;
+        case 5:
+          this.activeTab1 = "";
+          this.activeTab2 = "";
+          this.activeTab3 = "";
+          this.activeTab4 = "";
+          this.activeTab5 = "bg-gray-200";
+          break;
+
         default:
           break;
+      }
+    },
+    formatter(amount: number) {
+      if (amount) {
+        const formatter = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        });
+        return "Total Pledges :" + formatter.format( amount);
+      } else {
+        return this.headerFormatter(
+          "Total Pledge Amount not available check pledges tab"
+        );
       }
     },
     redirect() {

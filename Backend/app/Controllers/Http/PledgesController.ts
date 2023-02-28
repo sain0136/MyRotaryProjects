@@ -5,7 +5,6 @@ import Projects from "../../Models/Projects";
 import { Pledge } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
 import { ProjectStatus } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
 
-
 export default class PledgesController {
   /**
    * @param  {} {request
@@ -45,10 +44,15 @@ export default class PledgesController {
       projectId: pledge.project_id,
       userId: pledge.user_id,
     });
-    let changeStatus: Boolean =
-      parseFloat(project.anticipatedFunding.toString()) ===
+    let changeStatus: Boolean = false;
+    if (
+      (parseFloat(project.anticipatedFunding.toString())+ parseFloat(pledge.pledge_amount) ) ===
         parseFloat(project.fundingGoal.toString()) &&
-      project.projectStatus === ProjectStatus.LOOKINGFORFUNDING;
+      project.projectStatus === ProjectStatus.LOOKINGFORFUNDING
+    ) {
+      changeStatus = true;
+    }
+
     await project
       .merge({
         anticipatedFunding:
@@ -59,7 +63,7 @@ export default class PledgesController {
           pledgeHelper.pledge_amount,
         projectStatus: changeStatus
           ? ProjectStatus.FULLYFUNDED
-          : project.projectStatus,
+          : ProjectStatus.LOOKINGFORFUNDING,
       })
       .save();
     let allPledges = await this.normalizePledgesAmount(project, true);

@@ -18,6 +18,9 @@ import ReportApprovals from "@/modules/home/views/adminviews/ReportApprovals.vue
 import DistrictAdminClubForm from "@/components/common/forms/ClubForm.vue";
 import UserFormForAdmins from "@/components/common/forms/UserForm.vue";
 import ClubProjectFormLandingView from "@/components/common/forms/ClubProjectForm.vue";
+import DSGProjectFormLandingView from "@/components/common/forms/DSProjectForm.vue";
+import DMProjectFormLandingView from "@/components/common/forms/DMProjectForm.vue";
+
 const route = {
   path: "/",
   component: LandingApp,
@@ -115,6 +118,16 @@ const route = {
       path: "/clubproject",
       component: ClubProjectFormLandingView,
       name: "ClubProjectFormLandingView",
+    },
+    {
+      path: "/dsgproject",
+      component: DSGProjectFormLandingView,
+      name: "DSGProjectFormLandingView",
+    },
+    {
+      path: "/dmproject",
+      component: DMProjectFormLandingView,
+      name: "DMProjectFormLandingView", 
     },
   ],
 };

@@ -3,7 +3,10 @@
     class="relative overflow-x-auto shadow-md sm:rounded-lg"
     v-if="focusedProjects.length != 0"
   >
-    <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+    <table
+      :key="key"
+      class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
+    >
       <thead
         class="t_head text-s bg-primary-black uppercase text-primary-white"
       >
@@ -40,6 +43,20 @@
           <td class="px-6 py-4 text-primary-black">
             <div class="buttons_container2 flex gap-2">
               <button
+                v-if="
+                  project.project_status === 'Approved' &&
+                  project.grant_type === 'Club Project'
+                "
+                title="Project Complete"
+                class="crud_buttons hover:text-primary-c"
+                @click="completeClubProject(project.project_id)"
+              >
+                <font-awesome-icon
+                  icon="fa-solid fa-check-to-slot"
+                  class="hover:text-primary-color"
+                />
+              </button>
+              <button
                 title="Edit Project"
                 class="crud_buttons hover:text-primary-c"
                 @click="updateProject(project.project_id, project.grant_type)"
@@ -57,7 +74,7 @@
                 "
                 title="Submit Project "
                 class="crud_buttons hover:text-primary-c"
-                @click=""
+                @click="submitForApproval(project.project_id)"
               >
                 <font-awesome-icon
                   icon="fa-solid fa-thumbs-up"
@@ -124,19 +141,6 @@
             v-if="payload.current_page != 1"
             class="inline-flex items-center rounded-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
           >
-            <svg
-              aria-hidden="true"
-              class="mr-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
             Prev
           </button>
           <button
@@ -145,19 +149,6 @@
             class="inline-flex items-center rounded-r border-0 border-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
           >
             Next
-            <svg
-              aria-hidden="true"
-              class="ml-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
           </button>
         </div>
       </div>
@@ -181,10 +172,18 @@ import type {
 } from "@/utils/shared/interfaces/ProjectsInterface";
 import ProjectsApi from "@/services/Projects";
 import { useRotaryStore } from "@/stores/rotaryStore";
-import { GrantType } from "@/utils/shared/interfaces/SharedInterface";
+import {
+  GrantType,
+  ProjectStatus,
+} from "@/utils/shared/interfaces/SharedInterface";
 export default defineComponent({
   name: "FocusedProjectsTable",
   setup(props, context: SetupContext) {
+    const key = ref(0);
+    const increment = () => {
+      key.value++;
+    };
+
     const store = useRotaryStore();
     function updateShowModal(
       show: boolean,
@@ -197,7 +196,7 @@ export default defineComponent({
         idTobeDeleted: projectId,
       });
     }
-    return { store, updateShowModal };
+    return { store, updateShowModal, key, increment };
   },
   components: {},
   props: {
@@ -222,11 +221,53 @@ export default defineComponent({
     this.getFocusedProjects();
   },
   methods: {
+    async completeClubProject(projectId: number) {
+      try {
+        const response = await ProjectsApi.updateProjectStatus(
+          projectId as number,
+          ProjectStatus.COMPLETED
+        );
+        if (!Utilities.isAnApiError(response) && response === true) {
+          this.$router.go(0);
+          //  Not optimal but works for now fix later
+        } else {
+        }
+      } catch (error) {}
+      // Fix error catching this later
+    },
+    async submitForApproval(projectId: number) {
+      try {
+        const response = await ProjectsApi.updateProjectStatus(
+          projectId as number,
+          ProjectStatus.PENDINGAPPROVAL
+        );
+        if (!Utilities.isAnApiError(response) && response === true) {
+          this.$router.go(0);
+          //  Not optimal but works for now fix later
+        } else {
+        }
+      } catch (error) {}
+      // Fix error catching this later
+    },
     updateProject(projectId: number, projectType: string) {
       switch (projectType) {
-        case "DM":
+        case `${GrantType.DISTRICTMATCHINGPROJECT}`:
+        this.store.setDSGOrDMFormProps({
+            formModeProp: "UPDATE",
+            porjectIdProp: projectId,
+          });
+          this.$router.push({
+            name: "DMProjectFormLandingView",
+          });
           break;
-        case "DSG":
+        case `${GrantType.DISTRICTSIMPLIFIEDPROJECT}`:
+        this.store.setDSGOrDMFormProps({
+            formModeProp: "UPDATE",
+            porjectIdProp: projectId,
+          });
+          this.$router.push({
+            name: "DSGProjectFormLandingView",
+          });
           break;
         case `${GrantType.CLUBPROJECT}`:
           this.store.setClubProjectFormProps({

@@ -53,7 +53,22 @@ export interface IClubProjectFormProps {
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
 }
 
+// make interfce for Dsg and Dm project form props
+export interface IDsgOrDMProjectFormProps {
+  porjectIdProp?: number;
+  formModeProp?: "UPDATE" | "CREATE" | "VIEW";
+}
+
 class clubProjectFormPropsPojo implements IClubProjectFormProps {
+  porjectIdProp: number | undefined;
+  formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
+  constructor(props: IClubProjectFormProps) {
+    this.porjectIdProp = props.porjectIdProp ? props.porjectIdProp : undefined;
+    this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
+  }
+}
+
+class DSGOrDMFormPropsPojo implements IDsgOrDMProjectFormProps {
   porjectIdProp: number | undefined;
   formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
   constructor(props: IClubProjectFormProps) {
@@ -122,6 +137,7 @@ export const useRotaryStore = defineStore("main", {
   //The Global state variabales
   state: () => {
     return {
+      DsgOrDMProjectFormProps: {} as IDsgOrDMProjectFormProps,  
       focusedProjectsTableProps: {} as IFocusedProjectsTableProps,
       districtFormProps: {} as IDistrictFormProps,
       userFormProps: {} as IUserFormProps,
@@ -306,6 +322,12 @@ export const useRotaryStore = defineStore("main", {
         ...props,
       });
       this.clubProjectFormProps = clubProjectFormProps;
+    },
+    setDSGOrDMFormProps(props: IDsgOrDMProjectFormProps) {
+      const DSGOrDMFormProps = new DSGOrDMFormPropsPojo({
+        ...props,
+      });
+      this.DsgOrDMProjectFormProps = DSGOrDMFormProps;
     },
     async reloadDistrictDates() {
       try {
