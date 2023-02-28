@@ -31,19 +31,17 @@
         <strong class="text-primary-green">{{ closeDate }}</strong>
       </h3>
       <div class="my flex gap-8">
-        <RotaryButton
-          label="Create Club Project"
-          @click="createClubProject()"
-        />
+        <RotaryButton label="Create Club Project" @click="createNewProject('CLUB')" />
+
         <RotaryButton
           v-if="isProjectsOpen == true"
           label="Create Dsg Project"
-          @click=""
+          @click="createNewProject('DSG')"
         />
         <RotaryButton
           v-if="isProjectsOpen == true"
           label="Create Dm Project"
-          @click=""
+          @click="createNewProject('DM')"
         />
         <RotaryButton label="Create Global Project" @click="" />
       </div>
@@ -132,13 +130,34 @@ export default defineComponent({
     await this.store.reloadDistrictDates();
   },
   methods: {
-    async createClubProject() {
-      this.store.setClubProjectFormProps({
-        formModeProp: "CREATE",
-      });
-      this.$router.push({
-        name: "ClubProjectFormLandingView",
-      });
+    async createNewProject(projectType: string) {
+      switch (projectType) {
+        case "DM":
+          this.store.setDSGOrDMFormProps({
+            formModeProp: "CREATE",
+          });
+          this.$router.push({
+            name: "DMProjectFormLandingView",
+          });
+          break;
+        case "DSG":
+          this.store.setDSGOrDMFormProps({
+            formModeProp: "CREATE",
+          });
+          this.$router.push({
+            name: "DSGProjectFormLandingView",
+          });
+          break;
+        case "CLUB":
+          this.store.setClubProjectFormProps({
+            formModeProp: "CREATE",
+          });
+          this.$router.push({
+            name: "ClubProjectFormLandingView",
+          });
+          break;
+      }
+
     },
     updateDeleteConfirm(value: boolean) {
       if (value) {

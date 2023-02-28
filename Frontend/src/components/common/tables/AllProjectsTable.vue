@@ -42,19 +42,7 @@
               <button
                 title="Edit Project"
                 class="crud_buttons hover:text-primary-c"
-                @click="
-                  () => {
-                    $router.push({
-                      name: 'SiteAdminUsersForm',
-                      params: {
-                        adminRouteProp: 'ADMIN',
-                        editOrCreateProp: 'EDIT',
-                        userIdProp: project.project_id,
-                        userCreationTypeProp: 'DISTRICT_ADMIN',
-                      },
-                    });
-                  }
-                "
+                @click="updateProject(project.project_id, project.grant_type)"
               >
                 <font-awesome-icon
                   class="hover:text-primary-color"
@@ -104,19 +92,6 @@
             v-if="payload.current_page != 1"
             class="inline-flex items-center rounded-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
           >
-            <svg
-              aria-hidden="true"
-              class="mr-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
             Prev
           </button>
           <button
@@ -125,19 +100,6 @@
             class="inline-flex items-center rounded-r border-0 border-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
           >
             Next
-            <svg
-              aria-hidden="true"
-              class="ml-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
           </button>
         </div>
       </div>
@@ -160,9 +122,12 @@ import type {
   IDsgProject,
 } from "@/utils/shared/interfaces/ProjectsInterface";
 import ProjectsApi from "@/services/Projects";
+import { GrantType } from "@/utils/shared/interfaces/SharedInterface";
+import { useRotaryStore } from "@/stores/rotaryStore";
 export default defineComponent({
   name: "AllProjectsTable",
   setup(props, context: SetupContext) {
+    const store = useRotaryStore();
     function updateShowModal(
       show: boolean,
       projectName: string,
@@ -174,7 +139,7 @@ export default defineComponent({
         idTobeDeleted: projectId,
       });
     }
-    return {updateShowModal };
+    return { updateShowModal, store };
   },
   components: {},
   props: {
@@ -199,12 +164,28 @@ export default defineComponent({
   async created() {
     if (this.forApprovalViewProp) {
       await this.getAllProjects();
-
     } else {
       await this.getAllProjects();
     }
   },
   methods: {
+    updateProject(projectId: number, projectType: string) {
+      switch (projectType) {
+        case "DM":
+          break;
+        case "DSG":
+          break;
+        case `${GrantType.CLUBPROJECT}`:
+          this.store.setClubProjectFormProps({
+            formModeProp: "UPDATE",
+            porjectIdProp: projectId,
+          });
+          this.$router.push({
+            name: "ClubProjectFormLandingView",
+          });
+          break;
+      }
+    },
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
       this.getAllProjects();

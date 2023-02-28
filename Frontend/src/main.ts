@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import VueSocialSharing from 'vue-social-sharing'
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -17,7 +18,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelopeCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCircleDown } from "@fortawesome/free-solid-svg-icons";
-import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
+import { faFacebookF ,faSquareFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -35,9 +36,13 @@ import {
   faArrowUpRightFromSquare,
   faAngleDown,
   faQuestion,
+  faCheckToSlot,
+
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
+  faSquareFacebook,
+  faCheckToSlot,
   faQuestion,
   faAngleDown,
   faLocationDot,
@@ -79,6 +84,7 @@ const app = createApp(App);
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
+app.use(VueSocialSharing);
 app.use(pinia);
 app.use(router);
 app.component("font-awesome-icon", FontAwesomeIcon);

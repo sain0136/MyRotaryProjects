@@ -1,7 +1,7 @@
 <template>
   <div class="project_card">
     <div class="max-w-sm border-gray-200 bg-white shadow">
-      <div class="h-1/2" @click="foward()">
+      <div class="h-1/2 cursor-pointer" @click="foward()">
         <img
           v-if="!projectLoaded.image_link.url"
           class="w-full cursor-pointer object-cover"

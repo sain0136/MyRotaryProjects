@@ -185,6 +185,7 @@ export default class ProjectsController {
 
     const projects = await Projects.query()
       .select("*")
+      .orderByRaw("CASE WHEN project_status = 'Completed' THEN 1 ELSE 0 END, project_id DESC")
       .orderBy("project_id", "desc")
       .paginate(currentPage, limit);
     return response.json(projects);
