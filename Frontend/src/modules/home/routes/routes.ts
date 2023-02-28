@@ -21,6 +21,7 @@ import ClubProjectFormLandingView from "@/components/common/forms/ClubProjectFor
 import DSGProjectFormLandingView from "@/components/common/forms/DSProjectForm.vue";
 import DMProjectFormLandingView from "@/components/common/forms/DMProjectForm.vue";
 
+
 const route = {
   path: "/",
   component: LandingApp,
@@ -129,6 +130,7 @@ const route = {
       component: DMProjectFormLandingView,
       name: "DMProjectFormLandingView", 
     },
+
   ],
 };
 

@@ -63,6 +63,7 @@
         Approvals
       </h1>
     </li>
+
   </ul>
   <div class="form_tab" v-if="activeTab1">
     <div class="container my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
@@ -146,6 +147,7 @@
             v-if="v$.projectToUpdateOrCreate.$error"
             :error-msg="formatter(projectToUpdateOrCreate.total_pledges)"
           />
+
           <BaseDatePicker
             v-model="projectToUpdateOrCreate.start_date"
             label="Project Start Date"
@@ -361,6 +363,7 @@
 <script lang="ts">
 import AllPledgesTable from "@/components/common/tables/AllPledgesTable.vue";
 import ClubProjectPdf from "@/components/common/pdf/ClubProjectPdf.vue";
+
 import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
@@ -408,6 +411,7 @@ import {
   GrantType,
   ProjectStatus,
 } from "@/utils/shared/interfaces/SharedInterface";
+
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 export default defineComponent({
   name: "ClubProjectForm",
@@ -421,6 +425,7 @@ export default defineComponent({
   },
   components: {
     AllPledgesTable,
+
     RotaryButton,
     BaseFileUpload,
     BaseSelect,
@@ -436,11 +441,13 @@ export default defineComponent({
     ErrorValidation,
     UploadForm,
     ClubProjectPdf,
+
   },
   props: {},
   data() {
     return {
       projectApproval: "",
+
       headerFormatter: Utilities.headerFormater,
       projectToUpdateOrCreate: {} as IClubProject,
       activeTab1: "",
@@ -448,6 +455,7 @@ export default defineComponent({
       activeTab3: "",
       activeTab4: "",
       activeTab5: "",
+
       submitButtonmsg: "Submit",
       tailwind: TAILWIND_COMMON_CLASSES,
       expectionObject: {} as IApiException,
@@ -539,6 +547,7 @@ export default defineComponent({
               }
             }
           ),
+
         },
         start_date: {
           required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
@@ -624,6 +633,7 @@ export default defineComponent({
         this.serverException = true;
       }
     },
+
     async createClubProject() {
       try {
         const response = await ProjectsApi.createNewProject(
@@ -723,6 +733,7 @@ export default defineComponent({
           this.activeTab3 = "";
           this.activeTab4 = "";
           this.activeTab5 = "";
+
           break;
         case 2:
           this.activeTab1 = "";
@@ -730,6 +741,7 @@ export default defineComponent({
           this.activeTab3 = "";
           this.activeTab4 = "";
           this.activeTab5 = "";
+
           break;
         case 3:
           this.activeTab1 = "";
@@ -753,6 +765,7 @@ export default defineComponent({
           this.activeTab5 = "bg-gray-200";
           break;
 
+
         default:
           break;
       }
@@ -770,6 +783,7 @@ export default defineComponent({
         );
       }
     },
+
     redirect() {
       this.$router.go(-1);
     },

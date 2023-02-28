@@ -53,11 +53,13 @@ export interface IClubProjectFormProps {
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
 }
 
+
 // make interfce for Dsg and Dm project form props
 export interface IDsgOrDMProjectFormProps {
   porjectIdProp?: number;
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
 }
+
 
 class clubProjectFormPropsPojo implements IClubProjectFormProps {
   porjectIdProp: number | undefined;
@@ -68,6 +70,7 @@ class clubProjectFormPropsPojo implements IClubProjectFormProps {
   }
 }
 
+
 class DSGOrDMFormPropsPojo implements IDsgOrDMProjectFormProps {
   porjectIdProp: number | undefined;
   formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
@@ -76,6 +79,7 @@ class DSGOrDMFormPropsPojo implements IDsgOrDMProjectFormProps {
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
   }
 }
+
 
 class focusedProjectsTablePojo implements IFocusedProjectsTableProps {
   tableViewProp: "MYPROJECTS" | "DISTRICT" | "CLUB" | undefined;
@@ -329,6 +333,7 @@ export const useRotaryStore = defineStore("main", {
       });
       this.DsgOrDMProjectFormProps = DSGOrDMFormProps;
     },
+
     async reloadDistrictDates() {
       try {
         let box = this.loggedInUsersDistrict;

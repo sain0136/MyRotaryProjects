@@ -32,6 +32,7 @@
       </h3>
       <div class="my flex gap-8">
         <RotaryButton label="Create Club Project" @click="createNewProject('CLUB')" />
+
         <RotaryButton
           v-if="isProjectsOpen == true"
           label="Create Dsg Project"
@@ -156,6 +157,7 @@ export default defineComponent({
           });
           break;
       }
+
     },
     updateDeleteConfirm(value: boolean) {
       if (value) {

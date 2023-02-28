@@ -176,6 +176,7 @@ import {
   GrantType,
   ProjectStatus,
 } from "@/utils/shared/interfaces/SharedInterface";
+
 export default defineComponent({
   name: "FocusedProjectsTable",
   setup(props, context: SetupContext) {
@@ -268,6 +269,7 @@ export default defineComponent({
           this.$router.push({
             name: "DSGProjectFormLandingView",
           });
+
           break;
         case `${GrantType.CLUBPROJECT}`:
           this.store.setClubProjectFormProps({
