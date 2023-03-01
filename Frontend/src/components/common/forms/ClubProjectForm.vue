@@ -289,7 +289,7 @@
   <div class="upload_tab" v-if="activeTab2">
     <UploadForm
       v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
-      :projectIdProp="projectToUpdateOrCreate.project_id"
+      :projectProp="projectToUpdateOrCreate"
     />
     <div v-else>
       <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">

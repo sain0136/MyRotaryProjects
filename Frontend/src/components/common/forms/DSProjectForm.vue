@@ -74,10 +74,10 @@
       </h1>
     </li>
   </ul>
-  <div class="container mt-8 px-24 pb-24">
+  <div class="dsg_tabs mt-8 px-24 pb-24">
     <div class="form_tab" v-if="activeTab1">
-      <div class="container my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
-        <div class="container" :class="tailwind.DIVCOL">
+      <div class=" wrapper my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
+        <div class=" wrapper" :class="tailwind.DIVCOL">
           <Toast
             v-if="toast.display"
             :msg="toast.msg"
@@ -733,7 +733,7 @@
     <div class="upload_tab" v-if="activeTab2">
       <UploadForm
         v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
-        :projectIdProp="projectToUpdateOrCreate.project_id"
+        :projectProp="projectToUpdateOrCreate"
       />
       <div v-else>
         <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
@@ -804,6 +804,9 @@
           Must be a District Admin / Grants Chair to approve
         </h6>
       </div>
+      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+        Approve Reports
+      </h1>
     </div>
     <div class="share_tab" v-if="activeTab6">
       <div class="share flex justify-center">

@@ -353,12 +353,13 @@ export default class UploadsController {
    * @param  {Projects} toBeUpdatedProject
    */
   private async saveProjects(toBeUpdatedProject: Projects) {
-    let updated = await toBeUpdatedProject
+     await toBeUpdatedProject
       .merge({
         imageLink: toBeUpdatedProject.imageLink,
         fileUploads: toBeUpdatedProject.fileUploads,
       })
       .save();
+    let updated = await Projects.findOrFail(toBeUpdatedProject.projectId);
     return updated;
   }
 
@@ -422,13 +423,14 @@ export default class UploadsController {
       await Drive.delete(uploadFile.reports_files[indexToDelete].location);
       uploadFile.reports_files.splice(indexToDelete, 1);
     }
-    const updatedProject = await project
+     await project
       .merge({
         fileUploads: JSON.stringify(uploadFile),
         imageLink: project.imageLink,
       })
       .save();
-    return response.json(updatedProject.fileUploads);
+      const updatedProject = await Projects.findOrFail(projectId);
+    return response.json(updatedProject);
   }
 
   /**
