@@ -6,6 +6,9 @@ import {
 } from "@/utils/frontend/interfaces/Frontend";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 import type {
+IClubProject,
+IDmProject,
+IDsgProject,
   StorageInformation,
   Uploads,
 } from "@/utils/shared/interfaces/ProjectsInterface";
@@ -94,7 +97,7 @@ export default class UploadsApi {
   public static async deleteAnUpload(
     upload_information: StorageInformation,
     project_id?: number
-  ): Promise<IApiError | Uploads> {
+  ): Promise<IApiError | IDmProject | IDsgProject | IClubProject> {
     const apiReponse = await fetch(API_ROUTE + "delete", {
       method: "POST",
       headers: {
@@ -111,7 +114,7 @@ export default class UploadsApi {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as IApiError | Uploads;
+    return apiReponse as IApiError | IDmProject | IDsgProject | IClubProject;
   }
 
   //  write a deleteADistrictReportUpload function below that will delete a district report upload

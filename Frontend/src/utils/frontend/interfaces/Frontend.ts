@@ -132,7 +132,7 @@ export const ErrorMessages = {
   DATE_AFTER_START_DATE: "This field must be after start date",
   IMAGE_NOT_UPLOADED: "Please upload an image",
   CANT_BE_LOWER_THAN_PLEDGES_TOTAL: "This field must be greater than the pledges total",
-
+  NO_FILES_UPLOADED: "Please upload at least one file",
 };
 
 export interface UserValidationApiResponse {
