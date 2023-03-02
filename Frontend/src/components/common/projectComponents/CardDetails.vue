@@ -1,5 +1,5 @@
 <template>
-  <div class="container mb-8 min-w-full ">
+  <div class="container mb-8 min-w-full">
     <ExceptionModal
       v-if="serverException"
       :message="expectionObject.message"
@@ -70,7 +70,9 @@
             />
           </div>
           <div class="fully" v-else>
-            <h1>Fully Funded!</h1>
+            <h1 class="bg-primary-green py-2 px-4 font-bold text-primary-white">
+              Fully Funded!
+            </h1>
           </div>
         </div>
       </div>
@@ -80,7 +82,7 @@
           <h1 class="py-8 text-2xl font-bold text-primary-black">
             Description:
           </h1>
-          <blockquote class="border-l-4 border-gray-400 py-2 px-4  w-5/6">
+          <blockquote class="w-5/6 border-l-4 border-gray-400 py-2 px-4">
             {{ loadedProject.project_description }}
           </blockquote>
         </div>
@@ -88,22 +90,26 @@
           <blockquote>
             <ul>
               <li>
-                <span class="font-bold text-primary-black text-xl ">Region:</span>
+                <span class="text-xl font-bold text-primary-black"
+                  >Region:</span
+                >
                 {{ loadedProject.region }}
               </li>
               <li class="mt-8">
-                <span class="font-bold text-primary-black text-xl "> Country: </span>
+                <span class="text-xl font-bold text-primary-black">
+                  Country:
+                </span>
                 {{ loadedProject.country }}
               </li>
               <li class="mt-8">
-                <span class="font-bold text-xl text-primary-black">
+                <span class="text-xl font-bold text-primary-black">
                   {{ headerFormatter("Rotary Areas of Focus:") }}
                 </span>
                 <ul class="mt-4 flex flex-col gap-4 bg-primary-color p-4">
                   <li
                     v-for="area in areasOfFocus"
                     :key="area + 'area_focus'"
-                    class="ml-4 flex gap-2  text-xl font-bold text-primary-white"
+                    class="ml-4 flex gap-2 text-xl font-bold text-primary-white"
                   >
                     <font-awesome-icon
                       class="self-center"
@@ -123,10 +129,10 @@
             <h1 class="mb-2 text-2xl font-bold text-primary-black">
               Our Pledge Process
             </h1>
-            <ul class="faq_steps flex flex-col gap-2 ">
+            <ul class="faq_steps flex flex-col gap-2">
               <li class="flex gap-2">
                 <font-awesome-icon icon="fa-solid fa-check" class="mt-1" />
-                <span class=" font-semibold" >{{
+                <span class="font-semibold">{{
                   headerFormatter(
                     "Log in a district or club memebr and make a pledge."
                   )
@@ -134,7 +140,7 @@
               </li>
               <li class="flex gap-2">
                 <font-awesome-icon icon="fa-solid fa-check" class="mt-1" />
-                <span class=" font-semibold">{{
+                <span class="font-semibold">{{
                   headerFormatter(
                     "If you are not part of rotary you can still pledge."
                   )
@@ -142,7 +148,7 @@
               </li>
               <li class="flex gap-2">
                 <font-awesome-icon icon="fa-solid fa-check" class="mt-1" />
-                <span class=" font-semibold">{{
+                <span class="font-semibold">{{
                   headerFormatter(
                     "Simply make a guest account and promise an amount."
                   )
@@ -150,7 +156,7 @@
               </li>
               <li class="flex gap-2">
                 <font-awesome-icon icon="fa-solid fa-check" class="mt-1" />
-                <span class=" font-semibold">{{
+                <span class="font-semibold">{{
                   headerFormatter(
                     "When the project is Fully Funded and approved you will be contacted by the Projects's creators!"
                   )
@@ -245,7 +251,7 @@ export default defineComponent({
     redirectToPledgeForm() {
       this.$router.push({
         name: "PledgeForm",
-        params: { id: this.loadedProject.project_id},
+        params: { id: this.loadedProject.project_id },
       });
     },
     currencyFormatterAnticipated(amount: number) {

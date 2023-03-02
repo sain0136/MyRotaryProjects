@@ -14,7 +14,10 @@ import {
   IDsgProject,
   IClubProject,
 } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
-import { SearchCriteria } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
+import {
+  ProjectStatus,
+  SearchCriteria,
+} from "Contracts/util/sharedUtility/interfaces/SharedInterface";
 import { DateTime } from "luxon";
 
 export default class ProjectsController {
@@ -185,7 +188,9 @@ export default class ProjectsController {
 
     const projects = await Projects.query()
       .select("*")
-      .orderByRaw("CASE WHEN project_status = 'Completed' THEN 1 ELSE 0 END, project_id DESC")
+      .orderByRaw(
+        "CASE WHEN project_status = 'Completed' THEN 1 ELSE 0 END, project_id DESC"
+      )
       .orderBy("project_id", "desc")
       .paginate(currentPage, limit);
     return response.json(projects);
@@ -241,10 +246,10 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate ,
+          completionDate: convertedCompletionDate,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
-          startDate: convertedStartDate ,
+          startDate: convertedStartDate,
           createdBy: newProject.created_by,
           region: newProject.region,
           rotaryYear: RotaryYear.getCurrentYear(),
@@ -285,8 +290,8 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate ,
-          startDate: convertedStartDate ,
+          completionDate: convertedCompletionDate,
+          startDate: convertedStartDate,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
           createdBy: newProject.created_by,
@@ -338,8 +343,8 @@ export default class ProjectsController {
           projectDescription: newProject.project_description,
           grantType: newProject.grant_type,
           areaFocus: JSON.stringify(newProject.area_focus),
-          completionDate: convertedCompletionDate ,
-          startDate: convertedStartDate ,
+          completionDate: convertedCompletionDate,
+          startDate: convertedStartDate,
           fundingGoal: newProject.funding_goal,
           anticipatedFunding: newProject.anticipated_funding,
           createdBy: newProject.created_by,
@@ -477,7 +482,11 @@ export default class ProjectsController {
       oldProjectImformation.completion_date,
       "yyyy-MM-dd"
     );
-
+    let nonPledgeFullyFunded =
+      parseFloat(oldProjectImformation.anticipated_funding.toString()) ===
+      parseFloat(oldProjectImformation.funding_goal.toString())
+        ? true
+        : false;
     if (oldProjectImformation.grant_type === "Club Project") {
       const updatedProject = await projectToBeUpdateds
         .merge({
@@ -492,7 +501,9 @@ export default class ProjectsController {
           region: oldProjectImformation.region,
           rotaryYear: oldProjectImformation.rotary_year,
           country: oldProjectImformation.country,
-          projectStatus: oldProjectImformation.project_status,
+          projectStatus: nonPledgeFullyFunded
+            ? ProjectStatus.FULLYFUNDED
+            : oldProjectImformation.project_status,
           imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
           extraDescriptions: JSON.stringify(
@@ -511,20 +522,19 @@ export default class ProjectsController {
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate ,
-          startDate: convertedStartDate ,
+          completionDate: convertedCompletionDate,
+          startDate: convertedStartDate,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
           region: oldProjectImformation.region,
           rotaryYear: oldProjectImformation.rotary_year,
-          
+
           country: oldProjectImformation.country,
-          
+
           projectStatus: oldProjectImformation.project_status,
           imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
-          
-          
+
           coOperatingOrganisationContribution: (
             oldProjectImformation as IDsgProject
           ).co_operating_organisation_contribution,
@@ -553,20 +563,19 @@ export default class ProjectsController {
           projectDescription: oldProjectImformation.project_description,
           grantType: oldProjectImformation.grant_type,
           areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate ,
-          startDate: convertedStartDate ,
+          completionDate: convertedCompletionDate,
+          startDate: convertedStartDate,
           fundingGoal: oldProjectImformation.funding_goal,
           anticipatedFunding: oldProjectImformation.anticipated_funding,
           region: oldProjectImformation.region,
           rotaryYear: oldProjectImformation.rotary_year,
-          
+
           country: oldProjectImformation.country,
-          
+
           projectStatus: oldProjectImformation.project_status,
           imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
-          
-          
+
           coOperatingOrganisationContribution: (
             oldProjectImformation as IDmProject
           ).co_operating_organisation_contribution,

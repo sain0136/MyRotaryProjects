@@ -1,3 +1,5 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
   MyError,
@@ -6,9 +8,9 @@ import {
 } from "@/utils/frontend/interfaces/Frontend";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 import type {
-IClubProject,
-IDmProject,
-IDsgProject,
+  IClubProject,
+  IDmProject,
+  IDsgProject,
   StorageInformation,
   Uploads,
 } from "@/utils/shared/interfaces/ProjectsInterface";
@@ -65,14 +67,21 @@ export default class UploadsApi {
     if (uploadData.project_id) {
       fd.append("project_id", uploadData.project_id.toString());
     }
-    
+
     try {
       const apiReponse = await Axios.post(API_ROUTE, fd, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Access-Control-Request-Method": "POST",
         },
+        withCredentials: true,
       });
+      if(apiReponse.status === 401){
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       if (typeof apiReponse.data === "boolean") {
         if (apiReponse.data) {
           return true;
@@ -107,7 +116,14 @@ export default class UploadsApi {
         project_id: project_id,
         upload_information: upload_information,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -131,7 +147,14 @@ export default class UploadsApi {
         district_id: district_id,
         upload_information: upload_information,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

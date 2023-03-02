@@ -57,6 +57,18 @@
                 />
               </button>
               <button
+                v-else-if="
+                  project.project_status === 'Approved' &&
+                  (project.grant_type === 'District Simplified Project' ||
+                    project.grant_type === 'District Matching Project')
+                "
+                title="Submit For Reports"
+                class="crud_buttons hover:text-primary-c"
+                @click="submitReports(project.project_id)"
+              >
+              <font-awesome-icon icon="fa-solid fa-file" />
+              </button>
+              <button
                 title="Edit Project"
                 class="crud_buttons hover:text-primary-c"
                 @click="updateProject(project.project_id, project.grant_type)"
@@ -78,20 +90,6 @@
               >
                 <font-awesome-icon
                   icon="fa-solid fa-thumbs-up"
-                  class="hover:text-primary-color"
-                />
-              </button>
-              <button
-                v-if="
-                  project.project_status === 'Reports Due' &&
-                  store.$state.focusedProjectsTableProps.tableViewProp ==
-                    'MYPROJECTS'
-                "
-                title="Submit Reports"
-                class="crud_buttons hover:text-primary-c"
-              >
-                <font-awesome-icon
-                  icon="fa-solid fa-flag"
                   class="hover:text-primary-color"
                 />
               </button>
@@ -236,6 +234,20 @@ export default defineComponent({
       } catch (error) {}
       // Fix error catching this later
     },
+    async submitReports(projectId: number) {
+      try {
+        const response = await ProjectsApi.updateProjectStatus(
+          projectId as number,
+          ProjectStatus.REPORTSDUE
+        );
+        if (!Utilities.isAnApiError(response) && response === true) {
+          this.$router.go(0);
+          //  Not optimal but works for now fix later
+        } else {
+        }
+      } catch (error) {}
+      // Fix error catching this later
+    },
     async submitForApproval(projectId: number) {
       try {
         const response = await ProjectsApi.updateProjectStatus(
@@ -253,7 +265,7 @@ export default defineComponent({
     updateProject(projectId: number, projectType: string) {
       switch (projectType) {
         case `${GrantType.DISTRICTMATCHINGPROJECT}`:
-        this.store.setDSGOrDMFormProps({
+          this.store.setDSGOrDMFormProps({
             formModeProp: "UPDATE",
             porjectIdProp: projectId,
           });
@@ -262,7 +274,7 @@ export default defineComponent({
           });
           break;
         case `${GrantType.DISTRICTSIMPLIFIEDPROJECT}`:
-        this.store.setDSGOrDMFormProps({
+          this.store.setDSGOrDMFormProps({
             formModeProp: "UPDATE",
             porjectIdProp: projectId,
           });

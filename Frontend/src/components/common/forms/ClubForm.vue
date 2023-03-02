@@ -293,7 +293,7 @@ export default defineComponent({
     },
     validateClubForm() {
       this.v$.$validate();
-      debugger;
+      ;
       if (!this.v$.$error) {
         this.createOrUpdateClub();
       }

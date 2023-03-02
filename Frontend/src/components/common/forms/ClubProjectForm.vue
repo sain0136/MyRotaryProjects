@@ -63,7 +63,16 @@
         Approvals
       </h1>
     </li>
-
+    <li class="mr-2">
+      <h1
+        v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+        @click="setTab(6)"
+        :class="activeTab6"
+        class="inline-block cursor-pointer rounded-t-lg p-4 text-primary-black hover:bg-gray-200 hover:text-gray-600"
+      >
+        Share
+      </h1>
+    </li>
   </ul>
   <div class="form_tab" v-if="activeTab1">
     <div class="container my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
@@ -358,6 +367,30 @@
       </h6>
     </div>
   </div>
+  <div class="share_tab" v-if="activeTab6">
+      <div class="share mt-8 flex justify-center">
+        <button
+          class="inline-flex items-center rounded-full bg-blue-700 py-2 px-4 text-white hover:bg-blue-800"
+        >
+          <font-awesome-icon
+            class="mr-4 text-4xl text-primary-white"
+            icon="fa-brands fa-square-facebook"
+          />
+
+          <ShareNetwork
+            network="facebook"
+            :url="$data.urlForShare"
+            :title="$data.projectToUpdateOrCreate.project_name"
+            :description="$data.projectToUpdateOrCreate.project_description"
+            quote="Check Out this rotary project and make a pledge!"
+            hashtags="myrotaryprojects,"
+            class="link"
+          >
+            Share this Project On Facebook
+          </ShareNetwork>
+        </button>
+      </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -447,7 +480,7 @@ export default defineComponent({
   data() {
     return {
       projectApproval: "",
-
+      urlForShare: "",
       headerFormatter: Utilities.headerFormater,
       projectToUpdateOrCreate: {} as IClubProject,
       activeTab1: "",
@@ -455,7 +488,7 @@ export default defineComponent({
       activeTab3: "",
       activeTab4: "",
       activeTab5: "",
-
+      activeTab6: "",
       submitButtonmsg: "Submit",
       tailwind: TAILWIND_COMMON_CLASSES,
       expectionObject: {} as IApiException,
@@ -613,7 +646,7 @@ export default defineComponent({
           ProjectStatus.APPROVED
         );
         if (!Utilities.isAnApiError(response) && response === true) {
-          debugger;
+          ;
           window.scrollTo(0, 0);
           this.toast.display = true;
           this.toast.msg = this.headerFormatter("Project Approved");
@@ -719,6 +752,10 @@ export default defineComponent({
         );
         if (!Utilities.isAnApiError(response)) {
           this.projectToUpdateOrCreate = response as IClubProject;
+          this.urlForShare =
+            "https://myrotaryprojects.org/" +
+            "project/" +
+            this.projectToUpdateOrCreate.project_id;
         } else throw new MyError((response as IApiError).message);
       } catch (error) {
         this.serverException = true;
@@ -733,6 +770,7 @@ export default defineComponent({
           this.activeTab3 = "";
           this.activeTab4 = "";
           this.activeTab5 = "";
+          this.activeTab6 = "";
 
           break;
         case 2:
@@ -741,7 +779,7 @@ export default defineComponent({
           this.activeTab3 = "";
           this.activeTab4 = "";
           this.activeTab5 = "";
-
+          this.activeTab6 = "";
           break;
         case 3:
           this.activeTab1 = "";
@@ -749,6 +787,7 @@ export default defineComponent({
           this.activeTab3 = "bg-gray-200";
           this.activeTab4 = "";
           this.activeTab5 = "";
+          this.activeTab6 = "";
           break;
         case 4:
           this.activeTab1 = "";
@@ -756,6 +795,8 @@ export default defineComponent({
           this.activeTab3 = "";
           this.activeTab4 = "bg-gray-200";
           this.activeTab5 = "";
+          this.activeTab6 = "";
+
           break;
         case 5:
           this.activeTab1 = "";
@@ -763,8 +804,16 @@ export default defineComponent({
           this.activeTab3 = "";
           this.activeTab4 = "";
           this.activeTab5 = "bg-gray-200";
+          this.activeTab6 = "";
           break;
-
+        case 6:
+          this.activeTab1 = "";
+          this.activeTab2 = "";
+          this.activeTab3 = "";
+          this.activeTab4 = "";
+          this.activeTab5 = "";
+          this.activeTab6 = "bg-gray-200";
+          break;
 
         default:
           break;

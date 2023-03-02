@@ -1,3 +1,5 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
   MyError,
@@ -15,7 +17,14 @@ export default class ClubsApi {
   public static async getAllClubs(): Promise<IApiError | IClub[]> {
     const apiReponse = await fetch(API_ROUTE, {
       method: "GET",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -32,7 +41,14 @@ export default class ClubsApi {
   public static async getOneClubById(id: number): Promise<IClub | IApiError> {
     const apiReponse = await fetch(`${API_ROUTE}/${id}`, {
       method: "GET",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -62,7 +78,14 @@ export default class ClubsApi {
         current_page: current_page,
         limit: limit,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -82,7 +105,14 @@ export default class ClubsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ club: newClub }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -107,7 +137,14 @@ export default class ClubsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ club: updatedClub }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -122,12 +159,15 @@ export default class ClubsApi {
    * @returns Promise
    */
   public static async deleteClub(id: number): Promise<boolean | IApiError> {
-    const apiReponse = await fetch(
-      `${API_ROUTE}/${id}`,
-      {
-        method: "DELETE",
+    const apiReponse = await fetch(`${API_ROUTE}/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+        router.push({ name: "UserLogin" });
       }
-    ).then(async (response) => {
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

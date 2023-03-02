@@ -1,3 +1,5 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
   MyError,
@@ -20,7 +22,14 @@ export default class UserApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email: email }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -37,7 +46,14 @@ export default class UserApi {
   public static async getUserById(id: number): Promise<IUser | IApiError> {
     const apiReponse = await fetch(API + id, {
       method: "GET",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -58,7 +74,14 @@ export default class UserApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ new_user: newUser }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -76,13 +99,20 @@ export default class UserApi {
   public static async updateUser(
     updatedUser: IUser
   ): Promise<boolean | IApiError> {
-    const apiReponse = await fetch(API+ updatedUser.user_id, {
+    const apiReponse = await fetch(API + updatedUser.user_id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ user: updatedUser }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -99,7 +129,14 @@ export default class UserApi {
   public static async delete(id: number): Promise<boolean | IApiError> {
     const apiReponse = await fetch(API + id, {
       method: "DELETE",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

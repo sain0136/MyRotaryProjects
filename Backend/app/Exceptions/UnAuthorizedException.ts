@@ -19,6 +19,6 @@ export default class UnAuthorizedException extends Exception {
         let status = error.status
         let code = error.code
         const errorObject = { message, status, code }
-        ctx.response.status(200).send(JSON.stringify(errorObject))
+        ctx.response.status(401).send(JSON.stringify(errorObject))
       }
 }

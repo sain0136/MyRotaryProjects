@@ -1,5 +1,14 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
-import { MyError, type IApiError, type IApiException, type DistrictPagination, type UserPagination, type ClubPagination } from "@/utils/frontend/interfaces/Frontend";
+import {
+  MyError,
+  type IApiError,
+  type IApiException,
+  type DistrictPagination,
+  type UserPagination,
+  type ClubPagination,
+} from "@/utils/frontend/interfaces/Frontend";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 
 const API_ROUTE = import.meta.env.VITE_API_URL + "district/";
@@ -11,7 +20,14 @@ export default class DistrictsApi {
   public static async index(): Promise<IApiError | IDistrict[]> {
     const apiReponse = await fetch(API_ROUTE, {
       method: "GET",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -36,14 +52,20 @@ export default class DistrictsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ current_page: current_page, limit: limit }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as IApiError | DistrictPagination
+    return apiReponse as IApiError | DistrictPagination;
   }
 
   /**
@@ -67,7 +89,14 @@ export default class DistrictsApi {
         current_page: current_page,
         limit: limit,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -77,13 +106,20 @@ export default class DistrictsApi {
     return apiReponse as IApiError | ClubPagination;
   }
 
-  // write a function to get a single district by id send as a get with id in url 
+  // write a function to get a single district by id send as a get with id in url
   public static async getDistrictById(
     district_id: number
   ): Promise<IApiError | IDistrict> {
     const apiReponse = await fetch(API_ROUTE + district_id, {
       method: "GET",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -114,7 +150,14 @@ export default class DistrictsApi {
         current_page: current_page,
         limit: limit,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -139,7 +182,14 @@ export default class DistrictsApi {
       body: JSON.stringify({
         district: newDistrict,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -165,7 +215,14 @@ export default class DistrictsApi {
       body: JSON.stringify({
         district: updatedDistrict,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -182,7 +239,14 @@ export default class DistrictsApi {
   public static async deleteDistrict(id: number): Promise<boolean | IApiError> {
     const apiReponse = await fetch(API_ROUTE + id, {
       method: "DELETE",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

@@ -9,7 +9,7 @@
 |
 */
 
-import Server from '@ioc:Adonis/Core/Server'
+import Server from "@ioc:Adonis/Core/Server";
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +21,10 @@ import Server from '@ioc:Adonis/Core/Server'
 |
 */
 Server.middleware.register([
-  () => import('@ioc:Adonis/Core/BodyParser'),
-   () => import("App/Middleware/Authorize"),
-
-])
+  () => import("@ioc:Adonis/Core/BodyParser"),
+  // () => import("App/Middleware/SkipSesions"),
+  () => import("App/Middleware/Authorize"),
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -42,5 +42,4 @@ Server.middleware.register([
 | Route.get('dashboard', 'UserController.dashboard').middleware('auth')
 |
 */
-Server.middleware.registerNamed({
-})
+Server.middleware.registerNamed({});
