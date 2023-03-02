@@ -1,3 +1,5 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
   MyError,
@@ -25,7 +27,14 @@ export default class ProjectsApi {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -60,7 +69,14 @@ export default class ProjectsApi {
         current_page: current_page,
         limit: limit,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -81,7 +97,7 @@ export default class ProjectsApi {
   public static async getProjectsFilterdPaginated(
     current_page: number,
     limit: number,
-    filters: { [key: string]: string | number | boolean | undefined} = {}
+    filters: { [key: string]: string | number | boolean | undefined } = {}
   ): Promise<ProjectPagination | IApiError> {
     const apiReponse = await fetch(API_ROUTE + "filter", {
       method: "POST",
@@ -95,7 +111,14 @@ export default class ProjectsApi {
           ...filters,
         },
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -112,14 +135,21 @@ export default class ProjectsApi {
    */
   public static async createNewProject(
     newProject: IDmProject | IDsgProject | IClubProject
-  ): Promise<IApiError |  number> {
+  ): Promise<IApiError | number> {
     const apiReponse = await fetch(API_ROUTE, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ project: newProject }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -143,7 +173,14 @@ export default class ProjectsApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ project: updatedProject }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -163,7 +200,14 @@ export default class ProjectsApi {
   ): Promise<IApiError | IDmProject | IDsgProject | IClubProject> {
     const apiReponse = await fetch(API_ROUTE + id, {
       method: "GET",
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -198,7 +242,14 @@ export default class ProjectsApi {
         current_page: current_page,
         limit: limit,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -233,7 +284,14 @@ export default class ProjectsApi {
         limit: limit,
         conditional: conditional,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -262,7 +320,14 @@ export default class ProjectsApi {
         project_id: project_id,
         project_status: project_status,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -291,7 +356,14 @@ export default class ProjectsApi {
         project_id: project_id,
         override: override,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

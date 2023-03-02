@@ -76,8 +76,8 @@
   </ul>
   <div class="dsg_tabs mt-8 px-24 pb-24">
     <div class="form_tab" v-if="activeTab1">
-      <div class=" wrapper my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
-        <div class=" wrapper" :class="tailwind.DIVCOL">
+      <div class="wrapper my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
+        <div class="wrapper" :class="tailwind.DIVCOL">
           <Toast
             v-if="toast.display"
             :msg="toast.msg"
@@ -732,7 +732,7 @@
     </div>
     <div class="upload_tab" v-if="activeTab2">
       <UploadForm
-        v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+        v-if="store.$state.DsgOrDMProjectFormProps.formModeProp === 'UPDATE'"
         :projectProp="projectToUpdateOrCreate"
       />
       <div v-else>
@@ -769,10 +769,14 @@
         :width="toast.width"
         :closeTimer="toast.closeTimer"
       />
-      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
-        Approve Project
-      </h1>
-      <div class="details my-8 flex flex-col items-center gap-8">
+
+      <div
+        v-if="projectToUpdateOrCreate.project_status !== 'Reports Due'"
+        class="details my-8 flex flex-col items-center gap-8"
+      >
+        <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+          Approve Project
+        </h1>
         <h6 class="mt-4 text-center font-bold">Project Administrator</h6>
         <ul class="border border-primary-color p-4">
           <li>
@@ -804,9 +808,30 @@
           Must be a District Admin / Grants Chair to approve
         </h6>
       </div>
-      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
-        Approve Reports
-      </h1>
+      <div
+        v-if="projectToUpdateOrCreate.project_status === 'Reports Due'"
+        class="flex flex-col gap-8"
+      >
+        <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+          Approve Reports
+        </h1>
+        <div class="flex justify-center">
+          <RotaryButton
+            v-if="
+              store.$state.loggedInUserData.role[0].district_role ===
+                'District Admin' ||
+              store.$state.loggedInUserData.role[0].district_role ===
+                'District Grants Chair' ||
+              store.$state.loggedInUserData.role[0].district_role ===
+                'District Foundations Chair' ||
+              store.$state.loggedInUserData.role[0].district_role ===
+                'District International Chair'
+            "
+            label="Approve Reports"
+            @click="approveReports()"
+          />
+        </div>
+      </div>
     </div>
     <div class="share_tab" v-if="activeTab6">
       <div class="share flex justify-center">
@@ -814,7 +839,7 @@
           class="inline-flex items-center rounded-full bg-blue-700 py-2 px-4 text-white hover:bg-blue-800"
         >
           <font-awesome-icon
-            class="text-4xl text-primary-white mr-4"
+            class="mr-4 text-4xl text-primary-white"
             icon="fa-brands fa-square-facebook"
           />
 
@@ -1120,6 +1145,32 @@ export default defineComponent({
     }
   },
   methods: {
+    async approveReports() {
+      try {
+        const response = await ProjectsApi.updateProjectStatus(
+          this.projectToUpdateOrCreate.project_id as number,
+          ProjectStatus.COMPLETED
+        );
+        if (!Utilities.isAnApiError(response) && response === true) {
+          window.scrollTo(0, 0);
+          this.toast.display = true;
+          this.toast.msg = this.headerFormatter("Reports Approved. Project is complete.");
+          setTimeout(async () => {
+            this.toast.display = false;
+            this.$router.push("/");
+          }, 4000);
+        } else {
+          throw new MyError(
+            (response as IApiError).message,
+            (response as IApiError).stack,
+            (response as IApiError).code
+          );
+        }
+      } catch (error) {
+        this.expectionObject = error as IApiException;
+        this.serverException = true;
+      }
+    },
     addToFundsArray() {
       if (this.fundingSources.amount < 0) {
         window.scrollTo(0, 0);
@@ -1288,7 +1339,7 @@ export default defineComponent({
           this.toast.msg = this.headerFormatter(
             "Project Created. You can begin uploading files"
           );
-          this.store.setClubProjectFormProps({
+          this.store.setDSGOrDMFormProps({
             formModeProp: "UPDATE",
             porjectIdProp: response as number,
           });
@@ -1368,7 +1419,7 @@ export default defineComponent({
         if (!Utilities.isAnApiError(response)) {
           this.projectToUpdateOrCreate = response as IDsgProject;
           this.urlForShare =
-            "https://backendapi.myrotaryprojects.org/" +
+            "https://myrotaryprojects.org/" +
             "project/" +
             this.projectToUpdateOrCreate.project_id;
         } else throw new MyError((response as IApiError).message);
@@ -1465,7 +1516,9 @@ export default defineComponent({
       });
       this.projectToUpdateOrCreate.anticipated_funding =
         sum + parseFloat(this.projectToUpdateOrCreate.total_pledges.toString());
-      return formatter.format(parseFloat(this.projectToUpdateOrCreate.anticipated_funding.toFixed(2)));
+      return formatter.format(
+        parseFloat(this.projectToUpdateOrCreate.anticipated_funding.toFixed(2))
+      );
     },
     sumOfItemsCost() {
       let sum = 0;

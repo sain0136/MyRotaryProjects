@@ -1,3 +1,5 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
   MyError,
@@ -16,7 +18,6 @@ export default class ValidationApi {
     password: string,
     email: string
   ): Promise<IApiError | UserValidationApiResponse> {
-    ;
     const apiReponse = await fetch(
       import.meta.env.VITE_API_URL + "user/verify",
       {
@@ -25,11 +26,18 @@ export default class ValidationApi {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ password: password, email: email }),
+        credentials: "include",
       }
-    ).then(async (response) => {
+    ).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
-    
+
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
@@ -37,15 +45,20 @@ export default class ValidationApi {
     return apiReponse as IApiError | UserValidationApiResponse;
   }
   // create call to logut user from the backend
-  public static async logoutUser(): Promise<
-    IApiError | boolean
-  > {
+  public static async logoutUser(): Promise<IApiError | boolean> {
     const apiReponse = await fetch(
       import.meta.env.VITE_API_URL + "user/logout",
       {
         method: "POST",
+        credentials: "include",
       }
-    ).then(async (response) => {
+    ).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

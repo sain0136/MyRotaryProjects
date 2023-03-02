@@ -37,10 +37,11 @@ import {
   faAngleDown,
   faQuestion,
   faCheckToSlot,
-
+  faFile
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
+  faFile,
   faSquareFacebook,
   faCheckToSlot,
   faQuestion,

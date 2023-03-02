@@ -530,6 +530,7 @@ export default defineComponent({
       this.listView = !this.listView;
       this.viewTypeString = this.listView ? "Grid View" : "List View";
       this.paginationRequestLimit = this.listView ? 15 : 6;
+      this.paginationRequest.current_page = 1;
       this.populateTable();
     },
   },

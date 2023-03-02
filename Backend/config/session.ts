@@ -73,7 +73,7 @@ export default sessionConfig({
   | Example: `2 days`, `2.5 hrs`, `1y`, `5s` and so on.
   |
   */
-  age: '10s',
+  age: '1y',
 
   /*
   |--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ export default sessionConfig({
   */
   cookie: {
     path: '/',
-    httpOnly: true,
+    httpOnly: false,
     sameSite: false,
   },
 

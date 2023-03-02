@@ -20,12 +20,13 @@ import UserFormForAdmins from "@/components/common/forms/UserForm.vue";
 import ClubProjectFormLandingView from "@/components/common/forms/ClubProjectForm.vue";
 import DSGProjectFormLandingView from "@/components/common/forms/DSProjectForm.vue";
 import DMProjectFormLandingView from "@/components/common/forms/DMProjectForm.vue";
-
+import { useRotaryStore } from "@/stores/rotaryStore";
 
 const route = {
   path: "/",
   component: LandingApp,
   name: "LandingApp",
+  
   children: [
     { path: "/", component: LandingHome, mame: "LandingHome" },
     {
@@ -61,76 +62,91 @@ const route = {
       name: "UserLogin",
     },
     {
-      path: "/myprofile",
-      component: MyProfile,
-      name: "MyProfile",
-    },
-    {
-      path: "/myprojects",
-      component: MyProjects,
-      name: "MyProjects",
-    },
-    {
-      path: "/clubadmin",
-      component: DistrictAdminClubs,
-      name: "DistrictAdminClubs",
-    },
-    {
-      path: "/clubform",
-      component: DistrictAdminClubForm,
-      name: "DistrictAdminClubForm",
-    },
-    {
-      path: "/clubprojects",
-      component: ClubProjects,
-      name: "ClubProjects",
-    },
-    {
-      path: "/clubsettings",
-      component: ClubSettings,
-      name: "ClubSettings",
-    },
-    {
-      path: "/districtprojects",
-      component: DistrictProjects,
-      name: "DistrictProjects",
-    },
-    {
-      path: "/districtsettings",
-      component: DistrictSettings,
-      name: "DistrictSettings",
-    },
-    {
-      path: "/projectapprovals",
-      component: ProjectApprovals,
-      name: "ProjectApprovals",
-    },
-    {
-      path: "/reportapprovals",
-      component: ReportApprovals,
-      name: "ReportApprovals",
-    },
-    {
-      path: "/userform/admin",
-      component: UserFormForAdmins,
-      name: "UserFormForAdmins",
-    },
-    {
-      path: "/clubproject",
-      component: ClubProjectFormLandingView,
-      name: "ClubProjectFormLandingView",
-    },
-    {
-      path: "/dsgproject",
-      component: DSGProjectFormLandingView,
-      name: "DSGProjectFormLandingView",
-    },
-    {
-      path: "/dmproject",
-      component: DMProjectFormLandingView,
-      name: "DMProjectFormLandingView", 
-    },
+      path: "/member",
+      beforeEnter: () => {
+        if (!useRotaryStore().$state.isClubAdminLoggedIn && !useRotaryStore().$state.isDistrictAdminLoggedIn && !useRotaryStore().$state.isClubUserLoggedIn 
+        && !useRotaryStore().$state.isSiteAdminLoggedIn
+        ) {
+          return  '/login' ;
+        }
+      },
+      children: [
+        {
+          path: "/myprofile",
+          component: MyProfile,
+          name: "MyProfile",
+        },
+        {
+          path: "/myprojects",
+          component: MyProjects,
+          name: "MyProjects",
+        },
+        {
+          path: "/clubadmin",
+          component: DistrictAdminClubs,
+          name: "DistrictAdminClubs",
+        },
+        {
+          path: "/clubform",
+          component: DistrictAdminClubForm,
+          name: "DistrictAdminClubForm",
+        },
+        {
+          path: "/clubprojects",
+          component: ClubProjects,
+          name: "ClubProjects",
+        },
+        {
+          path: "/clubsettings",
+          component: ClubSettings,
+          name: "ClubSettings",
+        },
+        {
+          path: "/districtprojects",
+          component: DistrictProjects,
+          name: "DistrictProjects",
+        },
+        {
+          path: "/districtsettings",
+          component: DistrictSettings,
+          name: "DistrictSettings",
+        },
+        {
+          path: "/projectapprovals",
+          component: ProjectApprovals,
+          name: "ProjectApprovals",
+        },
+        {
+          path: "/reportapprovals",
+          component: ReportApprovals,
+          name: "ReportApprovals",
+        },
+        {
+          path: "/userform/admin",
+          component: UserFormForAdmins,
+          name: "UserFormForAdmins",
+        },
+        {
+          path: "/clubproject",
+          component: ClubProjectFormLandingView,
+          name: "ClubProjectFormLandingView",
+        },
+        {
+          path: "/dsgproject",
+          component: DSGProjectFormLandingView,
+          name: "DSGProjectFormLandingView",
+        },
+        {
+          path: "/dmproject",
+          component: DMProjectFormLandingView,
+          name: "DMProjectFormLandingView",
+        },
 
+
+
+      ]
+    },
+ 
   ],
 };
 

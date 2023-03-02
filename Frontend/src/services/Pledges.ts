@@ -1,5 +1,11 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
-import { MyError, type IApiError, type IApiException } from "@/utils/frontend/interfaces/Frontend";
+import {
+  MyError,
+  type IApiError,
+  type IApiException,
+} from "@/utils/frontend/interfaces/Frontend";
 import type {
   IClubProject,
   IDmProject,
@@ -31,18 +37,21 @@ export default class PledgesApi {
         current_page: current_page,
         limit: limit,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as
-      | IApiError
-      | IDmProject
-      | IDsgProject
-      | IClubProject;
+    return apiReponse as IApiError | IDmProject | IDsgProject | IClubProject;
   }
 
   /**
@@ -52,24 +61,27 @@ export default class PledgesApi {
   public static async createPledge(
     newPledge: Pledge
   ): Promise<IApiError | IDmProject | IDsgProject | IClubProject> {
-    const apiReponse = await fetch(API_ROUTE + 'create', {
+    const apiReponse = await fetch(API_ROUTE + "create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ pledge: newPledge }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as
-      | IApiError
-      | IDmProject
-      | IDsgProject
-      | IClubProject;
+    return apiReponse as IApiError | IDmProject | IDsgProject | IClubProject;
   }
 
   /**
@@ -87,7 +99,14 @@ export default class PledgesApi {
       body: JSON.stringify({
         user_id: id,
       }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {
@@ -108,7 +127,14 @@ export default class PledgesApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ pledge_id: id }),
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

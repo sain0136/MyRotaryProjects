@@ -1,3 +1,5 @@
+import router from "@/router";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
   MyError,
@@ -17,7 +19,13 @@ class AssetsApi {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then(async (response) => {
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+        router.push({ name: "UserLogin" });
+      }
       return await response.json();
     });
     if (Utilities.isAnException(apiReponse)) {

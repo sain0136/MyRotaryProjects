@@ -171,9 +171,23 @@ export default defineComponent({
   methods: {
     updateProject(projectId: number, projectType: string) {
       switch (projectType) {
-        case "DM":
+        case `${GrantType.DISTRICTMATCHINGPROJECT}`:
+        this.store.setDSGOrDMFormProps({
+            formModeProp: "UPDATE",
+            porjectIdProp: projectId,
+          });
+          this.$router.push({
+            name: "DMProjectFormLandingView",
+          });
           break;
-        case "DSG":
+        case `${GrantType.DISTRICTSIMPLIFIEDPROJECT}`:
+        this.store.setDSGOrDMFormProps({
+            formModeProp: "UPDATE",
+            porjectIdProp: projectId,
+          });
+          this.$router.push({
+            name: "DSGProjectFormLandingView",
+          });
           break;
         case `${GrantType.CLUBPROJECT}`:
           this.store.setClubProjectFormProps({

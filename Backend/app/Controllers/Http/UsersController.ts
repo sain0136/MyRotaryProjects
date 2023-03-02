@@ -81,10 +81,12 @@ export default class UsersController {
         .where({ user_id: user.userId });
     }
     let club: Clubs = await Clubs.findOrFail(user.clubId);
+    ;
     if (!session.get("userIsLoggedIn")) {
       session.put("userIsLoggedIn", true);
       session.put("lastApiCallTimeStamp", DateTime.now().toMillis());
     }
+
     return response.json({
       user: user,
       verified: true,
@@ -145,7 +147,7 @@ export default class UsersController {
   public async store({ request, response }: HttpContextContract) {
     const newUser: IUser = request.input("new_user");
 
-   const createdUser: Users = await Users.create({
+    const createdUser: Users = await Users.create({
       firstname: newUser.firstname,
       lastname: newUser.lastname,
       address: newUser.address,
@@ -157,7 +159,7 @@ export default class UsersController {
       email: newUser.email,
       password: newUser.password,
       clubId: newUser.club_id,
-      districtId: newUser.district_id ? newUser.district_id : undefined ,
+      districtId: newUser.district_id ? newUser.district_id : undefined,
       userType: newUser.user_type,
       extraDetails: JSON.stringify(newUser.extra_details),
     });
@@ -189,7 +191,7 @@ export default class UsersController {
   public async update({ request, params, response }: HttpContextContract) {
     const userToBeUpdated: Users = await Users.findOrFail(parseInt(params.id));
     const currentUserInfo: IUser = request.input("user");
-    const updatedUser: Users =  await userToBeUpdated
+    const updatedUser: Users = await userToBeUpdated
       .merge({
         firstname: currentUserInfo.firstname,
         lastname: currentUserInfo.lastname,
@@ -202,31 +204,33 @@ export default class UsersController {
         email: currentUserInfo.email,
         password: currentUserInfo.password,
         clubId: currentUserInfo.club_id,
-        districtId: currentUserInfo.district_id ? currentUserInfo.district_id : undefined,
+        districtId: currentUserInfo.district_id
+          ? currentUserInfo.district_id
+          : undefined,
         userType: currentUserInfo.user_type,
         extraDetails: JSON.stringify(currentUserInfo.extra_details),
       })
       .save();
-      if (currentUserInfo.user_type === "DISTRICT") {
-        await updatedUser.related("districtRole").detach();
-        const district: Districts = await Districts.findOrFail(
-          currentUserInfo.district_id
-        );
-        await updatedUser.related("districtRole").attach({
-          [district.districtId]: {
-            district_role: currentUserInfo.role_type,
-          },
-        });
-      } else {
-        await updatedUser.related("clubRole").detach();
-        const club: Clubs = await Clubs.findOrFail(currentUserInfo.club_id);
-        await updatedUser.related("clubRole").attach({
-          [club.clubId]: {
-            club_role: currentUserInfo.role_type,
-          },
-        });
-      }
-    
+    if (currentUserInfo.user_type === "DISTRICT") {
+      await updatedUser.related("districtRole").detach();
+      const district: Districts = await Districts.findOrFail(
+        currentUserInfo.district_id
+      );
+      await updatedUser.related("districtRole").attach({
+        [district.districtId]: {
+          district_role: currentUserInfo.role_type,
+        },
+      });
+    } else {
+      await updatedUser.related("clubRole").detach();
+      const club: Clubs = await Clubs.findOrFail(currentUserInfo.club_id);
+      await updatedUser.related("clubRole").attach({
+        [club.clubId]: {
+          club_role: currentUserInfo.role_type,
+        },
+      });
+    }
+
     return response.json(true);
   }
 
