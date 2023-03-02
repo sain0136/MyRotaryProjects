@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative overflow-x-auto shadow-md sm:rounded-lg"
+    class=" my-16 relative overflow-x-auto shadow-md sm:rounded-lg"
     v-if="allProjects.length != 0"
   >
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
@@ -167,12 +167,15 @@ export default defineComponent({
     } else {
       await this.getAllProjects();
     }
+    if (this.siteAdminViewProp) {
+      await this.getAllProjectsForSiteAdmin();
+    }
   },
   methods: {
     updateProject(projectId: number, projectType: string) {
       switch (projectType) {
         case `${GrantType.DISTRICTMATCHINGPROJECT}`:
-        this.store.setDSGOrDMFormProps({
+          this.store.setDSGOrDMFormProps({
             formModeProp: "UPDATE",
             porjectIdProp: projectId,
           });
@@ -181,7 +184,7 @@ export default defineComponent({
           });
           break;
         case `${GrantType.DISTRICTSIMPLIFIEDPROJECT}`:
-        this.store.setDSGOrDMFormProps({
+          this.store.setDSGOrDMFormProps({
             formModeProp: "UPDATE",
             porjectIdProp: projectId,
           });
@@ -200,9 +203,13 @@ export default defineComponent({
           break;
       }
     },
-    alterpayload(pageAction: number) {
+    async alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
-      this.getAllProjects();
+      if (this.siteAdminViewProp) {
+        await this.getAllProjectsForSiteAdmin();
+      } else if (this.forApprovalViewProp) {
+        await this.getAllProjects();
+      }
     },
     async getAllProjects() {
       if (!this.findProjectsForClubProp) {
@@ -246,6 +253,36 @@ export default defineComponent({
           //   this.serverException = true;
           //   this.expectionObject = error as IApiException;
         }
+      }
+    },
+    // Redo later
+    async getAllProjectsForSiteAdmin() {
+      try {
+        const response = await ProjectsApi.getProjectsByConditional(
+          this.findProjectsForClubProp as number,
+          this.payload.current_page,
+          this.payload.limit,
+          "club_id"
+        );
+        if (
+          !Utilities.isAnApiError(response) &&
+          (response as ProjectPagination).data.length > 0
+        ) {
+          this.allProjects = (response as ProjectPagination).data as
+            | IDmProject[]
+            | IDsgProject[]
+            | IClubProject[];
+          this.payload.total = (response as ProjectPagination).meta.total;
+          this.payload.last_page = (
+            response as ProjectPagination
+          ).meta.last_page;
+        } else {
+          this.allProjects = [];
+          this.message = "No Projects Found";
+        }
+      } catch (error) {
+        //   this.serverException = true;
+        //   this.expectionObject = error as IApiException;
       }
     },
   },
