@@ -5,7 +5,7 @@
     <!--Header Top-->
     <div class="header_top bg-primary-color py-4">
       <div class="auto_container px-64">
-        <div class="justify-between sm:flex-col md:flex md:flex-row">
+        <div class="flex flex-col justify-between gap-4 md:flex md:flex-row">
           <div class="top-left">
             <ul class="flex justify-center">
               <li class="text-primary-white">
@@ -52,17 +52,20 @@
         </div>
       </div>
     </div>
+    <!--End Header Top-->
+    <!-- Nav Bar -->
+
     <nav
-      class="header_bottom rounded border-gray-200 bg-primary-white px-2 py-2.5 sm:px-4"
+      class="rounded border-gray-200 bg-primary-white px-2 py-2.5 dark:bg-gray-900 sm:px-4"
     >
       <div
-        class="container mx-auto flex h-16 flex-wrap items-center justify-between"
+        class="container mx-auto flex flex-wrap items-center justify-between"
       >
-        <div class="mb-4 h-full">
+        <div href="" class="contents items-center">
           <img
-            src="/rotaryTransparent.png"
-            class="object-fit-cover mr-3 h-full"
-            alt=""
+            :src="logo"
+            class="mr-3 max-w-[50%] sm:max-w-[10%]"
+            alt="rotary-logo"
           />
         </div>
         <button
@@ -218,11 +221,7 @@
                       View/Edit District Projects
                     </router-link>
                   </li>
-                  <li
-                    v-if="
-                      store.$state.isClubAdminLoggedIn
-                    "
-                  >
+                  <li v-if="store.$state.isClubAdminLoggedIn">
                     <router-link
                       :to="{ name: 'ClubProjects' }"
                       class="block py-2 pl-3 pr-1 text-lg font-medium text-primary-black hover:bg-primary-color"
@@ -273,7 +272,9 @@
 </template>
 
 <script lang="ts">
+import AssetsApi from "@/services/Assets";
 import { useRotaryStore } from "@/stores/rotaryStore";
+import type { MainAssets } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "LandingHeader",
@@ -291,11 +292,25 @@ export default defineComponent({
   data() {
     return {
       revealDropdown: "hidden",
+      logo: "",
     };
   },
   watch: {},
-  async created() {},
+  async created() {
+    this.getLogo();
+  },
   methods: {
+    async getLogo() {
+      try {
+        const response = await AssetsApi.getMainAssets();
+        const imgUrl = new URL("./serve-logo", import.meta.url).href;
+        this.logo = (response as MainAssets).assets.main_logo.url
+          ? (response as MainAssets).assets.main_logo.url
+          : imgUrl;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     setDisrictForm() {
       this.store.setDistrictFormProps({
         formModeProp: "UPDATE",
@@ -329,4 +344,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+#dropdownNavbar {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate(-64px, 54px);
+}
+</style>

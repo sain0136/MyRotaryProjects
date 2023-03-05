@@ -31,7 +31,7 @@ export default class extends BaseSeeder {
         districtDescription:
           "These are better (and almost always) handled at the database level instead of the application level. It's the job of the DBMS to enforce this kind of referential integrity assuming you define your schema correctly so that entities are correctly linked together, via foreign keys.",
         districtDetails: JSON.stringify({
-          DdfCalculation: ["District Club Contribution"],
+          ddfCalculation: ["District Club Contribution"],
           dates: {
             grant_submission_closedate: "",
             grant_submission_startdate: "",
@@ -51,7 +51,7 @@ export default class extends BaseSeeder {
         districtPresident: "Daivd Polista",
         districtEmail: "peter@gmail.com",
         districtDetails: JSON.stringify({
-          DdfCalculation: ["District Club Contribution"],
+          ddfCalculation: ["District Club Contribution"],
           dates: {
             grant_submission_closedate: "",
             grant_submission_startdate: "",
@@ -73,7 +73,7 @@ export default class extends BaseSeeder {
         districtPresident: "Sebastien Saintrose",
         districtEmail: "pfsdfsdf@gmail.com",
         districtDetails: JSON.stringify({
-          DdfCalculation: ["District Club Contribution"],
+          ddfCalculation: ["District Club Contribution"],
           dates: {
             grant_submission_closedate: "",
             grant_submission_startdate: "",

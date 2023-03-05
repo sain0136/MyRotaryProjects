@@ -125,7 +125,7 @@ export const ErrorMessages = {
   INVALID_PASSWORD_CONFIRMATION: "Password confirmation does not match",
   PASSWORD_MIN_LENGTH: "Password must be at least 6 characters long",
   REQURIED_NUM_MIN_LENGTH: "This field cant be zero",
-  NUMBER_MUST_FRAC: "This field must be a fraction",
+  NUMBER_MUST_FRAC: "This field must be a fraction or 1",
   MAX_AMOUNT: "This field must be less than $10,000,000",
   LOWER_THAN_FUNDING_GOAL: "The Anticipated funding amount must be less than funding goal",
   ONE_MUST_BE_SELECTED:"At least one Area Of Focus must be selected",
