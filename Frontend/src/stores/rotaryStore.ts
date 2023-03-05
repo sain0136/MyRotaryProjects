@@ -53,13 +53,11 @@ export interface IClubProjectFormProps {
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
 }
 
-
 // make interfce for Dsg and Dm project form props
 export interface IDsgOrDMProjectFormProps {
   porjectIdProp?: number;
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
 }
-
 
 class clubProjectFormPropsPojo implements IClubProjectFormProps {
   porjectIdProp: number | undefined;
@@ -70,7 +68,6 @@ class clubProjectFormPropsPojo implements IClubProjectFormProps {
   }
 }
 
-
 class DSGOrDMFormPropsPojo implements IDsgOrDMProjectFormProps {
   porjectIdProp: number | undefined;
   formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
@@ -79,7 +76,6 @@ class DSGOrDMFormPropsPojo implements IDsgOrDMProjectFormProps {
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
   }
 }
-
 
 class focusedProjectsTablePojo implements IFocusedProjectsTableProps {
   tableViewProp: "MYPROJECTS" | "DISTRICT" | "CLUB" | undefined;
@@ -141,7 +137,7 @@ export const useRotaryStore = defineStore("main", {
   //The Global state variabales
   state: () => {
     return {
-      DsgOrDMProjectFormProps: {} as IDsgOrDMProjectFormProps,  
+      DsgOrDMProjectFormProps: {} as IDsgOrDMProjectFormProps,
       focusedProjectsTableProps: {} as IFocusedProjectsTableProps,
       districtFormProps: {} as IDistrictFormProps,
       userFormProps: {} as IUserFormProps,
@@ -214,16 +210,16 @@ export const useRotaryStore = defineStore("main", {
         ];
         if (districtUserRoles.includes(user.role[0].district_role as string)) {
           this.isDistrictAdminLoggedIn = true;
-        } else if (user.user_type === UserType.Club) {
-          let clubUserUserRoles = [RotaryRoles.CLUBADMIN, RotaryRoles.STANDARD];
-          if (clubUserUserRoles[0] == user.role[0].club_role) {
-            this.isClubAdminLoggedIn = true;
-          }
-          if (clubUserUserRoles[1] == user.role[0].club_role) {
-            this.isClubUserLoggedIn = true;
-          }
-        } else throw new MyError("User role not found");
-      }
+        }
+      } else if (user.user_type === UserType.Club) {
+        let clubUserUserRoles = [RotaryRoles.CLUBADMIN, RotaryRoles.STANDARD];
+        if (clubUserUserRoles[0] == user.role[0].club_role) {
+          this.isClubAdminLoggedIn = true;
+        }
+        if (clubUserUserRoles[1] == user.role[0].club_role) {
+          this.isClubUserLoggedIn = true;
+        }
+      } else throw new MyError("User role not found");
       try {
         this.setDistrictData(user.district_id);
         this.setClubData(user.club_id);

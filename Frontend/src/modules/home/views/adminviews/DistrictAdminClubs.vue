@@ -165,6 +165,7 @@ export default defineComponent({
       this.store.setUserFormProps({
         formModeProp: "CREATE",
         userCreationTypeProp: "CLUB_MEMBER",
+        clubIdProp: this.clubId,
       });
       this.$router.push({ name: "UserFormForAdmins" });
     },

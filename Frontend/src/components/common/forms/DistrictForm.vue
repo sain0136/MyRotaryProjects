@@ -147,7 +147,7 @@
 
         <BaseDatePicker
           v-model="district.district_details.dates.grant_submission_startdate"
-          label="Set the date for when DM and DSG grant submission will be opened"
+          label="Date District Matching and District Simplified grant submission will be opened"
         />
         <ErrorValidation
           v-if="
@@ -160,7 +160,7 @@
         />
         <BaseDatePicker
           v-model="district.district_details.dates.grant_submission_closedate"
-          label="Set the date for when DM and DSG grant submission will be closed"
+          label="Date District Matching and District Simplified grant submission will be closed"
         />
         <ErrorValidation
           v-if="
@@ -463,7 +463,7 @@ export default defineComponent({
                 ErrorMessages.NUMBER_MUST_FRAC,
                 () => {
                   return (
-                    this.district.district_details.ddfCapes.dsgFraction < 1
+                    this.district.district_details.ddfCapes.dsgFraction <= 1
                   );
                 }
               ),
@@ -486,7 +486,7 @@ export default defineComponent({
               lessThanOne: helpers.withMessage(
                 ErrorMessages.NUMBER_MUST_FRAC,
                 () => {
-                  return this.district.district_details.ddfCapes.dmFraction < 1;
+                  return this.district.district_details.ddfCapes.dmFraction <= 1;
                 }
               ),
             },

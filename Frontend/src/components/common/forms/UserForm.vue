@@ -387,6 +387,9 @@ export default defineComponent({
         return !el.includes("District");
       });
       this.user.user_type = UserType.Club;
+      this.user.club_id = this.store.$state.userFormProps.clubIdProp as number;
+      this.user.district_id = this.store.$state.loggedInUsersDistrict.district_id;
+
     }
     if (this.userformProps.userCreationTypeProp === "DISTRICT_ADMIN") {
       this.rolesList = Object.values(RotaryRoles).filter((el) => {

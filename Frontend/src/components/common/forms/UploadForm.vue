@@ -71,7 +71,7 @@
   
       <div class="uploads_DSG_DM" v-if="project.grant_type !== 'Club Project'">
         <div
-          class="flex h-1/2 w-1/3 max-w-md flex-col gap-2 rounded-lg border border-primary-color bg-primary-white p-4"
+          class="flex h-1/2  flex-col gap-2 rounded-lg border border-primary-color bg-primary-white p-4"
         >
           <h1 class="my-2 text-center font-bold" :class="tailwind.H1">
             Upload Evidence
@@ -174,7 +174,7 @@
             </tr>
           </tbody>
         </table>
-        <span v-else>No Files</span>
+        <p class="text-center font-semibold" v-else>No Files</p>
         <h1 class="my-2 text-center font-bold" :class="tailwind.H1">
           Report Files Table
         </h1>
@@ -231,8 +231,8 @@
             </tr>
           </tbody>
         </table>
-        <span v-else>No Files</span>
-        <div class="slideshow_container relative m-auto w-1/2">
+        <p class="text-center font-semibold" v-else>No Files</p>
+        <div v-if="reportTable.length > 0" class="slideshow_container relative m-auto w-1/2">
           <div class="fade">
             <img :src="gallaryActive.url" style="width: 100%" />
             <a class="prev" @click="changeSlides(-1)">&#10094;</a>
