@@ -19,6 +19,7 @@ import {
   SearchCriteria,
 } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
 import { DateTime } from "luxon";
+import IUser from "Contracts/util/sharedUtility/interfaces/UserInterface";
 
 export default class ProjectsController {
   /**
@@ -55,6 +56,15 @@ export default class ProjectsController {
       projectById.districtId
     );
     const projectClub: Clubs = await Clubs.findOrFail(projectById.clubId);
+    let projectAdmins = await Database.from("project_roles")
+      .select("*")
+      .where({ project_id: id });
+    const allProjectAdmins = [] as IUser[];
+    for await (const admin of projectAdmins) {
+      const user: Users = await Users.findOrFail(admin.user_id);
+      allProjectAdmins.push(user as unknown as IUser);
+    }
+
     const projectDetails: ProjectDetails = {
       creatorData: {
         fullName: creator.fullName,
@@ -66,6 +76,7 @@ export default class ProjectsController {
         clubName: projectClub.clubName,
         district_name: projectDisrict.districtName,
       },
+      projectAdmins: allProjectAdmins ? allProjectAdmins : [],
     };
     return projectDetails;
   }
@@ -360,8 +371,8 @@ export default class ProjectsController {
           projectCode: "DM-" + projectNumber.toString(),
           coOperatingOrganisationContribution: (newProject as IDmProject)
             .co_operating_organisation_contribution,
-          districtSimplifiedGrantRequest: (newProject as IDmProject)
-            .district_simplified_grant_request,
+          districtMatchingGrantRequest: (newProject as IDmProject)
+            .district_matching_grant_request,
           intialSponsorClubContribution: (newProject as IDmProject)
             .intial_sponsor_club_contribution,
           extraDescriptions: JSON.stringify(newProject.extra_descriptions),
@@ -439,12 +450,40 @@ export default class ProjectsController {
     const value: number | string | boolean = request.input("value");
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
+    const adminTable: boolean = request.input("project_admin_table");
+
+    if (adminTable) {
+      const projectsWhereUserAdmin = await Database.from("project_roles")
+        .where({ user_id: value })
+        .orderBy("project_id", "desc")
+        .paginate(currentPage, limit);
+      const relatedProjectsWhereUserAdmin = [] as unknown[];
+      for await (const projects of projectsWhereUserAdmin as Array<{
+        project_id: number;
+      }>) {
+        relatedProjectsWhereUserAdmin.push(
+          await Projects.findOrFail(projects.project_id)
+        );
+      }
+      let data = {
+        data: relatedProjectsWhereUserAdmin,
+        meta: {
+          total: projectsWhereUserAdmin.total,
+          current_page: projectsWhereUserAdmin.currentPage,
+          per_page: projectsWhereUserAdmin.perPage,
+          last_page: projectsWhereUserAdmin.lastPage,
+          first_page: projectsWhereUserAdmin.firstPage,
+        },
+      };
+      return response.json(data);
+    }
 
     const projects: Projects[] = await Projects.query()
       .select()
       .where({ [conditional]: value })
       .orderBy("project_id", "desc")
       .paginate(currentPage, limit);
+
     return response.json(projects);
   }
 
@@ -620,6 +659,27 @@ export default class ProjectsController {
       await projectToBeDeleted.delete();
       return response.json(true);
     } else {
+      return response.json(false);
+    }
+  }
+
+  /**
+   * @desc Add admin users to a project by project id and user id
+   * @param  {} {request
+   * @param  {HttpContextContract} response}
+   * @returns Promise
+   */
+  public async addUsersToProject({
+    request,
+    response,
+  }: HttpContextContract): Promise<void> {
+    try {
+      const userId: number = request.input("user_id");
+      const projectId: number = request.input("project_id");
+      const projectToBeUpdated: Projects = await Projects.findOrFail(projectId);
+      await projectToBeUpdated.related("projectRole").attach([userId]);
+      return response.json(true);
+    } catch (error) {
       return response.json(false);
     }
   }

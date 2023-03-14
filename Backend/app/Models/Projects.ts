@@ -2,14 +2,17 @@ import { DateTime } from "luxon";
 import {
   BaseModel,
   HasMany,
+  ManyToMany,
   column,
   computed,
   hasMany,
+manyToMany,
 } from "@ioc:Adonis/Lucid/Orm";
 import { NonPlurizeNamingStrategy } from "Contracts/NonPlurizeNamingStrategy";
 import Pledge from "./Pledges";
 import Pledges from "./Pledges";
 import { ProjectDetails } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
+import Users from "./Users";
 
 export default class Projects extends BaseModel {
   public static namingStrategy = new NonPlurizeNamingStrategy();
@@ -201,4 +204,15 @@ export default class Projects extends BaseModel {
 
   @hasMany(() => Pledges, { foreignKey: "projectId" })
   public pledges: HasMany<typeof Pledges>;
+
+  @manyToMany(() => Users, {
+    pivotTable: 'project_roles',
+    localKey: 'projectId',
+    relatedKey: 'userId',
+    pivotRelatedForeignKey: 'user_id',
+    pivotForeignKey: 'project_id',
+    pivotTimestamps: true,
+  })
+  public projectRole: ManyToMany<typeof Users>
+
 }

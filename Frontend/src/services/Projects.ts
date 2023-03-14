@@ -45,6 +45,41 @@ export default class ProjectsApi {
   }
 
   /**
+   * @description This function is used to add a user to a project
+   * @param  {number} project_id
+   * @param  {number} user_id
+   * @returns Promise
+   */
+  public static async addProjectUser(
+    project_id: number,
+    user_id: number
+  ): Promise<Boolean| IApiError> {
+    const apiReponse = await fetch(API_ROUTE + "addProjectUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_id: project_id,
+        user_id: user_id,
+      }),
+      credentials: "include",
+    }).then(async (response: Response) => {
+      if (response.status === 401) {
+        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().signOut();
+        router.push({ name: "UserLogin" });
+      }
+      return await response.json();
+    });
+    if (Utilities.isAnException(apiReponse)) {
+      const exception = apiReponse as IApiException;
+      throw new MyError(exception.message, exception.stack, exception.code);
+    }
+    return apiReponse as Boolean| IApiError;
+  }
+
+  /**
    * @description This function is used to get all projects paginated
    * @param  {string} id_type
    * @param  {number} id
@@ -271,7 +306,8 @@ export default class ProjectsApi {
     value: number | string | boolean,
     current_page: number,
     limit: number,
-    conditional: string
+    conditional: string,
+    project_admin_table?: boolean
   ): Promise<ProjectPagination | IApiError> {
     const apiReponse = await fetch(API_ROUTE + "conditional", {
       method: "POST",
@@ -283,7 +319,8 @@ export default class ProjectsApi {
         current_page: current_page,
         limit: limit,
         conditional: conditional,
-      }),
+        project_admin_table: project_admin_table,
+      }), 
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {

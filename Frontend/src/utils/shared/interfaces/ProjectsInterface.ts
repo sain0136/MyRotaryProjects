@@ -1,3 +1,5 @@
+import type IUser from "./UserInterface";
+
 // common
 interface ContactSection {
   address: string;
@@ -119,6 +121,7 @@ export interface ProjectDetails {
     clubName: string;
   };
   districtClubData: { clubName: string; district_name: string };
+  projectAdmins: Array<IUser>;
 }
 
 export interface StorageInformation {
@@ -187,6 +190,7 @@ export interface IDsgProject extends IGenericProject {
 
 export interface IDmProject extends IGenericProject, IDsgProject {
   hostclub_information: HostclubInformation;
+  district_matching_grant_request: number;
 }
 
 export interface IGlobalProject

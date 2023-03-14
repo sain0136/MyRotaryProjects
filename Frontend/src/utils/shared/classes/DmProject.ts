@@ -4,6 +4,7 @@ import DsgProject from "@/utils/shared/classes/DsgProject";
 
 
 export default class DmProject extends DsgProject implements IDmProject {
+  district_matching_grant_request = 0;
   hostclub_information = {
     host_club_name: "",
     district_number: "",

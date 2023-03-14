@@ -73,301 +73,317 @@
         Share
       </h1>
     </li>
+    <li class="mr-2">
+      <h1
+        v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+        @click="setTab(7)"
+        :class="activeTab7"
+        class="inline-block cursor-pointer rounded-t-lg p-4 text-primary-black hover:bg-gray-200 hover:text-gray-600"
+      >
+        Add Users
+      </h1>
+    </li>
   </ul>
-  <div class="form_tab" v-if="activeTab1">
-    <div class="container my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
-      <div class="container" :class="tailwind.DIVCOL">
-        <Toast
-          v-if="toast.display"
-          :msg="toast.msg"
-          :width="toast.width"
-          :closeTimer="toast.closeTimer"
-        />
-        <ExceptionModal
-          v-if="serverException"
-          :message="expectionObject.message"
-          :stackTrace="expectionObject.stack"
-          :toggleModel="true"
-        />
-        <form @submit.prevent="" novalidate>
-          <BaseInputsText
-            label="Project Name"
-            v-model="projectToUpdateOrCreate.project_name"
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.project_name.$error"
-            :errorMsg="
-              v$.projectToUpdateOrCreate.project_name.$errors[0].$message
-            "
-          />
-          <BaseTextArea
-            v-model="projectToUpdateOrCreate.project_description"
-            label="Description"
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.project_description.$error"
-            :errorMsg="
-              v$.projectToUpdateOrCreate.project_description.$errors[0].$message
-            "
-          />
-          <BaseSelect
-            v-model="projectToUpdateOrCreate.country"
-            :options="countryList"
-            label="Country"
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.country.$error"
-            :errorMsg="v$.projectToUpdateOrCreate.country.$errors[0].$message"
-          />
-          <BaseSelect
-            v-model="projectToUpdateOrCreate.region"
-            :options="regionList"
-            label="Region"
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.region.$error"
-            :errorMsg="v$.projectToUpdateOrCreate.region.$errors[0].$message"
-          />
-          <BaseInputsText
-            label="Funding Goal"
-            v-model="projectToUpdateOrCreate.funding_goal"
-            formType="number"
-            inputMode="numeric"
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.funding_goal.$error"
-            :errorMsg="
-              v$.projectToUpdateOrCreate.funding_goal.$errors[0].$message
-            "
-          />
-          <BaseInputsText
-            label="Anticipated Funding"
-            v-model="projectToUpdateOrCreate.anticipated_funding"
-            formType="number"
-            inputMode="numeric"
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.anticipated_funding.$error"
-            :errorMsg="
-              v$.projectToUpdateOrCreate.anticipated_funding.$errors[0].$message
-            "
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.$error"
-            :error-msg="formatter(projectToUpdateOrCreate.total_pledges)"
-          />
 
-          <BaseDatePicker
-            v-model="projectToUpdateOrCreate.start_date"
-            label="Project Start Date"
+  <div class="club_tabs mt-8 px-24 pb-24">
+    <div class="form_tab" v-if="activeTab1">
+      <div class="container my-8 min-w-full gap-8" :class="tailwind.DIVCOL">
+        <div class="container" :class="tailwind.DIVCOL">
+          <Toast
+            v-if="toast.display"
+            :msg="toast.msg"
+            :width="toast.width"
+            :closeTimer="toast.closeTimer"
           />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.start_date.$error"
-            :errorMsg="
-              v$.projectToUpdateOrCreate.start_date.$errors[0].$message
-            "
+          <ExceptionModal
+            v-if="serverException"
+            :message="expectionObject.message"
+            :stackTrace="expectionObject.stack"
+            :toggleModel="true"
           />
-          <BaseDatePicker
-            v-model="projectToUpdateOrCreate.completion_date"
-            label="Project Completion Date"
-          />
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.completion_date.$error"
-            :errorMsg="
-              v$.projectToUpdateOrCreate.completion_date.$errors[0].$message
-            "
-          />
-          <div class="flex flex-col">
-            <div class="area_focus flex">
-              <img class="w-2/12" :src="areaFocusImages[0]" alt="" />
-              <BaseCheckBox
-                v-model="
-                  projectToUpdateOrCreate.area_focus.Peace_Conflict_Prevention
-                "
-                :label="
-                  Object.keys(projectToUpdateOrCreate.area_focus)[0].replace(
-                    /_/g,
-                    ' '
-                  )
-                "
-              />
-            </div>
-            <div class="area_focus flex">
-              <img class="w-2/12" :src="areaFocusImages[1]" alt="" />
-              <BaseCheckBox
-                v-model="
-                  projectToUpdateOrCreate.area_focus
-                    .Disease_Prevention_And_Treatment
-                "
-                :label="
-                  Object.keys(projectToUpdateOrCreate.area_focus)[1].replace(
-                    /_/g,
-                    ' '
-                  )
-                "
-              />
-            </div>
-            <div class="area_focus flex">
-              <img class="w-2/12" :src="areaFocusImages[2]" alt="" />
-              <BaseCheckBox
-                v-model="
-                  projectToUpdateOrCreate.area_focus.Water_And_Sanitation
-                "
-                :label="
-                  Object.keys(projectToUpdateOrCreate.area_focus)[2].replace(
-                    /_/g,
-                    ' '
-                  )
-                "
-              />
-            </div>
-            <div class="area_focus flex">
-              <img class="w-2/12" :src="areaFocusImages[3]" alt="" />
-              <BaseCheckBox
-                v-model="
-                  projectToUpdateOrCreate.area_focus.Maternal_And_Child_Health
-                "
-                :label="
-                  Object.keys(projectToUpdateOrCreate.area_focus)[3].replace(
-                    /_/g,
-                    ' '
-                  )
-                "
-              />
-            </div>
-            <div class="area_focus flex">
-              <img class="w-2/12" :src="areaFocusImages[4]" alt="" />
-              <BaseCheckBox
-                v-model="
-                  projectToUpdateOrCreate.area_focus
-                    .Basic_Education_And_Literacy
-                "
-                :label="
-                  Object.keys(projectToUpdateOrCreate.area_focus)[4].replace(
-                    /_/g,
-                    ' '
-                  )
-                "
-              />
-            </div>
-            <div class="area_focus flex">
-              <img class="w-2/12" :src="areaFocusImages[5]" alt="" />
-              <BaseCheckBox
-                v-model="
-                  projectToUpdateOrCreate.area_focus
-                    .Economic_And_Community_Development
-                "
-                :label="
-                  Object.keys(projectToUpdateOrCreate.area_focus)[5].replace(
-                    /_/g,
-                    ' '
-                  )
-                "
-              />
-            </div>
-            <div class="area_focus flex">
-              <img class="w-2/12" :src="areaFocusImages[6]" alt="" />
-              <BaseCheckBox
-                v-model="projectToUpdateOrCreate.area_focus.Environment"
-                :label="
-                  Object.keys(projectToUpdateOrCreate.area_focus)[6].replace(
-                    /_/g,
-                    ' '
-                  )
-                "
-              />
-            </div>
-          </div>
-          <ErrorValidation
-            v-if="v$.projectToUpdateOrCreate.area_focus.$error"
-            :errorMsg="
-              v$.projectToUpdateOrCreate.area_focus.$errors[0].$message
-            "
-          />
-          <div class="button_row mt-8 flex justify-center gap-4">
-            <RotaryButton
-              :label="submitButtonmsg"
-              @click="validateClubProject()"
+          <form @submit.prevent="" novalidate>
+            <BaseInputsText
+              label="Project Name"
+              v-model="projectToUpdateOrCreate.project_name"
             />
-            <RotaryButton label="Cancel" @click="redirect()" />
-          </div>
-        </form>
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.project_name.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.project_name.$errors[0].$message
+              "
+            />
+            <BaseTextArea
+              v-model="projectToUpdateOrCreate.project_description"
+              label="Description"
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.project_description.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.project_description.$errors[0]
+                  .$message
+              "
+            />
+            <BaseSelect
+              v-model="projectToUpdateOrCreate.country"
+              :options="countryList"
+              label="Country"
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.country.$error"
+              :errorMsg="v$.projectToUpdateOrCreate.country.$errors[0].$message"
+            />
+            <BaseSelect
+              v-model="projectToUpdateOrCreate.region"
+              :options="regionList"
+              label="Region"
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.region.$error"
+              :errorMsg="v$.projectToUpdateOrCreate.region.$errors[0].$message"
+            />
+            <BaseInputsText
+              label="Funding Goal"
+              v-model="projectToUpdateOrCreate.funding_goal"
+              formType="number"
+              inputMode="numeric"
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.funding_goal.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.funding_goal.$errors[0].$message
+              "
+            />
+            <BaseInputsText
+              label="Anticipated Funding"
+              v-model="projectToUpdateOrCreate.anticipated_funding"
+              formType="number"
+              inputMode="numeric"
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.anticipated_funding.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.anticipated_funding.$errors[0]
+                  .$message
+              "
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.$error"
+              :error-msg="formatter(projectToUpdateOrCreate.total_pledges)"
+            />
+
+            <BaseDatePicker
+              v-model="projectToUpdateOrCreate.start_date"
+              label="Project Start Date"
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.start_date.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.start_date.$errors[0].$message
+              "
+            />
+            <BaseDatePicker
+              v-model="projectToUpdateOrCreate.completion_date"
+              label="Project Completion Date"
+            />
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.completion_date.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.completion_date.$errors[0].$message
+              "
+            />
+            <div class="flex flex-col">
+              <div class="area_focus flex">
+                <img class="w-2/12" :src="areaFocusImages[0]" alt="" />
+                <BaseCheckBox
+                  v-model="
+                    projectToUpdateOrCreate.area_focus.Peace_Conflict_Prevention
+                  "
+                  :label="
+                    Object.keys(projectToUpdateOrCreate.area_focus)[0].replace(
+                      /_/g,
+                      ' '
+                    )
+                  "
+                />
+              </div>
+              <div class="area_focus flex">
+                <img class="w-2/12" :src="areaFocusImages[1]" alt="" />
+                <BaseCheckBox
+                  v-model="
+                    projectToUpdateOrCreate.area_focus
+                      .Disease_Prevention_And_Treatment
+                  "
+                  :label="
+                    Object.keys(projectToUpdateOrCreate.area_focus)[1].replace(
+                      /_/g,
+                      ' '
+                    )
+                  "
+                />
+              </div>
+              <div class="area_focus flex">
+                <img class="w-2/12" :src="areaFocusImages[2]" alt="" />
+                <BaseCheckBox
+                  v-model="
+                    projectToUpdateOrCreate.area_focus.Water_And_Sanitation
+                  "
+                  :label="
+                    Object.keys(projectToUpdateOrCreate.area_focus)[2].replace(
+                      /_/g,
+                      ' '
+                    )
+                  "
+                />
+              </div>
+              <div class="area_focus flex">
+                <img class="w-2/12" :src="areaFocusImages[3]" alt="" />
+                <BaseCheckBox
+                  v-model="
+                    projectToUpdateOrCreate.area_focus.Maternal_And_Child_Health
+                  "
+                  :label="
+                    Object.keys(projectToUpdateOrCreate.area_focus)[3].replace(
+                      /_/g,
+                      ' '
+                    )
+                  "
+                />
+              </div>
+              <div class="area_focus flex">
+                <img class="w-2/12" :src="areaFocusImages[4]" alt="" />
+                <BaseCheckBox
+                  v-model="
+                    projectToUpdateOrCreate.area_focus
+                      .Basic_Education_And_Literacy
+                  "
+                  :label="
+                    Object.keys(projectToUpdateOrCreate.area_focus)[4].replace(
+                      /_/g,
+                      ' '
+                    )
+                  "
+                />
+              </div>
+              <div class="area_focus flex">
+                <img class="w-2/12" :src="areaFocusImages[5]" alt="" />
+                <BaseCheckBox
+                  v-model="
+                    projectToUpdateOrCreate.area_focus
+                      .Economic_And_Community_Development
+                  "
+                  :label="
+                    Object.keys(projectToUpdateOrCreate.area_focus)[5].replace(
+                      /_/g,
+                      ' '
+                    )
+                  "
+                />
+              </div>
+              <div class="area_focus flex">
+                <img class="w-2/12" :src="areaFocusImages[6]" alt="" />
+                <BaseCheckBox
+                  v-model="projectToUpdateOrCreate.area_focus.Environment"
+                  :label="
+                    Object.keys(projectToUpdateOrCreate.area_focus)[6].replace(
+                      /_/g,
+                      ' '
+                    )
+                  "
+                />
+              </div>
+            </div>
+            <ErrorValidation
+              v-if="v$.projectToUpdateOrCreate.area_focus.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.area_focus.$errors[0].$message
+              "
+            />
+            <div class="button_row mt-8 flex justify-center gap-4">
+              <RotaryButton
+                :label="submitButtonmsg"
+                @click="validateClubProject()"
+              />
+              <RotaryButton label="Cancel" @click="redirect()" />
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="upload_tab" v-if="activeTab2">
-    <UploadForm
-      v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
-      :projectProp="projectToUpdateOrCreate"
-    />
-    <div v-else>
-      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
-        <span class="">{{
-          headerFormatter("Please submit this project first")
-        }}</span>
-      </h1>
-    </div>
-  </div>
-  <div class="pdf_tab" v-if="activeTab3">
-    <ClubProjectPdf
-      v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
-      :projectProp="projectToUpdateOrCreate"
-    />
-    <div v-else>
-      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
-        <span class="">{{
-          headerFormatter("Please submit this project first")
-        }}</span>
-      </h1>
-    </div>
-  </div>
-  <div class="pledge_tab" v-if="activeTab4">
-    <AllPledgesTable :pledgesProp="projectToUpdateOrCreate.pledgesAssociated" />
-  </div>
-  <div class="approval_tab" v-if="activeTab5">
-    <Toast
-          v-if="toast.display"
-          :msg="toast.msg"
-          :width="toast.width"
-          :closeTimer="toast.closeTimer"
-        />
-    <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
-      Approve Project
-    </h1>
-    <div class="details my-8 flex flex-col items-center gap-8">
-      <h6 class="mt-4 text-center font-bold">Project Administrator</h6>
-      <ul class="border border-primary-color p-4">
-        <li>
-          <strong>Name:</strong>
-          {{ projectToUpdateOrCreate.projectDetails.creatorData.fullName }}
-        </li>
-        <li>
-          <strong>Email:</strong>
-          {{ projectToUpdateOrCreate.projectDetails.creatorData.email }}
-        </li>
-        <li>
-          <strong>Phone:</strong>
-          {{ projectToUpdateOrCreate.projectDetails.creatorData.phone }}
-        </li>
-      </ul>
-      <ErrorValidation v-if="projectApproval" :errorMsg="projectApproval" />
-      <RotaryButton
-        v-if="
-          store.$state.loggedInUserData.role[0].district_role ===
-            'District Admin' ||
-          store.$state.loggedInUserData.role[0].district_role ===
-            'District Grants Chair'
-        "
-        label="Approve"
-        @click="approveProject()"
+    <div class="upload_tab" v-if="activeTab2">
+      <UploadForm
+        v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+        :projectProp="projectToUpdateOrCreate"
       />
-
-      <h6 v-else class="mt-4 text-center font-bold">
-        Must be a District Admin / Grants Chair to approve
-      </h6>
+      <div v-else>
+        <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+          <span class="">{{
+            headerFormatter("Please submit this project first")
+          }}</span>
+        </h1>
+      </div>
     </div>
-  </div>
-  <div class="share_tab" v-if="activeTab6">
+    <div class="pdf_tab" v-if="activeTab3">
+      <ClubProjectPdf
+        v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+        :projectProp="projectToUpdateOrCreate"
+      />
+      <div v-else>
+        <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+          <span class="">{{
+            headerFormatter("Please submit this project first")
+          }}</span>
+        </h1>
+      </div>
+    </div>
+    <div class="pledge_tab" v-if="activeTab4">
+      <AllPledgesTable
+        :pledgesProp="projectToUpdateOrCreate.pledgesAssociated"
+      />
+    </div>
+    <div class="approval_tab" v-if="activeTab5">
+      <Toast
+        v-if="toast.display"
+        :msg="toast.msg"
+        :width="toast.width"
+        :closeTimer="toast.closeTimer"
+      />
+      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+        Approve Project
+      </h1>
+      <div class="details my-8 flex flex-col items-center gap-8">
+        <h6 class="mt-4 text-center font-bold">Project Administrator</h6>
+        <ul class="border border-primary-color p-4">
+          <li>
+            <strong>Name:</strong>
+            {{ projectToUpdateOrCreate.projectDetails.creatorData.fullName }}
+          </li>
+          <li>
+            <strong>Email:</strong>
+            {{ projectToUpdateOrCreate.projectDetails.creatorData.email }}
+          </li>
+          <li>
+            <strong>Phone:</strong>
+            {{ projectToUpdateOrCreate.projectDetails.creatorData.phone }}
+          </li>
+        </ul>
+        <ErrorValidation v-if="projectApproval" :errorMsg="projectApproval" />
+        <RotaryButton
+          v-if="
+            store.$state.loggedInUserData.role[0].district_role ===
+              'District Admin' ||
+            store.$state.loggedInUserData.role[0].district_role ===
+              'District Grants Chair'
+          "
+          label="Approve"
+          @click="approveProject()"
+        />
+
+        <h6 v-else class="mt-4 text-center font-bold">
+          Must be a District Admin / Grants Chair to approve
+        </h6>
+      </div>
+    </div>
+    <div class="share_tab" v-if="activeTab6">
       <div class="share mt-8 flex justify-center">
         <button
           class="inline-flex items-center rounded-full bg-blue-700 py-2 px-4 text-white hover:bg-blue-800"
@@ -391,6 +407,10 @@
         </button>
       </div>
     </div>
+    <div class="addUser_tab" v-if="activeTab7">
+    <AddUserProjectForm :projectAdminsProp="projectToUpdateOrCreate.projectDetails.projectAdmins"    :projectId="projectToUpdateOrCreate.project_id" v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -444,7 +464,7 @@ import {
   GrantType,
   ProjectStatus,
 } from "@/utils/shared/interfaces/SharedInterface";
-
+import AddUserProjectForm from "@/components/common/forms/AddUserProjectForm.vue";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 export default defineComponent({
   name: "ClubProjectForm",
@@ -458,7 +478,7 @@ export default defineComponent({
   },
   components: {
     AllPledgesTable,
-
+    AddUserProjectForm,
     RotaryButton,
     BaseFileUpload,
     BaseSelect,
@@ -474,7 +494,6 @@ export default defineComponent({
     ErrorValidation,
     UploadForm,
     ClubProjectPdf,
-
   },
   props: {},
   data() {
@@ -489,6 +508,7 @@ export default defineComponent({
       activeTab4: "",
       activeTab5: "",
       activeTab6: "",
+      activeTab7: "",
       submitButtonmsg: "Submit",
       tailwind: TAILWIND_COMMON_CLASSES,
       expectionObject: {} as IApiException,
@@ -580,7 +600,6 @@ export default defineComponent({
               }
             }
           ),
-
         },
         start_date: {
           required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
@@ -646,7 +665,6 @@ export default defineComponent({
           ProjectStatus.APPROVED
         );
         if (!Utilities.isAnApiError(response) && response === true) {
-          ;
           window.scrollTo(0, 0);
           this.toast.display = true;
           this.toast.msg = this.headerFormatter("Project Approved");
@@ -771,7 +789,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "";
-
+          this.activeTab7 = "";
           break;
         case 2:
           this.activeTab1 = "";
@@ -780,6 +798,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "";
+          this.activeTab7 = "";
           break;
         case 3:
           this.activeTab1 = "";
@@ -788,6 +807,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "";
+          this.activeTab7 = "";
           break;
         case 4:
           this.activeTab1 = "";
@@ -796,7 +816,7 @@ export default defineComponent({
           this.activeTab4 = "bg-gray-200";
           this.activeTab5 = "";
           this.activeTab6 = "";
-
+          this.activeTab7 = "";
           break;
         case 5:
           this.activeTab1 = "";
@@ -805,6 +825,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "bg-gray-200";
           this.activeTab6 = "";
+          this.activeTab7 = "";
           break;
         case 6:
           this.activeTab1 = "";
@@ -813,8 +834,17 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "bg-gray-200";
+          this.activeTab7 = "";
           break;
-
+        case 7:
+          this.activeTab1 = "";
+          this.activeTab2 = "";
+          this.activeTab3 = "";
+          this.activeTab4 = "";
+          this.activeTab5 = "";
+          this.activeTab6 = "";
+          this.activeTab7 = "bg-gray-200";
+          break;
         default:
           break;
       }
@@ -825,7 +855,7 @@ export default defineComponent({
           style: "currency",
           currency: "USD",
         });
-        return "Total Pledges :" + formatter.format( amount);
+        return "Total Pledges :" + formatter.format(amount);
       } else {
         return this.headerFormatter(
           "Total Pledge Amount not available check pledges tab"
