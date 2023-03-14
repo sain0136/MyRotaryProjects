@@ -2,6 +2,7 @@ import type {
   StorageInformation,
   IGenericProject,
 } from "../interfaces/ProjectsInterface";
+import IUser from "../interfaces/UserInterface";
 
 export default class GenericProject implements IGenericProject {
   project_id = 0;
@@ -53,6 +54,7 @@ export default class GenericProject implements IGenericProject {
       clubName: "",
     },
     districtClubData: { clubName: "", district_name: "" },
+    projectAdmins: [] as IUser[],
   };
 
   constructor() {}

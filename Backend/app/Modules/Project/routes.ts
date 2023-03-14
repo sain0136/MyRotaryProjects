@@ -9,6 +9,8 @@ Route.post('/project/conditional', 'ProjectsController.getAllProjectsWithCondtio
 Route.post('/project/changeStatus', 'ProjectsController.updateProjectStatus')
 Route.post('/project/delete/', 'ProjectsController.destroyProject')
 Route.post('/project/updateById', 'ProjectsController.updateById')
+Route.post('/project/addProjectUser', 'ProjectsController.addUsersToProject')
+
 
 
 

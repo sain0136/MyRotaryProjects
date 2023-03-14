@@ -31,7 +31,7 @@ import { faPersonCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faX , faPlus} from "@fortawesome/free-solid-svg-icons";
 import {
   faArrowUpRightFromSquare,
   faAngleDown,
@@ -41,6 +41,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
+  faPlus,
   faFile,
   faSquareFacebook,
   faCheckToSlot,

@@ -15,11 +15,18 @@
       :width="toast.width"
       :closeTimer="toast.closeTimer"
     />
-    <h1 class="text-center font-bold" :class="tailwind.H1">Manage Projects</h1>
+    <h1 class="text-center font-bold" :class="tailwind.H1">Created Projects</h1>
     <FocusedProjectsTable
       class="my-12"
       :key="myKey"
       @update:showConfirmModal="updateShowModal"
+    />
+    <h1 class="text-center font-bold" :class="tailwind.H1">Other Projects</h1>
+    <FocusedProjectsTable
+      class="my-12"
+      :key="myKey"
+      @update:showConfirmModal="updateShowModal"
+      :showProjectsWhereAdminProp="true" 
     />
     <div class="new_projects flex flex-col gap-8">
       <h1 class="text-center font-bold" :class="tailwind.H1">

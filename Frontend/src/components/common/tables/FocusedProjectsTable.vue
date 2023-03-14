@@ -199,8 +199,9 @@ export default defineComponent({
   },
   components: {},
   props: {
-    test: {
-      type: String,
+    showProjectsWhereAdminProp: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -312,7 +313,8 @@ export default defineComponent({
             .conditionalIdProp as number,
           this.payload.current_page,
           this.payload.limit,
-          apiCondtional
+          apiCondtional,
+          this.showProjectsWhereAdminProp  
         );
         if (
           !Utilities.isAnApiError(response) &&

@@ -73,6 +73,16 @@
         Share
       </h1>
     </li>
+    <li class="mr-2">
+      <h1
+        v-if="store.$state.DsgOrDMProjectFormProps.formModeProp === 'UPDATE'"
+        @click="setTab(7)"
+        :class="activeTab7"
+        class="inline-block cursor-pointer rounded-t-lg p-4 text-primary-black hover:bg-gray-200 hover:text-gray-600"
+      >
+        Add Users
+      </h1>
+    </li>
   </ul>
   <div class="dsg_tabs mt-8 px-24 pb-24">
     <div class="form_tab" v-if="activeTab1">
@@ -857,6 +867,9 @@
         </button>
       </div>
     </div>
+    <div class="addUser_tab" v-if="activeTab7">
+      <AddUserProjectForm :projectAdminsProp="projectToUpdateOrCreate.projectDetails.projectAdmins" v-if="store.$state.DsgOrDMProjectFormProps.formModeProp === 'UPDATE'" :projectId="projectToUpdateOrCreate.project_id" />
+    </div>
   </div>
 </template>
 
@@ -890,6 +903,8 @@ import Toast from "@/components/common/toast/Toast.vue";
 import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import ErrorValidation from "@/components/common/baseformComponents/ErrorValidation.vue";
+import AddUserProjectForm from "@/components/common/forms/AddUserProjectForm.vue";
+
 import type {
   FundingSource,
   IClubProject,
@@ -945,6 +960,7 @@ export default defineComponent({
     ErrorValidation,
     UploadForm,
     ClubProjectPdf,
+    AddUserProjectForm,
   },
   props: {},
   data() {
@@ -971,6 +987,7 @@ export default defineComponent({
       activeTab4: "",
       activeTab5: "",
       activeTab6: "",
+      activeTab7: "",
       submitButtonmsg: "Submit",
       tailwind: TAILWIND_COMMON_CLASSES,
       expectionObject: {} as IApiException,
@@ -1154,7 +1171,9 @@ export default defineComponent({
         if (!Utilities.isAnApiError(response) && response === true) {
           window.scrollTo(0, 0);
           this.toast.display = true;
-          this.toast.msg = this.headerFormatter("Reports Approved. Project is complete.");
+          this.toast.msg = this.headerFormatter(
+            "Reports Approved. Project is complete."
+          );
           setTimeout(async () => {
             this.toast.display = false;
             this.$router.push("/");
@@ -1437,7 +1456,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "";
-
+          this.activeTab7 = "";
           break;
         case 2:
           this.activeTab1 = "";
@@ -1446,6 +1465,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "";
+          this.activeTab7 = "";
           break;
         case 3:
           this.activeTab1 = "";
@@ -1454,6 +1474,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "";
+          this.activeTab7 = "";
           break;
         case 4:
           this.activeTab1 = "";
@@ -1462,7 +1483,7 @@ export default defineComponent({
           this.activeTab4 = "bg-gray-200";
           this.activeTab5 = "";
           this.activeTab6 = "";
-
+          this.activeTab7 = "";
           break;
         case 5:
           this.activeTab1 = "";
@@ -1471,6 +1492,7 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "bg-gray-200";
           this.activeTab6 = "";
+          this.activeTab7 = "";
           break;
         case 6:
           this.activeTab1 = "";
@@ -1479,8 +1501,17 @@ export default defineComponent({
           this.activeTab4 = "";
           this.activeTab5 = "";
           this.activeTab6 = "bg-gray-200";
+          this.activeTab7 = "";
           break;
-
+        case 7:
+          this.activeTab1 = "";
+          this.activeTab2 = "";
+          this.activeTab3 = "";
+          this.activeTab4 = "";
+          this.activeTab5 = "";
+          this.activeTab6 = "";
+          this.activeTab7 = "bg-gray-200";
+          break;
         default:
           break;
       }

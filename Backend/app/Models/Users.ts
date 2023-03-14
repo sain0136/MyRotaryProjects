@@ -17,6 +17,7 @@ import Club from "./Clubs";
 import District from "./Districts";
 import Project from "./Projects";
 import Pledge from "./Pledges";
+import Projects from "./Projects";
 
 export default class Users extends BaseModel {
   public static namingStrategy = new NonPlurizeNamingStrategy();
@@ -128,4 +129,14 @@ export default class Users extends BaseModel {
     pivotTimestamps: true,
   })
   public districtRole: ManyToMany<typeof District>;
+
+  @manyToMany(() => Projects, {
+    pivotTable: 'project_roles',
+    localKey: 'userId',
+    relatedKey: 'projectId',
+    pivotRelatedForeignKey: 'project_id',
+    pivotForeignKey: 'user_id',
+    pivotTimestamps: true,
+  })
+  public projectRole: ManyToMany<typeof Projects>
 }
