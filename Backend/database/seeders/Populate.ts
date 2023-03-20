@@ -12,15 +12,16 @@ import Assets from "../../app/Models/Assets";
 import Projects from "../../app/Models/Projects";
 import { DateTime } from "luxon";
 import RotaryYear from "Contracts/util/backend/classes/RotaryYear";
+import { FundingSource } from "Contracts/util/sharedUtility/interfaces/ProjectsInterface";
 
 export default class extends BaseSeeder {
   public async run() {
     await Assets.create({
-      dmInitial: 800000,
-      dsgIntial: 500000,
-      clubIntial: 100000,
-      globalIntial: 1200000,
-      assets:JSON.stringify({main_logo:{}})
+      dmInitial: 100000,
+      dsgInitial: 100000,
+      clubInitial: 100001,
+      globalInitial: 100000,
+      assets: JSON.stringify({ main_logo: {} }),
     });
     await District.createMany([
       {
@@ -33,15 +34,15 @@ export default class extends BaseSeeder {
         districtDetails: JSON.stringify({
           ddfCalculation: ["District Club Contribution"],
           dates: {
-            grant_submission_closedate: "",
-            grant_submission_startdate: "",
+            grant_submission_closedate: '2023-05-19',
+            grant_submission_startdate: '2023-03-19'
           },
           reportLinks: [],
           ddfCapes: {
-            dsgCap: 0,
-            dsgFraction: 0,
-            dmCap: 0,
-            dmFraction: 0,
+            dmCap: '1000',
+            dsgCap: '1000',
+            dmFraction: '.5',
+            dsgFraction: '1'
           },
         }),
       },
@@ -53,15 +54,15 @@ export default class extends BaseSeeder {
         districtDetails: JSON.stringify({
           ddfCalculation: ["District Club Contribution"],
           dates: {
-            grant_submission_closedate: "",
-            grant_submission_startdate: "",
+            grant_submission_closedate: '2023-05-19',
+            grant_submission_startdate: '2023-03-19'
           },
           reportLinks: [],
           ddfCapes: {
-            dsgCap: 0,
-            dsgFraction: 0,
-            dmCap: 0,
-            dmFraction: 0,
+            dmCap: '1000',
+            dsgCap: '1000',
+            dmFraction: '.5',
+            dsgFraction: '1'
           },
         }),
         districtDescription:
@@ -202,8 +203,8 @@ export default class extends BaseSeeder {
       projectName: "Test Club Project",
       grantType: GrantType.CLUBPROJECT,
       projectStatus: ProjectStatus.LOOKINGFORFUNDING,
-      projectNumber: 1000001,
-      projectCode: "CP-1000001",
+      projectNumber: 100000,
+      projectCode: "CP-100000",
       projectDescription:
         "It works by capitalizing the very first letter in each sentence, and will then go on to transform the rest of the text into lowercase as well as converting i’s into I’s. Every letter after a full stop will get converted into an upper case letter.",
       country: "Italy",
@@ -236,8 +237,8 @@ export default class extends BaseSeeder {
       projectName: "Test Africa Project",
       grantType: GrantType.CLUBPROJECT,
       projectStatus: ProjectStatus.LOOKINGFORFUNDING,
-      projectNumber: 1000002,
-      projectCode: "CP-1000002",
+      projectNumber: 100001,
+      projectCode: "CP-100001",
       projectDescription:
         "It works by capitalizing the very first letter in each sentence, and will then go on to transform the rest of the text into lowercase as well as converting i’s into I’s. Every letter after a full stop will get converted into an upper case letter.",
       country: "Ghana",
@@ -260,7 +261,7 @@ export default class extends BaseSeeder {
         reports_files: [],
         evidence_files: [],
       }),
-      imageLink:  JSON.stringify({}),
+      imageLink: JSON.stringify({}),
       createdBy: 2,
       clubId: 1,
       districtId: 1,
@@ -270,8 +271,8 @@ export default class extends BaseSeeder {
       projectName: "Test Club DSG",
       grantType: GrantType.DISTRICTSIMPLIFIEDPROJECT,
       projectStatus: ProjectStatus.LOOKINGFORFUNDING,
-      projectNumber: 5000001,
-      projectCode: "DSG-5000001",
+      projectNumber: 100000,
+      projectCode: "DSG-100000",
       projectDescription:
         "It works by capitalizing the very first letter in each sentence, and will then go on to transform the rest of the text into lowercase as well as converting i’s into I’s. Every letter after a full stop will get converted into an upper case letter.",
       country: "Italy",
@@ -294,12 +295,54 @@ export default class extends BaseSeeder {
         reports_files: [],
         evidence_files: [],
       }),
-      imageLink:  JSON.stringify({}),
+      imageLink: JSON.stringify({}),
       createdBy: 2,
       clubId: 1,
       districtId: 1,
       rotaryYear: RotaryYear.getCurrentYear(),
-      extraDescriptions: JSON.stringify({name:"sddssd"}),
+      extraDescriptions: JSON.stringify({
+        other_club_contribution: 0,
+        other_sources: 0,
+        fundingSourceArray: [] as FundingSource[],
+        benefit_community_description: "",
+        co_operating_organisation_letter: "",
+        non_financial_participation: "",
+        primary_contact: {
+          address: "",
+          email: "",
+          cell: "",
+          name: "",
+          phone: "",
+        },
+        secondary_contact: {
+          address: "",
+          email: "",
+          cell: "",
+          name: "",
+          phone: "",
+        },
+        sectionD: {
+          community_benefit: "",
+          project_accountability: "",
+          ownership_project: "",
+          inventory_project: "",
+          customs_clearance: "",
+        },
+        sectionE: {
+          project_capacity: "",
+          project_sustainment: "",
+          e: {
+            Surveys: false,
+            Questionnaires: false,
+            Observations: false,
+            Tests_Of_Knowledge: false,
+            Interviews: false,
+            Focus_Groups: false,
+            Video_Media: false,
+            Documents_Materials_Collections: false,
+          },
+        },
+      }),
       coOperatingOrganisationContribution: 0,
       districtSimplifiedGrantRequest: 0,
       intialSponsorClubContribution: 0,
@@ -309,8 +352,8 @@ export default class extends BaseSeeder {
       projectName: "Test Club DM",
       grantType: GrantType.DISTRICTMATCHINGPROJECT,
       projectStatus: ProjectStatus.LOOKINGFORFUNDING,
-      projectNumber: 8000001,
-      projectCode: "DM-8000001",
+      projectNumber: 100000,
+      projectCode: "DM-100000",
       projectDescription:
         "It works by capitalizing the very first letter in each sentence, and will then go on to transform the rest of the text into lowercase as well as converting i’s into I’s. Every letter after a full stop will get converted into an upper case letter.",
       country: "Italy",
@@ -333,17 +376,100 @@ export default class extends BaseSeeder {
         reports_files: [],
         evidence_files: [],
       }),
-      imageLink:  JSON.stringify({}),
+      imageLink: JSON.stringify({}),
       createdBy: 2,
       clubId: 1,
       districtId: 1,
       rotaryYear: RotaryYear.getCurrentYear(),
-      extraDescriptions: JSON.stringify({}),
+      extraDescriptions: JSON.stringify({
+        other_club_contribution: 0,
+        other_sources: 0,
+        fundingSourceArray: [] as FundingSource[],
+        benefit_community_description: "",
+        co_operating_organisation_letter: "",
+        non_financial_participation: "",
+        primary_contact: {
+          address: "",
+          email: "",
+          cell: "",
+          name: "",
+          phone: "",
+        },
+        secondary_contact: {
+          address: "",
+          email: "",
+          cell: "",
+          name: "",
+          phone: "",
+        },
+        sectionD: {
+          community_benefit: "",
+          project_accountability: "",
+          ownership_project: "",
+          inventory_project: "",
+          customs_clearance: "",
+        },
+        sectionE: {
+          project_capacity: "",
+          project_sustainment: "",
+          e: {
+            Surveys: false,
+            Questionnaires: false,
+            Observations: false,
+            Tests_Of_Knowledge: false,
+            Interviews: false,
+            Focus_Groups: false,
+            Video_Media: false,
+            Documents_Materials_Collections: false,
+          },
+        },
+      }),
       coOperatingOrganisationContribution: 0,
       districtSimplifiedGrantRequest: 0,
       intialSponsorClubContribution: 0,
       itemizedBudget: JSON.stringify([]),
-      hostclubInformation: JSON.stringify([]),
+      hostclubInformation: JSON.stringify({
+        host_club_name: "",
+        district_number: "",
+        district_country: "",
+        location_city: "",
+        location_country: "",
+        location_community: "",
+        host_primary_contact: {
+          name: "",
+          address: "",
+          phone: "",
+          email: "",
+          cell: "",
+        },
+        listOfObjectives: [] as string[],
+        host_sponsor_planned_project_description: "",
+        host_commit_description: "",
+        international_commit_description: "",
+        sponsor_publicize_description: "",
+        sectionC: {
+          cooperating_organizations: [
+            {
+              organization_name: "",
+              address: "",
+              contact_person: {
+                name: "",
+                address: "",
+                phone: "",
+                email: "",
+                cell: "",
+              },
+              website_address: "",
+            },
+          ],
+          cooperating_organizations_roles_description: "",
+          cooperating_organizations_identify_members: "",
+        },
+        sectionF: {
+          local_currency_name: "",
+          exchange_rate: "",
+        },
+      }),
     });
   }
 }

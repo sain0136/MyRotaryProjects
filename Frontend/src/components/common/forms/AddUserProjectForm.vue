@@ -23,7 +23,7 @@
           class="t_head text-s bg-primary-black uppercase text-primary-white"
         >
           <tr>
-            <th class=" text-center">Project Admins</th>
+            <th class="text-center">Project Admins</th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
               scope="row"
               class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
             >
-            Name:  {{ user }}
+              Name: {{ user }}
             </th>
           </tr>
         </tbody>
@@ -145,13 +145,17 @@ export default defineComponent({
       }
     },
     async addUserToProject() {
+      
+      if (this.isUserAlreadyAdmin()) {
+        return;
+      }
       try {
-        const find = this.allClubMembers.find((member: IUser) => {
+        const memberID = this.allClubMembers.find((member: IUser) => {
           return member.fullName === this.chosenUser;
         })?.user_id;
         const response = await ProjectsApi.addProjectUser(
           this.projectId,
-          find || 0
+          memberID || 0
         );
         this.toast.display = true;
         setTimeout(() => {
@@ -159,6 +163,8 @@ export default defineComponent({
         }, 3000);
         if (!Utilities.isAnApiError(response) && response === true) {
           this.toast.msg = "User added successfully";
+          this.usersAllowed.push(this.chosenUser);
+          this.chosenUser = "";
         } else {
           this.toast.msg = "User not added. Contact admin";
         }
@@ -166,6 +172,18 @@ export default defineComponent({
         this.serverException = true;
         this.expectionObject = error as IApiException;
       }
+    },
+    isUserAlreadyAdmin() {
+      if (this.usersAllowed.includes(this.chosenUser)) {
+        this.toast.display = true;
+        setTimeout(() => {
+          this.toast.display = false;
+        }, 3000);
+        this.toast.msg = "User is already an admin";
+        this.chosenUser = "";
+        return true;
+      }
+      return false;
     },
   },
   computed: {},

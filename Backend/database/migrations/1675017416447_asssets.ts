@@ -7,9 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments("id").primary().unsigned();;
       table.integer("dm_initial").nullable();
-      table.integer("dsg_intial").nullable();
-      table.integer("club_intial").nullable();
-      table.integer("global_intial").nullable();
+      table.integer("dsg_initial").nullable();
+      table.integer("club_initial").nullable();
+      table.integer("global_initial").nullable();
       table.jsonb("assets").nullable();
       table.timestamp("created_at");
       table.timestamp("updated_at");

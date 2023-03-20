@@ -246,11 +246,11 @@ export default class ProjectsController {
       newProject.completion_date,
       "yyyy-MM-dd"
     );
-
+      
     if (newProject.grant_type === "Club Project") {
       try {
         const projectNumber: number = await ProjectCodeGenerator.getProjectCode(
-          "clubIntial"
+          "clubInitial"
         );
         const createdProject = await Projects.create({
           projectName: newProject.project_name,
@@ -278,7 +278,7 @@ export default class ProjectsController {
         if (createdProject.projectId) {
           try {
             await ProjectCodeGenerator.setProjectCode(
-              "clubIntial",
+              "clubInitial",
               createdProject.projectNumber
             );
           } catch (error) {
@@ -294,7 +294,7 @@ export default class ProjectsController {
     if (newProject.grant_type === "District Simplified Project") {
       try {
         const projectNumber: number = await ProjectCodeGenerator.getProjectCode(
-          "dsgIntial"
+          "dsgInitial"
         );
         const createdProject = await Projects.create({
           projectName: newProject.project_name,
@@ -331,7 +331,7 @@ export default class ProjectsController {
         if (createdProject.projectId) {
           try {
             await ProjectCodeGenerator.setProjectCode(
-              "dsgIntial",
+              "dsgInitial",
               createdProject.projectNumber
             );
           } catch (error) {
@@ -344,10 +344,10 @@ export default class ProjectsController {
       }
     }
 
-    if (newProject.grant_type === "District Matching Grant") {
+    if (newProject.grant_type === "District Matching Project") {
       try {
         const projectNumber: number = await ProjectCodeGenerator.getProjectCode(
-          "dmIntial"
+          "dmInitial"
         );
         const createdProject = await Projects.create({
           projectName: newProject.project_name,
@@ -387,16 +387,16 @@ export default class ProjectsController {
         if (createdProject.projectId) {
           try {
             await ProjectCodeGenerator.setProjectCode(
-              "dmIntial",
+              "dmInitial",
               createdProject.projectNumber
             );
           } catch (error) {
-            return response.json(new CustomReponse(error));
+            return response.json(new CustomReponse(error.message , error.stack));
           }
         }
         return response.json(createdProject.projectId);
       } catch (error) {
-        return response.json(new CustomReponse(error));
+        return response.json(new CustomReponse(error.message , error.stack));
       }
     }
   }

@@ -1,8 +1,12 @@
 export default class CustomReponse {
   message: string;
   requestStaus: boolean;
-  constructor(message: string) {
+  stack?: string;
+
+  constructor(message: string , stack?: string) {
     this.message = message;
     this.requestStaus = false;
+    this.stack = stack;
   }
+  
 }

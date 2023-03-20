@@ -31,9 +31,9 @@ export default class ProjectCodeGenerator {
       try {
         if (
           type === "dmInitial" ||
-          "dsgIntial" ||
-          "clubIntial" ||
-          "globalIntial"
+          "dsgInitial" ||
+          "clubInitial" ||
+          "globalInitial"
         ) {
           await assets
             .merge({

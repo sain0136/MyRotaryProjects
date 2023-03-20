@@ -332,10 +332,11 @@
                   .$errors[0].$message
               "
             />
-            <BaseInputsText
+            <BaseSelect
               v-model="
                 projectToUpdateOrCreate.hostclub_information.district_country
               "
+              :options="countryList"
               label="Host Club Country"
             />
             <ErrorValidation
@@ -352,7 +353,7 @@
               v-model="
                 projectToUpdateOrCreate.hostclub_information.location_city
               "
-              label="Host Club City"
+              label="Host Club City / Community / Village"
             />
             <ErrorValidation
               v-if="
@@ -991,12 +992,14 @@
                     <button
                       title="Add item"
                       class="crud-buttons text-lg hover:text-primary-color"
-                      @click=" addToBudget(
-                          budgetItemName,   
+                      @click="
+                        addToBudget(
+                          budgetItemName,
                           budgetSupplierName,
                           budgetItemCostLocalCurrency,
-                          budgetItemCost,
-                        )"
+                          budgetItemCost
+                        )
+                      "
                     >
                       <font-awesome-icon icon="fa-solid fa-circle-plus" />
                     </button>
@@ -1182,8 +1185,6 @@
               <tfoot>
                 <tr class="">
                   <th></th>
-                  <th></th>
-                  <th></th>
                   <th
                     class="border-2 border-primary-color px-6 py-4 font-bold text-primary-black"
                   >
@@ -1194,6 +1195,8 @@
                   >
                     USD {{ sumOfAnticipatedFunding }}
                   </th>
+                  <th></th>
+                  <th></th>
                 </tr>
               </tfoot>
             </table>
@@ -1760,7 +1763,7 @@ export default defineComponent({
     ) {
       this.projectToUpdateOrCreate = new DmProject();
       this.projectToUpdateOrCreate.grant_type =
-        GrantType.DISTRICTSIMPLIFIEDPROJECT;
+        GrantType.DISTRICTMATCHINGPROJECT;
       this.projectToUpdateOrCreate.created_by = this.store.$state
         .loggedInUserData.user_id as number;
       this.projectToUpdateOrCreate.club_id =
