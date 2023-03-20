@@ -171,6 +171,7 @@ export default class ProjectsApi {
   public static async createNewProject(
     newProject: IDmProject | IDsgProject | IClubProject
   ): Promise<IApiError | number> {
+    debugger;
     const apiReponse = await fetch(API_ROUTE, {
       method: "POST",
       headers: {
@@ -182,7 +183,6 @@ export default class ProjectsApi {
       if (response.status === 401) {
         alert("You were logged out due to inactivity. Please login again.");
         useRotaryStore().signOut();
-
         router.push({ name: "UserLogin" });
       }
       return await response.json();

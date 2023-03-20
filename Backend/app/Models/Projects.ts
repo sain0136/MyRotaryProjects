@@ -6,7 +6,7 @@ import {
   column,
   computed,
   hasMany,
-manyToMany,
+  manyToMany,
 } from "@ioc:Adonis/Lucid/Orm";
 import { NonPlurizeNamingStrategy } from "Contracts/NonPlurizeNamingStrategy";
 import Pledge from "./Pledges";
@@ -76,8 +76,6 @@ export default class Projects extends BaseModel {
   })
   public fundingGoal: number;
 
-
-
   @column({
     serialize: (value) => {
       if (value) {
@@ -138,7 +136,11 @@ export default class Projects extends BaseModel {
   @column({
     serialize: (value: string | null) => {
       if (value) {
-        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        let parse =
+          typeof value === "object" &&
+          Object.keys(value as unknown as object).length < 1
+            ? "{}"
+            : JSON.stringify(value);
         return JSON.parse(parse);
       }
     },
@@ -146,9 +148,13 @@ export default class Projects extends BaseModel {
   public extraDescriptions: string;
 
   @column({
-        serialize: (value: string | null) => {
+    serialize: (value: string | null) => {
       if (value) {
-        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        let parse =
+          typeof value === "object" &&
+          Object.keys(value as unknown as object).length < 1
+            ? "[]"
+            : JSON.stringify(value);
         return JSON.parse(parse);
       }
     },
@@ -156,9 +162,13 @@ export default class Projects extends BaseModel {
   public itemizedBudget: string;
 
   @column({
-        serialize: (value: string | null) => {
+    serialize: (value: string | null) => {
       if (value) {
-        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        let parse =
+          typeof value === "object" &&
+          Object.keys(value as unknown as object).length < 1
+            ? "{}"
+            : JSON.stringify(value);
         return JSON.parse(parse);
       }
     },
@@ -166,9 +176,13 @@ export default class Projects extends BaseModel {
   public hostclubInformation: string;
 
   @column({
-        serialize: (value: string | null) => {
+    serialize: (value: string | null) => {
       if (value) {
-        let parse = typeof value === 'object' && Object.keys(value as unknown as object).length <1? "{}"  : JSON.stringify(value)
+        let parse =
+          typeof value === "object" &&
+          Object.keys(value as unknown as object).length < 1
+            ? "{}"
+            : JSON.stringify(value);
         return JSON.parse(parse);
       }
     },
@@ -206,13 +220,12 @@ export default class Projects extends BaseModel {
   public pledges: HasMany<typeof Pledges>;
 
   @manyToMany(() => Users, {
-    pivotTable: 'project_roles',
-    localKey: 'projectId',
-    relatedKey: 'userId',
-    pivotRelatedForeignKey: 'user_id',
-    pivotForeignKey: 'project_id',
+    pivotTable: "project_roles",
+    localKey: "projectId",
+    relatedKey: "userId",
+    pivotRelatedForeignKey: "user_id",
+    pivotForeignKey: "project_id",
     pivotTimestamps: true,
   })
-  public projectRole: ManyToMany<typeof Users>
-
+  public projectRole: ManyToMany<typeof Users>;
 }

@@ -26,19 +26,32 @@
       class="my-12"
       :key="myKey"
       @update:showConfirmModal="updateShowModal"
-      :showProjectsWhereAdminProp="true" 
+      :showProjectsWhereAdminProp="true"
     />
     <div class="new_projects flex flex-col gap-8">
       <h1 class="text-center font-bold" :class="tailwind.H1">
         District Club Admin
       </h1>
-      <h3 class="text-center text-lg font-semibold">
+      <h3
+        v-if="isProjectsOpen == true"
+        class="text-center text-lg font-semibold"
+      >
         DM and DSG Projects will be open for submission from
         <strong class="text-primary-green">{{ startDate }}</strong> to
         <strong class="text-primary-green">{{ closeDate }}</strong>
       </h3>
-      <div class="my flex gap-8">
-        <RotaryButton label="Create Club Project" @click="createNewProject('CLUB')" />
+      <h3
+        v-if="isProjectsOpen == false"
+        class="text-center text-lg font-semibold"
+      >
+        Your District is not currently accepting District Simplified Projects or
+        District Matching projects. Please check back later.
+      </h3>
+      <div class="my flex justify-evenly gap-8">
+        <RotaryButton
+          label="Create Club Project"
+          @click="createNewProject('CLUB')"
+        />
 
         <RotaryButton
           v-if="isProjectsOpen == true"
@@ -125,13 +138,16 @@ export default defineComponent({
       this.store.$state.loggedInUsersDistrict.district_details.dates.grant_submission_closedate;
     this.startDate =
       this.store.$state.loggedInUsersDistrict.district_details.dates.grant_submission_startdate;
+      if (!this.startDate || !this.closeDate) {
+      this.isProjectsOpen = false;
+      }
     const todaysDate = new Date(DateTime.now().toLocaleString());
     const closeDate = new Date(this.closeDate);
     const startDate = new Date(this.startDate);
     if (todaysDate < startDate || todaysDate > closeDate) {
       this.isProjectsOpen = false;
-    }
-    console.log("ayy");
+    } 
+
   },
   async updated() {
     await this.store.reloadDistrictDates();
@@ -164,7 +180,6 @@ export default defineComponent({
           });
           break;
       }
-
     },
     updateDeleteConfirm(value: boolean) {
       if (value) {

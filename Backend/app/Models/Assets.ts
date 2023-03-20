@@ -12,13 +12,13 @@ export default class Assets extends BaseModel {
   public dmInitial?: number;
 
   @column()
-  public dsgIntial?: number;
+  public dsgInitial?: number;
 
   @column()
-  public clubIntial?: number;
+  public clubInitial?: number;
 
   @column()
-  public globalIntial?: number;
+  public globalInitial?: number;
 
   @column()
   public assets?: string;
