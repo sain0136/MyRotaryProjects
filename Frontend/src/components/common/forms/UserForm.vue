@@ -558,6 +558,7 @@ export default defineComponent({
       };
     },
     redirect(): void {
+      this.store.$state.canLeaveForm = true;
       this.$router.go(-1);
     },
   },
