@@ -76,11 +76,9 @@ export default class UploadsApi {
         },
         withCredentials: true,
       });
-      if(apiReponse.status === 401){
-        alert("You were logged out due to inactivity. Please login again.");
+      if (apiReponse.status === 401) {
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       if (typeof apiReponse.data === "boolean") {
         if (apiReponse.data) {
@@ -119,10 +117,8 @@ export default class UploadsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -150,10 +146,8 @@ export default class UploadsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
