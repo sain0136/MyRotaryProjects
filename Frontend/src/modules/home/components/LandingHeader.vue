@@ -308,7 +308,6 @@ export default defineComponent({
           ? (response as MainAssets).assets.main_logo.url
           : imgUrl;
       } catch (error) {
-        console.log(error);
       }
     },
     setDisrictForm() {

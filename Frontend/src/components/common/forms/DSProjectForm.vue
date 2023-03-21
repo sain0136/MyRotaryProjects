@@ -2,6 +2,7 @@
   <div class="landing_header w-full">
     <h1 class="header2_h1">District Simplified Project Form</h1>
   </div>
+  <!-- Form Tabs Ui -->
   <ul
     class="flex flex-wrap justify-center border-b border-gray-200 text-center text-lg font-semibold text-primary-black"
   >
@@ -754,18 +755,17 @@
       </div>
     </div>
     <div class="pdf_tab" v-if="activeTab3">
-      <!-- <ClubProjectPdf
-      v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
-      :projectProp="projectToUpdateOrCreate"
-    />
-    <div v-else>
-      <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
-        <span class="">{{
-          headerFormatter("Please submit this project first")
-        }}</span>
-      </h1>
-    </div> -->
-      <h1>Work in progress</h1>
+      <DSProjectPdf
+        v-if="store.$state.DsgOrDMProjectFormProps.formModeProp === 'UPDATE'"
+        :projectProp="projectToUpdateOrCreate"
+      />
+      <div v-else>
+        <h1 class="mt-4 text-center font-bold" :class="tailwind.H1">
+          <span class="">{{
+            headerFormatter("Please submit this project first")
+          }}</span>
+        </h1>
+      </div>
     </div>
     <div class="pledge_tab" v-if="activeTab4">
       <AllPledgesTable
@@ -868,14 +868,20 @@
       </div>
     </div>
     <div class="addUser_tab" v-if="activeTab7">
-      <AddUserProjectForm :projectAdminsProp="projectToUpdateOrCreate.projectDetails.projectAdmins" v-if="store.$state.DsgOrDMProjectFormProps.formModeProp === 'UPDATE'" :projectId="projectToUpdateOrCreate.project_id" />
+      <AddUserProjectForm
+        :projectAdminsProp="
+          projectToUpdateOrCreate.projectDetails.projectAdmins
+        "
+        v-if="store.$state.DsgOrDMProjectFormProps.formModeProp === 'UPDATE'"
+        :projectId="projectToUpdateOrCreate.project_id"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import AllPledgesTable from "@/components/common/tables/AllPledgesTable.vue";
-import ClubProjectPdf from "@/components/common/pdf/ClubProjectPdf.vue";
+import DSProjectPdf from "@/components/common/pdf/DSProjectPdf.vue";
 import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
@@ -959,7 +965,7 @@ export default defineComponent({
     DistrictUploadModal,
     ErrorValidation,
     UploadForm,
-    ClubProjectPdf,
+    DSProjectPdf,
     AddUserProjectForm,
   },
   props: {},
@@ -1612,5 +1618,7 @@ export default defineComponent({
   width: 140%;
   height: 100%;
   overflow: auto;
+  position: relative;
+  left: -110px;
 }
 </style>

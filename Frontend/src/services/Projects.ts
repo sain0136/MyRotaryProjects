@@ -171,7 +171,6 @@ export default class ProjectsApi {
   public static async createNewProject(
     newProject: IDmProject | IDsgProject | IClubProject
   ): Promise<IApiError | number> {
-    debugger;
     const apiReponse = await fetch(API_ROUTE, {
       method: "POST",
       headers: {

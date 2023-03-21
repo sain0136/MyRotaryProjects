@@ -1185,6 +1185,8 @@
               <tfoot>
                 <tr class="">
                   <th></th>
+                  <th></th>
+                  <th></th>
                   <th
                     class="border-2 border-primary-color px-6 py-4 font-bold text-primary-black"
                   >
@@ -1195,8 +1197,6 @@
                   >
                     USD {{ sumOfAnticipatedFunding }}
                   </th>
-                  <th></th>
-                  <th></th>
                 </tr>
               </tfoot>
             </table>
@@ -2256,5 +2256,7 @@ export default defineComponent({
   width: 140%;
   height: 100%;
   overflow: auto;
+  position: relative;
+  left: -110px;
 }
 </style>
