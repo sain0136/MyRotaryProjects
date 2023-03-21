@@ -21,7 +21,6 @@ export default {
   name: "BaseCheckBox",
   setup(props, { emit }) {
     const handleChange = (event: Event) => {
-      console.log("object");
       const isChecked = (event.target as HTMLInputElement).checked;
       emit("update:modelValue", isChecked);
     };
