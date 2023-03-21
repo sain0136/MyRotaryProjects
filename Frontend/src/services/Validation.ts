@@ -30,10 +30,8 @@ export default class ValidationApi {
       }
     ).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -54,10 +52,8 @@ export default class ValidationApi {
       }
     ).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });

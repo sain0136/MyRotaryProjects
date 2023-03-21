@@ -30,10 +30,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -53,7 +51,7 @@ export default class ProjectsApi {
   public static async addProjectUser(
     project_id: number,
     user_id: number
-  ): Promise<Boolean| IApiError> {
+  ): Promise<Boolean | IApiError> {
     const apiReponse = await fetch(API_ROUTE + "addProjectUser", {
       method: "POST",
       headers: {
@@ -66,9 +64,9 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
+
         useRotaryStore().signOut();
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -76,7 +74,7 @@ export default class ProjectsApi {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);
     }
-    return apiReponse as Boolean| IApiError;
+    return apiReponse as Boolean | IApiError;
   }
 
   /**
@@ -107,10 +105,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -149,10 +145,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -180,9 +174,9 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
+
         useRotaryStore().signOut();
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -210,10 +204,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -237,10 +229,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -279,10 +269,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -319,14 +307,12 @@ export default class ProjectsApi {
         limit: limit,
         conditional: conditional,
         project_admin_table: project_admin_table,
-      }), 
+      }),
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -359,10 +345,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });
@@ -395,10 +379,8 @@ export default class ProjectsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        alert("You were logged out due to inactivity. Please login again.");
+        useRotaryStore().$state.showLogoutModal = true;
         useRotaryStore().signOut();
-
-        router.push({ name: "UserLogin" });
       }
       return await response.json();
     });

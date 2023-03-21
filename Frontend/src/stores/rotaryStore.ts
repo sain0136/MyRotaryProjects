@@ -159,6 +159,7 @@ export const useRotaryStore = defineStore("main", {
         | IDmProject
         | IDsgProject
         | IClubProject,
+      showLogoutModal: false,
     };
   },
   //Used to manipulate state variable without changing the States themseleves
