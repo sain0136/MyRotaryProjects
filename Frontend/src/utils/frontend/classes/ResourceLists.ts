@@ -15,6 +15,22 @@ class ResourceLists {
     }
   });
 
+  static siteValues = {
+    adminEmail: "Peter.labelle@CornwallSunriseRotary.com ",
+    adminPhone: "+1 613-362-4173",
+    adminName: "Peter Labelle",
+    adminPosition: "MyRotaryProjects Webmaster",
+    adminClub: "Cornwall Sunrise Rotary Club",
+    adminDistrict: "7040",
+    adminCountry: "Canada",
+    adminProvince: "Ontario",
+    adminCity: "Cornwall",
+    adminAddress: "239 Pitt Street",
+    adminPostalCode: "Canada K6H 5R8",
+    adminWebsite: "https://www.cornwallsunriserotary.com/",
+    adminFacebook: "https://www.facebook.com/CornwallSunriseRotary/",
+  }
+
   static areaFocusImages: Array<string> = [
     "/1-Peace-and-Conflict.png",
     "/2-Disease_Prevention.png",

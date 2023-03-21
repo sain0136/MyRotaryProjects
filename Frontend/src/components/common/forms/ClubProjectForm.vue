@@ -408,7 +408,13 @@
       </div>
     </div>
     <div class="addUser_tab" v-if="activeTab7">
-    <AddUserProjectForm :projectAdminsProp="projectToUpdateOrCreate.projectDetails.projectAdmins"    :projectId="projectToUpdateOrCreate.project_id" v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'" />
+      <AddUserProjectForm
+        :projectAdminsProp="
+          projectToUpdateOrCreate.projectDetails.projectAdmins
+        "
+        :projectId="projectToUpdateOrCreate.project_id"
+        v-if="store.$state.clubProjectFormProps.formModeProp === 'UPDATE'"
+      />
     </div>
   </div>
 </template>
@@ -864,6 +870,7 @@ export default defineComponent({
     },
 
     redirect() {
+      this.store.$state.canLeaveForm = true;
       this.$router.go(-1);
     },
   },

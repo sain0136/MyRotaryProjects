@@ -403,6 +403,7 @@ export default defineComponent({
       }
     },
     redirect() {
+      this.store.$state.canLeaveForm = true;
       this.$router.go(-1);
     },
   },

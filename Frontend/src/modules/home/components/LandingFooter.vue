@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gray-800 text-primary-white flex-grow-0 mt-auto ">
+  <footer class="mt-auto flex-grow-0 bg-gray-800 text-primary-white">
     <div class="container mx-auto px-6 py-10">
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         <div class="col-span-1 flex flex-col">
@@ -14,7 +14,10 @@
           </div>
           <ul class="social-icon-two mt-4 flex justify-evenly">
             <li>
-              <a href="https://www.facebook.com/rotary">
+              <a
+                href="https://www.facebook.com/rotary"
+                title="Rotary International Facebook"
+              >
                 <font-awesome-icon
                   class="text-3xl hover:text-primary-color"
                   icon="fa-brands fa-facebook" />
@@ -23,6 +26,7 @@
             </li>
             <li>
               <a
+                title="Rotary International Twitter"
                 href="https://twitter.com/Rotary?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
               >
                 <font-awesome-icon
@@ -32,7 +36,10 @@
               ></a>
             </li>
             <li>
-              <a href="https://www.instagram.com/rotaryinternational/?hl=en">
+              <a
+                title="Rotary International Instagram"
+                href="https://www.instagram.com/rotaryinternational/?hl=en"
+              >
                 <font-awesome-icon
                   class="text-3xl hover:text-primary-color"
                   icon="fa-brands fa-instagram" />
@@ -42,7 +49,7 @@
           </ul>
         </div>
         <div class="col-span-1 flex flex-wrap">
-          <h2 class=" basis-full text-lg">Quick Links</h2>
+          <!-- <h2 class=" basis-full text-lg">Quick Links</h2>
           <ul class="list mb-4 flex basis-1/2 flex-col gap-2">
             <li class="cursor-pointer hover:text-primary-color">
               <font-awesome-icon
@@ -100,35 +107,47 @@
                 class="mr-2"
               /><a href="#">Press</a>
             </li>
-          </ul>
+          </ul> -->
         </div>
-
-        <div class="col-span-1 flex flex-col justify-center">
-          <h2 class="mb-4 text-lg">Our Address</h2>
+        <div class="col-span-1 flex flex-col items-end">
+          <h2 class="mb-4 text-center text-lg">Contact</h2>
           <ul class="list-style-one flex gap-4">
-            <font-awesome-icon
-              icon="fa-solid fa-location-dot "
-              class="mt-1 text-2xl text-primary-color"
-            />
-            <li class="flex flex-col gap-2">
-              <span class="icon flaticon-location-pin"> 239 Pitt Street</span>
-              <span>Cornwall , Ontario</span>
-              <span> Canada K6H 5R8</span>
+            <li class="flex flex-col items-end gap-2">
+              <span class="icon flaticon-location-pin">
+                <font-awesome-icon
+                  icon="fa-solid fa-location-dot "
+                  class="mt-1 text-2xl text-primary-color mr-4 "
+                />{{ siteValues.adminAddress }}</span
+              >
+              <span
+                >{{ siteValues.adminCity }} ,
+                {{ siteValues.adminProvince }}</span
+              >
+              <span>
+                {{ siteValues.adminCountry }}
+                {{ siteValues.adminPostalCode }}</span
+              >
             </li>
           </ul>
           <span class=""
             ><font-awesome-icon
               icon="fa-solid fa-phone"
               class="mt-4 mr-2 text-2xl text-primary-color"
-            />+1 613 330 5497</span
+            />{{ siteValues.adminPhone }}</span
           >
 
           <span class="mt-auto flex"
             ><font-awesome-icon
+              @click="
+                () => {
+                  mailTo(siteValues.adminEmail);
+                }
+              "
+              title="Send Email"
               icon="fa-solid fa-envelope"
               class="mr-4 cursor-pointer text-2xl text-primary-color"
-            />MyRotaryProjects@gmail.com</span
-          >
+            />{{ siteValues.adminEmail }}
+          </span>
         </div>
       </div>
       <div
@@ -139,9 +158,31 @@
           {{ headerFormatter("2023 All Rights Reserved MyRotaryProjects") }}
         </div>
         <ul class="footer-nav mt-4 flex md:mt-0">
-          <li><a href="#" class="mx-3 hover:text-white">Home</a></li>
-          <li><a href="#" class="mx-3 hover:text-white">Contact Us</a></li>
-          <li><a href="#" class="mx-3 hover:text-white">FAQ's</a></li>
+          <li>
+            <a
+              href="#"
+              @click="
+                () => {
+                  $router.push({ name: 'LandingApp' });
+                }
+              "
+              class="mx-3 hover:text-white"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              @click="
+                () => {
+                  $router.push({ name: 'ContactUs' });
+                }
+              "
+              class="mx-3 hover:text-white"
+              >Contact Us</a
+            >
+          </li>
+          <!-- <li><a href="#" class="mx-3 hover:text-white">FAQ's</a></li> -->
         </ul>
       </div>
     </div>
@@ -150,6 +191,7 @@
 
 <script lang="ts">
 import AssetsApi from "@/services/Assets";
+import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import type {
   MainAssets,
@@ -167,6 +209,7 @@ export default defineComponent({
   },
   data() {
     return {
+      siteValues: ResourceLists.siteValues,
       headerFormatter: Utilities.headerFormater,
       logo: "",
       serverException: false,
@@ -186,7 +229,11 @@ export default defineComponent({
       this.expectionObject = error as IApiException;
     }
   },
-  methods: {},
+  methods: {
+    mailTo(email: string) {
+      window.open(`mailto:${email}`);
+    },
+  },
   computed: {},
 });
 </script>

@@ -21,12 +21,13 @@ import ClubProjectFormLandingView from "@/components/common/forms/ClubProjectFor
 import DSGProjectFormLandingView from "@/components/common/forms/DSProjectForm.vue";
 import DMProjectFormLandingView from "@/components/common/forms/DMProjectForm.vue";
 import { useRotaryStore } from "@/stores/rotaryStore";
+import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 
 const route = {
   path: "/",
   component: LandingApp,
   name: "LandingApp",
-  
+
   children: [
     { path: "/", component: LandingHome, mame: "LandingHome" },
     {
@@ -64,10 +65,13 @@ const route = {
     {
       path: "/member",
       beforeEnter: () => {
-        if (!useRotaryStore().$state.isClubAdminLoggedIn && !useRotaryStore().$state.isDistrictAdminLoggedIn && !useRotaryStore().$state.isClubUserLoggedIn 
-        && !useRotaryStore().$state.isSiteAdminLoggedIn
+        if (
+          !useRotaryStore().$state.isClubAdminLoggedIn &&
+          !useRotaryStore().$state.isDistrictAdminLoggedIn &&
+          !useRotaryStore().$state.isClubUserLoggedIn &&
+          !useRotaryStore().$state.isSiteAdminLoggedIn
         ) {
-          return  '/login' ;
+          return "/login";
         }
       },
       children: [
@@ -141,12 +145,8 @@ const route = {
           component: DMProjectFormLandingView,
           name: "DMProjectFormLandingView",
         },
-
-
-
-      ]
+      ],
     },
- 
   ],
 };
 
