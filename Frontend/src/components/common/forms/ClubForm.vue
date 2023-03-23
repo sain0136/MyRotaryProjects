@@ -33,7 +33,7 @@
         novalidate
       >
         <BaseSelect
-          v-if="store.$state.clubFormProps.formModeProp === formMode.CREATE"
+          v-if="store.$state.clubFormProps.formModeProp === formMode.CREATE && !store.clubFormProps.districtIdProp"
           v-model="districtChosen"
           label="Assign To District"
           :options="districtNameList"
@@ -90,9 +90,6 @@ import {
   type IApiException,
   FORM_MODE_PROP,
   ErrorMessages,
-  type IApiError,
-  DISTRIST_REPORT_TYPE,
-  type ClubPagination,
 } from "@/utils/frontend/interfaces/Frontend";
 import DistrictUploadModal from "@/components/common/modals/DistrictUploadModal.vue";
 import BaseDatePicker from "@/components/common/baseformComponents/BaseDatePicker.vue";
@@ -107,34 +104,23 @@ import useVuelidate from "@vuelidate/core";
 import ConfirmModal from "@/components/common/../common/modals/ConfirmModal.vue";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
 import Toast from "@/components/common/toast/Toast.vue";
-import RotaryUser from "@/utils/shared/classes/RotaryUser";
 import {
   useRotaryStore,
-  type IUserFormProps,
-  type IClubFormProps,
 } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import ErrorValidation from "@/components/common/baseformComponents/ErrorValidation.vue";
 import DistrictsApi from "@/services/Districts";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import type club from "@/utils/shared/classes/RotaryClub";
-import UserApi from "@/services/User";
 import BaseInputsPassword from "@/components/common/baseformComponents/BaseInputsPassword.vue";
 
 import {
   email,
   helpers,
-  maxLength,
-  minLength,
   required,
   requiredIf,
 } from "@vuelidate/validators";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
-import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
-import {
-  RotaryRoles,
-  UserType,
-} from "@/utils/shared/interfaces/SharedInterface";
 import RotaryClub from "@/utils/shared/classes/RotaryClub";
 import ClubsApi from "@/services/Club";
 export default defineComponent({
@@ -228,7 +214,7 @@ export default defineComponent({
     return {
       districtChosen: {
         requiredIfFuction: requiredIf(
-          this.store.clubFormProps.formModeProp === "CREATE" &&
+          this.store.clubFormProps.formModeProp === "CREATE" && !this.store.clubFormProps.districtIdProp  &&
             this.districtChosen === ""
         ),
       },
@@ -253,6 +239,10 @@ export default defineComponent({
   },
   async created() {
     if (this.store.clubFormProps.formModeProp === "CREATE") {
+      if ( this.store.clubFormProps.districtIdProp) {
+        this.club.district_id = this.store.clubFormProps.districtIdProp;
+        return;
+      }
       await this.getAllDistricts();
     } else if (this.store.clubFormProps.formModeProp === "UPDATE") {
       await this.populateFormData();

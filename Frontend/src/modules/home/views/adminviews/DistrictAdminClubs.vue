@@ -28,7 +28,6 @@
 
     <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
     <DistrictClubsTable
-      :districtAdminViewProp="districtAdminViewProp"
       @update:showConfirmModal="updateShowModal"
       @update:clubId="updateClubId"
     />
@@ -43,7 +42,7 @@
     />
     <RotaryButton
       v-if="clubId !== 0"
-      label="Create Member"
+      label="Create New Member"
       @click="createNewClubMember()"
     />
   </div>
@@ -102,7 +101,6 @@ export default defineComponent({
     return {
       tailwind: TAILWIND_COMMON_CLASSES,
       deleteConfirm: null as any,
-      districtAdminViewProp: 0,
       serverException: false,
       expectionObject: {} as IApiException,
       toast: {
@@ -115,8 +113,6 @@ export default defineComponent({
   },
   watch: {},
   async created() {
-    this.districtAdminViewProp =
-      this.store.$state.loggedInUserData.district_id || 0;
   },
   methods: {
     updateDeleteConfirm(value: boolean) {
@@ -158,6 +154,7 @@ export default defineComponent({
     createNewClub() {
       this.store.setClubFormProps({
         formModeProp: "CREATE",
+        districtIdProp: this.store.$state.loggedInUserData.district_id || 0,
       });
       this.$router.push({ name: "DistrictAdminClubForm" });
     },

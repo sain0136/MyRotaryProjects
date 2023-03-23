@@ -9,15 +9,17 @@
         <tr>
           <th scope="col" class="px-6 py-3">
             Club Name
-            <font-awesome-icon
-              class="ml-2 text-primary-color cursor-pointer"
-              data-te-toggle="tooltip"
-              data-te-placement="top"
-              data-te-ripple-init
-              data-te-ripple-color="light"
-              title="Select a row to view and add club memebers"
-              icon="fa-solid fa-question"
-            />
+            <div class="question-mark">
+              <font-awesome-icon
+                class="ml-2 cursor-pointer text-primary-color"
+                data-te-toggle="tooltip"
+                data-te-placement="top"
+                data-te-ripple-init
+                data-te-ripple-color="light"
+                title="Click a row to view and add club memebers"
+                icon="fa-solid fa-question"
+              />
+            </div>
           </th>
           <th scope="col" class="px-6 py-3">Actions</th>
         </tr>
@@ -172,7 +174,7 @@ export default defineComponent({
     return { key, updateShowModal, store };
   },
   components: {},
-  emits: ['update:clubId'],
+  emits: ["update:clubId"],
   props: {
     districtIdProp: Number,
     districtAdminViewProp: Number,
@@ -184,12 +186,11 @@ export default defineComponent({
       allClubs: [] as IClub[],
       payload: {
         current_page: 1,
-        limit: 10,
+        limit: 5,
         last_page: 1,
         total: 0,
       },
       message: "Choose a district from the dropdown",
-   
     };
   },
   watch: {
@@ -202,12 +203,22 @@ export default defineComponent({
   async created() {
     if (this.districtAdminViewProp) {
       this.getAllClubsInDistrict(this.districtAdminViewProp || 0);
+    } else {
+      this.getAllClubsInDistrict(
+        this.store.$state.loggedInUsersDistrict.district_id
+      );
     }
   },
   methods: {
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
-      this.getAllClubsInDistrict();
+      if (this.districtAdminViewProp) {
+        this.getAllClubsInDistrict();
+      } else {
+        this.getAllClubsInDistrict(
+          this.store.$state.loggedInUsersDistrict.district_id
+        );
+      }
     },
     async getAllClubsInDistrict(id?: number) {
       try {
@@ -247,9 +258,9 @@ export default defineComponent({
       });
       this.$router.push({ name: "DistrictAdminClubForm" });
     },
-    async viewClubMembers(clubId:number){
-      this.$emit('update:clubId', clubId);
-    }
+    async viewClubMembers(clubId: number) {
+      this.$emit("update:clubId", clubId);
+    },
   },
   computed: {},
 });
@@ -268,4 +279,21 @@ export default defineComponent({
     background-color: #5cb85c !important;
   }
 }
+.question-mark {
+  display: inline-block;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 </style>

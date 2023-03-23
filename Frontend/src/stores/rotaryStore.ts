@@ -45,6 +45,7 @@ export interface IUserFormProps {
 
 export interface IClubFormProps {
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
+  districtIdProp?: number;
   clubIdProp?: number;
 }
 
@@ -91,9 +92,11 @@ class focusedProjectsTablePojo implements IFocusedProjectsTableProps {
 class clubFormPropsPojo implements IClubFormProps {
   formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
   clubIdProp: number | undefined;
+  districtIdProp: number | undefined;
   constructor(props: IClubFormProps) {
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
     this.clubIdProp = props.clubIdProp ? props.clubIdProp : undefined;
+    this.districtIdProp = props.districtIdProp ? props.districtIdProp : undefined;
   }
 }
 

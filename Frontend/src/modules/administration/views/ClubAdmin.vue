@@ -18,7 +18,7 @@
       :width="toast.width"
       :closeTimer="toast.closeTimer"
     />
-    <section :class="tailwind.DIVCOL" class="gap-8">
+    <section :class="tailwind.DIVCOL" class="my-8 gap-8">
       <h1 class="text-center" :class="tailwind.H1">
         {{ headerFormatter("Choose a District") }}
       </h1>
@@ -29,14 +29,27 @@
       <h1 class="text-center" :class="tailwind.H1">
         {{ headerFormatter("Create a new club") }}
       </h1>
+      <AllClubsInDisctrictTable
+        :districtIdProp="districtId"
+        @update:showConfirmModal="updateShowModal"
+        @update:clubId="updateClubId"
+      />
+      <div class="button_wrapper">
+        <RotaryButton label="Create" @click="createNewClub()" />
+      </div>
+      <AllClubMembersTable
+        v-if="clubId !== 0"
+        :clubIdProp="clubId"
+        @update:showConfirmModal="updateShowModal"
+        :key="clubId"
+        tableViewProp="SITEADMIN"
+      />
+      <RotaryButton
+        v-if="clubId !== 0"
+        label="Create Member"
+        @click="createNewClubMember()"
+      />
     </section>
-    <DistrictClubsTable
-      :districtIdProp="districtId"
-      @update:showConfirmModal="updateShowModal"
-    />
-    <div class="button_wrapper">
-      <RotaryButton label="Create" @click="createNewClub()" />
-    </div>
   </div>
 </template>
 
@@ -47,12 +60,13 @@ import {
   type DistrictPagination,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent, ref } from "vue";
+import AllClubMembersTable from "@/components/common/tables/AllClubMembersTable.vue";
 import BaseSelect from "@/components/common/baseformComponents/BaseSelect.vue";
 import RotaryButton from "@/components/common/RotaryButton.vue";
 import DistrictsApi from "@/services/Districts";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
-import DistrictClubsTable from "@/components/common/tables/AllClubsInDisctrictTable.vue";
+import AllClubsInDisctrictTable from "@/components/common/tables/AllClubsInDisctrictTable.vue";
 import ConfirmModal from "@/components/common/modals/ConfirmModal.vue";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
 import Toast from "@/components/common/toast/Toast.vue";
@@ -61,9 +75,10 @@ import { useRotaryStore } from "@/stores/rotaryStore";
 export default defineComponent({
   name: "ClubAdmin",
   components: {
+    AllClubMembersTable,
     BaseSelect,
     RotaryButton,
-    DistrictClubsTable,
+    AllClubsInDisctrictTable,
     ConfirmModal,
     ExceptionModal,
     Toast,
@@ -78,11 +93,16 @@ export default defineComponent({
     function updateShowModal(newValue: any) {
       showConfirmModal.value = newValue;
     }
-
+    const clubId = ref(0);
+    const updateClubId = (newValue: number) => {
+      clubId.value = newValue;
+    };
     return {
+      clubId,
       store,
       showConfirmModal,
       updateShowModal,
+      updateClubId,
     };
   },
   props: {},
@@ -176,7 +196,7 @@ export default defineComponent({
     createNewClub() {
       this.store.setClubFormProps({
         formModeProp: "CREATE",
-      })
+      });
       this.$router.push({ name: "SiteAdminClubForm" });
     },
     resetSet() {
@@ -186,9 +206,19 @@ export default defineComponent({
         idTobeDeleted: 0,
       };
     },
+    createNewClubMember() {
+      this.store.setUserFormProps({
+        formModeProp: "CREATE",
+        userCreationTypeProp: "CLUB_MEMBER",
+        clubIdProp: this.clubId,
+      });
+      this.$router.push({ name: "UserFormForSiteAdmin" });
+    },
   },
   computed: {},
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+
+</style>
