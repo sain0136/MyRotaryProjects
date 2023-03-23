@@ -143,7 +143,7 @@ import { defineComponent, type SetupContext } from "vue";
 export default defineComponent({
   name: "AllClubMembersTable",
   setup(props, context: SetupContext) {
-   const store = useRotaryStore()
+    const store = useRotaryStore();
     function updateShowModal(
       show: boolean,
       memberName: string,
@@ -160,6 +160,10 @@ export default defineComponent({
   components: {},
   props: {
     clubIdProp: Number,
+    tableViewProp: {
+      type: String,
+      default: "DISTRICTADMIN",
+    }
   },
   data() {
     return {
@@ -218,7 +222,11 @@ export default defineComponent({
         userIdProp: memberId,
         userCreationTypeProp: "CLUB_MEMBER",
       });
-      this.$router.push({ name: 'UserFormForAdmins'})
+      if (this.tableViewProp === "DISTRICTADMIN") {
+        this.$router.push({ name: "UserFormForAdmins" });
+      } else if (this.tableViewProp === "SITEADMIN") {
+        this.$router.push({ name: "UserFormForSiteAdmin" });
+      }
     },
   },
   computed: {},
