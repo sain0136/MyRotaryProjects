@@ -15,6 +15,12 @@ class ResourceLists {
     }
   });
 
+  static aboutUsDescription: string = ` MyRotaryProjects aims to simplify project lifecycle management for Rotary Districts.
+     Developed by Peter Labelle of District 7040, the app will replace the previously manual process used for Rotary grant applications, pledge tracking,
+      and reporting. With this app, users will be able to easily create and pledge to projects, as well as track their progress and report
+       on their completion. The app is being designed to be user-friendly and efficient, and Peter Labelle is committed to ensuring its successful
+        deployment and scalability for Rotary District 7040 and future districts.`;
+
   static siteValues = {
     adminEmail: "Peter.labelle@CornwallSunriseRotary.com ",
     adminPhone: "+1 613-362-4173",
@@ -29,7 +35,7 @@ class ResourceLists {
     adminPostalCode: "Canada K6H 5R8",
     adminWebsite: "https://www.cornwallsunriserotary.com/",
     adminFacebook: "https://www.facebook.com/CornwallSunriseRotary/",
-  }
+  };
 
   static areaFocusImages: Array<string> = [
     "/1-Peace-and-Conflict.png",
