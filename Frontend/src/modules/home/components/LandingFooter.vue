@@ -9,8 +9,11 @@
             /></a>
           </div>
           <div class="text mt-4">
-            Lorem ipsum dolor sit amet, vix an natu tur eleifend, mel amet
-            laorit menandri. Ei item justo complectitur duo.
+            My Rotary Projects is a platform for Rotarians and Rotary clubs to
+            showcase their service projects and inspire others to take action.
+            You can browse, share, and support projects from around the world
+            that align with Rotary’s areas of focus. Join us in making a
+            difference in our communities and beyond.
           </div>
           <ul class="social-icon-two mt-4 flex justify-evenly">
             <li>
@@ -116,7 +119,7 @@
               <span class="icon flaticon-location-pin">
                 <font-awesome-icon
                   icon="fa-solid fa-location-dot "
-                  class="mt-1 text-2xl text-primary-color mr-4 "
+                  class="mt-1 mr-4 text-2xl text-primary-color"
                 />{{ siteValues.adminAddress }}</span
               >
               <span
