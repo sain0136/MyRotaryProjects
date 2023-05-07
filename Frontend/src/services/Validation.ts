@@ -35,7 +35,7 @@ export default class ValidationApi {
       }
       return await response.json();
     });
-
+    
     if (Utilities.isAnException(apiReponse)) {
       const exception = apiReponse as IApiException;
       throw new MyError(exception.message, exception.stack, exception.code);

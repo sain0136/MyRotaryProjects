@@ -203,7 +203,7 @@ export const useRotaryStore = defineStore("main", {
      */
     setLoggedInUserInforamtion(user: IUser): void {
       this.loggedInUserData = user;
-      if (user.user_id === 2) {
+      if (user.email === 'admin@myrotaryrotaryprojects.com') {
         this.isSiteAdminLoggedIn = true;
       }
       if (user.user_type === UserType.District) {
