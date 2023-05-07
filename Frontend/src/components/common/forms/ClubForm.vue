@@ -25,7 +25,6 @@
             : headerFormatter("Update Club")
         }}
       </h1>
-      <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
       <form
         @submit.prevent=""
         autocomplete="off"

@@ -1,6 +1,6 @@
 import BaseSeeder from "@ioc:Adonis/Lucid/Seeder";
-import Club from "../../app/Models/Clubs";
-import District from "../../app/Models/Districts";
+// import Club from "../../app/Models/Clubs";
+// import District from "../../app/Models/Districts";
 import User from "../../app/Models/Users";
 import {
 /*   GrantType,
@@ -8,7 +8,7 @@ import {
   RotaryRoles,
   UserType,
 } from "../../contracts/util/backend/interfaces/Utilities";
-import Assets from "../../app/Models/Assets";
+// import Assets from "../../app/Models/Assets";
 // import Projects from "../../app/Models/Projects";
 // import { DateTime } from "luxon";
 // import RotaryYear from "Contracts/util/backend/classes/RotaryYear";
@@ -16,124 +16,124 @@ import Assets from "../../app/Models/Assets";
 
 export default class extends BaseSeeder {
   public async run() {
-    await Assets.create({
-      dmInitial: 100000,
-      dsgInitial: 100000,
-      clubInitial: 100001,
-      globalInitial: 100000,
-      assets: JSON.stringify({ main_logo: {} }),
-    });
-    await District.createMany([
-      {
-        districtName: "District 7000",
-        districtNumber: "D-7000",
-        districtEmail: "district7000@gmail.com",
-        districtPresident: "John Stewert",
-        districtDescription:
-          "These are better (and almost always) handled at the database level instead of the application level. It's the job of the DBMS to enforce this kind of referential integrity assuming you define your schema correctly so that entities are correctly linked together, via foreign keys.",
-        districtDetails: JSON.stringify({
-          ddfCalculation: ["District Club Contribution"],
-          dates: {
-            grant_submission_closedate: '2023-05-19',
-            grant_submission_startdate: '2023-03-19'
-          },
-          reportLinks: [],
-          ddfCapes: {
-            dmCap: '1000',
-            dsgCap: '1000',
-            dmFraction: '.5',
-            dsgFraction: '1'
-          },
-        }),
-      },
-      {
-        districtName: "District 6000",
-        districtNumber: "D-6000",
-        districtPresident: "Daivd Polista",
-        districtEmail: "peter@gmail.com",
-        districtDetails: JSON.stringify({
-          ddfCalculation: ["District Club Contribution"],
-          dates: {
-            grant_submission_closedate: '2023-05-19',
-            grant_submission_startdate: '2023-03-19'
-          },
-          reportLinks: [],
-          ddfCapes: {
-            dmCap: '1000',
-            dsgCap: '1000',
-            dmFraction: '.5',
-            dsgFraction: '1'
-          },
-        }),
-        districtDescription:
-          "Every seeder file must extend the BaseSeeder class and implement the run method.The following example uses a Lucid model to create multiple users. However, you can also use the Database query builder directly. In other words, seeders don't care what you write inside the run method.",
-      },
-      {
-        districtName: "District 5000",
-        districtNumber: "D-1234",
-        districtPresident: "Sebastien Saintrose",
-        districtEmail: "pfsdfsdf@gmail.com",
-        districtDetails: JSON.stringify({
-          ddfCalculation: ["District Club Contribution"],
-          dates: {
-            grant_submission_closedate: "",
-            grant_submission_startdate: "",
-          },
-          reportLinks: [],
-          ddfCapes: {
-            dsgCap: 0,
-            dsgFraction: 0,
-            dmCap: 0,
-            dmFraction: 0,
-          },
-        }),
-        districtDescription:
-          "Every seeder file must extend the BaseSeeder class and implement the run method.The following example uses a Lucid model to create multiple users. However, you can also use the Database query builder directly. In other words, seeders don't care what you write inside the run method.",
-      },
-    ]);
-    await Club.createMany([
-      {
-        clubName: "Cornwall",
-        clubAddress: "239 Pitt Street",
-        clubCity: "Cornwall",
-        clubPostal: "K2C 4V5",
-        clubProvince: "Ontario",
-        clubCountry: "Canada",
-        clubEmail: "cornwallian12@gmail.com",
-        siteUrl: "https://www.cornwallrotary.com/",
-        districtId: 1,
-      },
-      {
-        clubName: "Brockville",
-        clubAddress: "3543 Sud Street",
-        clubCity: "CornwBrockvilleall",
-        clubPostal: "R4H 4V5",
-        clubProvince: "Ontario",
-        clubCountry: "Canada",
-        clubEmail: "brokallian12@gmail.com",
-        siteUrl: "https://www.espn.com/",
-        districtId: 1,
-      },
-    ]);
-    const guest: User = await User.create({
-      firstname: "John",
-      lastname: "Doe",
-      address: "234 bluders ave",
-      userCity: "cornwall",
-      userPostal: "K4V 2VC",
-      userProvince: "Ontario",
-      userCountry: "Canada",
-      phone: "",
-      email: "",
-      password: "123456",
-      districtId: 1,
-      userType: UserType.District,
-    });
-    await guest.related("districtRole").attach({
-      [1]: {
-        district_role: RotaryRoles.GUEST,
-      },
-    });
+    // await Assets.create({
+    //   dmInitial: 100000,
+    //   dsgInitial: 100000,
+    //   clubInitial: 100001,
+    //   globalInitial: 100000,
+    //   assets: JSON.stringify({ main_logo: {} }),
+    // });
+    // await District.createMany([
+    //   {
+    //     districtName: "District 7000",
+    //     districtNumber: "D-7000",
+    //     districtEmail: "district7000@gmail.com",
+    //     districtPresident: "John Stewert",
+    //     districtDescription:
+    //       "These are better (and almost always) handled at the database level instead of the application level. It's the job of the DBMS to enforce this kind of referential integrity assuming you define your schema correctly so that entities are correctly linked together, via foreign keys.",
+    //     districtDetails: JSON.stringify({
+    //       ddfCalculation: ["District Club Contribution"],
+    //       dates: {
+    //         grant_submission_closedate: '2023-05-19',
+    //         grant_submission_startdate: '2023-03-19'
+    //       },
+    //       reportLinks: [],
+    //       ddfCapes: {
+    //         dmCap: '1000',
+    //         dsgCap: '1000',
+    //         dmFraction: '.5',
+    //         dsgFraction: '1'
+    //       },
+    //     }),
+    //   },
+    //   {
+    //     districtName: "District 6000",
+    //     districtNumber: "D-6000",
+    //     districtPresident: "Daivd Polista",
+    //     districtEmail: "peter@gmail.com",
+    //     districtDetails: JSON.stringify({
+    //       ddfCalculation: ["District Club Contribution"],
+    //       dates: {
+    //         grant_submission_closedate: '2023-05-19',
+    //         grant_submission_startdate: '2023-03-19'
+    //       },
+    //       reportLinks: [],
+    //       ddfCapes: {
+    //         dmCap: '1000',
+    //         dsgCap: '1000',
+    //         dmFraction: '.5',
+    //         dsgFraction: '1'
+    //       },
+    //     }),
+    //     districtDescription:
+    //       "Every seeder file must extend the BaseSeeder class and implement the run method.The following example uses a Lucid model to create multiple users. However, you can also use the Database query builder directly. In other words, seeders don't care what you write inside the run method.",
+    //   },
+    //   {
+    //     districtName: "District 5000",
+    //     districtNumber: "D-1234",
+    //     districtPresident: "Sebastien Saintrose",
+    //     districtEmail: "pfsdfsdf@gmail.com",
+    //     districtDetails: JSON.stringify({
+    //       ddfCalculation: ["District Club Contribution"],
+    //       dates: {
+    //         grant_submission_closedate: "",
+    //         grant_submission_startdate: "",
+    //       },
+    //       reportLinks: [],
+    //       ddfCapes: {
+    //         dsgCap: 0,
+    //         dsgFraction: 0,
+    //         dmCap: 0,
+    //         dmFraction: 0,
+    //       },
+    //     }),
+    //     districtDescription:
+    //       "Every seeder file must extend the BaseSeeder class and implement the run method.The following example uses a Lucid model to create multiple users. However, you can also use the Database query builder directly. In other words, seeders don't care what you write inside the run method.",
+    //   },
+    // ]);
+    // await Club.createMany([
+    //   {
+    //     clubName: "Cornwall",
+    //     clubAddress: "239 Pitt Street",
+    //     clubCity: "Cornwall",
+    //     clubPostal: "K2C 4V5",
+    //     clubProvince: "Ontario",
+    //     clubCountry: "Canada",
+    //     clubEmail: "cornwallian12@gmail.com",
+    //     siteUrl: "https://www.cornwallrotary.com/",
+    //     districtId: 1,
+    //   },
+    //   {
+    //     clubName: "Brockville",
+    //     clubAddress: "3543 Sud Street",
+    //     clubCity: "CornwBrockvilleall",
+    //     clubPostal: "R4H 4V5",
+    //     clubProvince: "Ontario",
+    //     clubCountry: "Canada",
+    //     clubEmail: "brokallian12@gmail.com",
+    //     siteUrl: "https://www.espn.com/",
+    //     districtId: 1,
+    //   },
+    // ]);
+    // const guest: User = await User.create({
+    //   firstname: "John",
+    //   lastname: "Doe",
+    //   address: "234 bluders ave",
+    //   userCity: "cornwall",
+    //   userPostal: "K4V 2VC",
+    //   userProvince: "Ontario",
+    //   userCountry: "Canada",
+    //   phone: "",
+    //   email: "",
+    //   password: "123456",
+    //   districtId: 4,
+    //   userType: UserType.District,
+    // });
+    // await guest.related("districtRole").attach({
+    //   [1]: {
+    //     district_role: RotaryRoles.GUEST,
+    //   },
+    // });
     const siteAdminUser: User = await User.create({
       firstname: "Peter",
       lastname: "Labelle",
@@ -149,8 +149,8 @@ export default class extends BaseSeeder {
         yarn: "They are full!",
         number: [1, 2, 3, 4],
       }),
-      districtId: 1,
-      clubId: 1,
+      districtId: 4,
+      clubId: 3,
       userType: UserType.District,
     });
     await siteAdminUser.related("districtRole").attach({
@@ -159,7 +159,7 @@ export default class extends BaseSeeder {
       },
     });
     const newUser: User = await User.create({
-      firstname: "John",
+      firstname: "Jean",
       lastname: "Saint Rose ",
       address: "234 bluders ave",
       userCity: "cornwall",
@@ -170,8 +170,8 @@ export default class extends BaseSeeder {
       email: "jssr26@gmail.com",
       password: "123456",
       extraDetails: JSON.stringify({}),
-      districtId: 1,
-      clubId: 1,
+      districtId: 4,
+      clubId: 3,
       userType: UserType.District,
     });
     await newUser.related("districtRole").attach({
@@ -179,26 +179,26 @@ export default class extends BaseSeeder {
         district_role: RotaryRoles.DISTRICTADMIN,
       },
     });
-    const clubUser: User = await User.create({
-      firstname: "Sandy",
-      lastname: "Rosemen ",
-      address: "544 ilop ave",
-      userCity: "brockville",
-      userPostal: "K4V 5D4",
-      userProvince: "Ontario",
-      userCountry: "Canada",
-      phone: "613-455-6733",
-      email: "admintyyy@gmail.com",
-      password: "123456",
-      extraDetails: JSON.stringify({}),
-      clubId: 1,
-      userType: UserType.Club,
-    });
-    await clubUser.related("clubRole").attach({
-      [1]: {
-        club_role: RotaryRoles.CLUBADMIN,
-      },
-    });
+    // const clubUser: User = await User.create({
+    //   firstname: "Sandy",
+    //   lastname: "Rosemen ",
+    //   address: "544 ilop ave",
+    //   userCity: "brockville",
+    //   userPostal: "K4V 5D4",
+    //   userProvince: "Ontario",
+    //   userCountry: "Canada",
+    //   phone: "613-455-6733",
+    //   email: "admintyyy@gmail.com",
+    //   password: "123456",
+    //   extraDetails: JSON.stringify({}),
+    //   clubId: 1,
+    //   userType: UserType.Club,
+    // });
+    // await clubUser.related("clubRole").attach({
+    //   [1]: {
+    //     club_role: RotaryRoles.CLUBADMIN,
+    //   },
+    // });
     // await Projects.create({
     //   projectName: "Test Club Project",
     //   grantType: GrantType.CLUBPROJECT,

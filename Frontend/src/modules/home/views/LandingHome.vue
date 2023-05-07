@@ -415,7 +415,7 @@ export default defineComponent({
         if (!Utilities.isAnApiError(response)) {
           this.projects = (response as ProjectPagination).data;
           this.paginationRequest = (response as ProjectPagination).meta;
-        } else throw new Error("No projects found");
+        } 
       } catch (error) {
         this.serverException = true;
         this.expectionObject = error as IApiException;

@@ -25,6 +25,7 @@
           All Districts
         </h1>
         <DistrictsTable @update:showConfirmModal="updateShowModal" :key="key"/>
+        <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
         <h1 class="text-center font-bold" :class="tailwind.H1">
           {{headerFormatter("Create a new District")}}
         </h1>

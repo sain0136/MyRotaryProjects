@@ -1,9 +1,16 @@
+import { useRotaryStore } from "@/stores/rotaryStore";
 import {
   ErrorMessages,
   type IResizeImageOptions,
 } from "@/utils/frontend/interfaces/Frontend";
 
 export default class Utilities {
+      
+  public static logoutTimedOutUser = async () => {
+    useRotaryStore().$state.showLogoutModal = true;
+    useRotaryStore().signOut();
+  };
+
   /**
    * @param  {any} v$
    * @returns string

@@ -26,17 +26,21 @@
         {{ headerFormatter("All Districts") }}
       </h3>
       <BaseSelect v-model="districtChosen" :options="districtNameList" />
-      <h1 class="text-center" :class="tailwind.H1">
-        {{ headerFormatter("Create a new club") }}
-      </h1>
+      <h6 class="text-center font-bold" v-if="districtId !== 0">
+        *Click on a row to add members to club!
+      </h6>
       <AllClubsInDisctrictTable
+        :key="key"
+        v-if="districtId !== 0"
         :districtIdProp="districtId"
         @update:showConfirmModal="updateShowModal"
         @update:clubId="updateClubId"
       />
-      <div class="button_wrapper">
-        <RotaryButton label="Create" @click="createNewClub()" />
-      </div>
+      <RotaryButton
+        v-if="clubId !== 0"
+        label="Create New Member"
+        @click="createNewClubMember()"
+      />
       <AllClubMembersTable
         v-if="clubId !== 0"
         :clubIdProp="clubId"
@@ -44,11 +48,13 @@
         :key="clubId"
         tableViewProp="SITEADMIN"
       />
-      <RotaryButton
-        v-if="clubId !== 0"
-        label="Create Member"
-        @click="createNewClubMember()"
-      />
+      <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
+      <h1 class="text-center" :class="tailwind.H1">
+        {{ headerFormatter("Create a new club") }}
+      </h1>
+      <div class="button_wrapper">
+        <RotaryButton label="Create" @click="createNewClub()" />
+      </div>
     </section>
   </div>
 </template>
@@ -123,6 +129,7 @@ export default defineComponent({
         width: "w-1/2",
         closeTimer: 4000,
       },
+      key: 0,
     };
   },
   watch: {
@@ -200,6 +207,7 @@ export default defineComponent({
       this.$router.push({ name: "SiteAdminClubForm" });
     },
     resetSet() {
+      this.key++;
       (this.showConfirmModal as any) = {
         showConfirmModal: false,
         confirmModalMessage: "",
@@ -219,6 +227,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

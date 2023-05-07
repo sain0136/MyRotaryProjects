@@ -25,16 +25,18 @@
       <h3 class="text-center font-bold" :class="tailwind.H3">
         {{ headerFormatter("All Districts") }}
       </h3>
-      <BaseSelect v-model="districtChosen" :options="districtNameList" />
-      <h1 class="text-center" :class="tailwind.H1">
-        {{ headerFormatter("Create a new admin") }}
-      </h1>
-    </section>
-    <DistrictAdminsTable
+      <BaseSelect v-model="districtChosen" :options="districtNameList" />    
+      <DistrictAdminsTable
       :districtIdProp="districtId"
       @update:showConfirmModal="updateShowModal"
       :keyProp="keyProp"
     />
+      <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
+      <h1 class="text-center" :class="tailwind.H1">
+        {{ headerFormatter("Create a new admin") }}
+      </h1>
+    </section>
+
     <div class="button_wrapper">
       <RotaryButton label="Create" @click="createNewAdmin()" />
     </div>

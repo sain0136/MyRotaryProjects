@@ -1,5 +1,3 @@
-import router from "@/router";
-import { useRotaryStore } from "@/stores/rotaryStore";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
   MyError,
@@ -8,8 +6,8 @@ import {
   type UserPagination,
 } from "@/utils/frontend/interfaces/Frontend";
 import type { IClub } from "@/utils/shared/interfaces/ClubInterface";
-import type IUser from "@/utils/shared/interfaces/UserInterface";
 const API_ROUTE = import.meta.env.VITE_API_URL + "club";
+
 export default class ClubsApi {
   /**
    * @returns Promise
@@ -20,8 +18,7 @@ export default class ClubsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        useRotaryStore().$state.showLogoutModal = true;
-        useRotaryStore().signOut();
+        Utilities.logoutTimedOutUser();
       }
       return await response.json();
     });
@@ -42,8 +39,7 @@ export default class ClubsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        useRotaryStore().$state.showLogoutModal = true;
-        useRotaryStore().signOut();
+        Utilities.logoutTimedOutUser();
       }
       return await response.json();
     });
@@ -77,8 +73,7 @@ export default class ClubsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        useRotaryStore().$state.showLogoutModal = true;
-        useRotaryStore().signOut();
+        Utilities.logoutTimedOutUser();
       }
       return await response.json();
     });
@@ -102,8 +97,7 @@ export default class ClubsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        useRotaryStore().$state.showLogoutModal = true;
-        useRotaryStore().signOut();
+        Utilities.logoutTimedOutUser();
       }
       return await response.json();
     });
@@ -132,8 +126,7 @@ export default class ClubsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        useRotaryStore().$state.showLogoutModal = true;
-        useRotaryStore().signOut();
+        Utilities.logoutTimedOutUser();
       }
       return await response.json();
     });
@@ -154,9 +147,7 @@ export default class ClubsApi {
       credentials: "include",
     }).then(async (response: Response) => {
       if (response.status === 401) {
-        useRotaryStore().$state.showLogoutModal = true;
-
-        useRotaryStore().signOut();
+        Utilities.logoutTimedOutUser();
       }
       return await response.json();
     });

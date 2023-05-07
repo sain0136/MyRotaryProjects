@@ -5,7 +5,7 @@
     </div>
     <form
       class="flex justify-center px-48 py-24"
-      @submit.prevent="submittFrmHandler()"
+      @submit.prevent="submitFormHandler()"
     >
       <Toast
         v-if="toast.display"
@@ -136,7 +136,7 @@ export default defineComponent({
   watch: {},
   async created() {},
   methods: {
-    async submittFrmHandler() {
+    async submitFormHandler() {
       this.v$.$validate();
       if (!this.v$.$error) {
         try {
