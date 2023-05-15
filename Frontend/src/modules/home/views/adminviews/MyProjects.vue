@@ -52,14 +52,13 @@
           label="Create Club Project"
           @click="createNewProject('CLUB')"
         />
-
         <RotaryButton
-          v-if="isProjectsOpen == true"
+          v-if="isProjectsOpen == true && !store.$state.loggedInUsersClub.settings?.allowedDsg"
           label="Create Dsg Project"
           @click="createNewProject('DSG')"
         />
         <RotaryButton
-          v-if="isProjectsOpen == true"
+          v-if="isProjectsOpen == true && !store.$state.loggedInUsersClub.settings?.allowedDM"
           label="Create Dm Project"
           @click="createNewProject('DM')"
         />
@@ -113,7 +112,6 @@ export default defineComponent({
       headerFormatter: Utilities.headerFormater,
       tailwind: TAILWIND_COMMON_CLASSES,
       deleteConfirm: null as any,
-      districtAdminViewProp: 0,
       serverException: false,
       expectionObject: {} as IApiException,
       toast: {
