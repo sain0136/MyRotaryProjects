@@ -213,16 +213,6 @@ export default class ProjectsController {
    */
   public async paginationFilter({ request, response }: HttpContextContract) {
     const searchCriteria: SearchCriteria = request.input("search_criteria");
-    // const currentPage: number = request.input("current_page");
-    // const limit: number = request.input("limit");
-    // const clubId: number = request.input("club_id");
-    // const searchText: string = request.input("search_text");
-    // const projectStatus: string = request.input("project_status");
-    // const projectRegion: string = request.input("project_region");
-    // const areaOfFocus: string = request.input("area_focus");
-    // const rotaryYear: string = request.input("rotary_year");
-    // const districtId: number | string = request.input("district_id");
-    // const grantType = request.input("grant_type");
     let filteredProjects = await this.filter(searchCriteria);
     return response.json(filteredProjects);
   }

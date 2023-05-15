@@ -43,6 +43,20 @@ export default class Clubs extends BaseModel {
   @column()
   public clubDescription?: string;
 
+  @column({
+    serialize: (value: string | null) => {
+      if (value) {
+        let parse =
+          typeof value === "object" &&
+          Object.keys(value as unknown as object).length < 1
+            ? "{}"
+            : JSON.stringify(value);
+        return JSON.parse(parse);
+      }
+    },
+  })
+  public settings: string;
+
   @column()
   public siteUrl?: string;
 

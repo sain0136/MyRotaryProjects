@@ -30,7 +30,8 @@
     <DistrictClubsTable
       @update:showConfirmModal="updateShowModal"
       @update:clubId="updateClubId"
-    />
+      :districtAdminIdViewProp="store.loggedInUsersDistrict.district_id" 
+      />
     <div class="button_wrapper">
       <RotaryButton label="Create" @click="createNewClub()" />
     </div>

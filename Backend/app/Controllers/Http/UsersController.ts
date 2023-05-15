@@ -81,7 +81,6 @@ export default class UsersController {
         .where({ user_id: user.userId });
     }
     let club: Clubs = await Clubs.findOrFail(user.clubId);
-    ;
     if (!session.get("userIsLoggedIn")) {
       session.put("userIsLoggedIn", true);
       session.put("lastApiCallTimeStamp", DateTime.now().toMillis());

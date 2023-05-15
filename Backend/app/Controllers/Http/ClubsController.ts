@@ -56,6 +56,7 @@ export default class ClubsController {
       clubEmail: newClub.club_email,
       districtId: newClub.district_id,
       siteUrl: newClub.siteUrl,
+      settings: JSON.stringify(newClub.settings),
     });
     return response.json(true);
   }
@@ -90,6 +91,7 @@ export default class ClubsController {
         clubDescription: updatedClubData.club_description,
         clubEmail: updatedClubData.club_email,
         siteUrl: updatedClubData.siteUrl,
+        settings: JSON.stringify(updatedClubData.settings),
       })
       .save();
     return response.json(true);

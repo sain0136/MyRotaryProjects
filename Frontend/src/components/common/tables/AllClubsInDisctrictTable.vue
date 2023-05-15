@@ -42,7 +42,7 @@
           <td class="px-6 py-4 text-primary-black">
             <div class="buttons_container2 flex gap-2">
               <button
-                v-if="!districtAdminViewProp"
+                v-if="!districtAdminIdViewProp"
                 title="Edit Club"
                 class="crud_buttons hover:text-primary-c"
                 @click="updateClub(club.club_id as number)"
@@ -177,8 +177,7 @@ export default defineComponent({
   emits: ["update:clubId"],
   props: {
     districtIdProp: Number,
-    districtAdminViewProp: Number,
-    clubId: Number,
+    districtAdminIdViewProp: Number,
   },
   data() {
     return {
@@ -201,8 +200,8 @@ export default defineComponent({
     },
   },
   async created() {
-    if (this.districtAdminViewProp) {
-      this.getAllClubsInDistrict(this.districtAdminViewProp || 0);
+    if (this.districtAdminIdViewProp) {
+      this.getAllClubsInDistrict(this.districtAdminIdViewProp || 0);
     } else {
       this.getAllClubsInDistrict(
         this.store.$state.loggedInUsersDistrict.district_id
@@ -212,7 +211,7 @@ export default defineComponent({
   methods: {
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
-      if (this.districtAdminViewProp) {
+      if (this.districtAdminIdViewProp) {
         this.getAllClubsInDistrict();
       } else {
         this.getAllClubsInDistrict(

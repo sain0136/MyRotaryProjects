@@ -15,6 +15,7 @@ export default class extends BaseSchema {
       table.string("club_email", 254).nullable();
       table.string("club_description", 3000).nullable();
       table.string("site_url", 200).nullable();
+      table.jsonb('settings').nullable
       table
         .integer("district_id", 50)
         .unsigned()

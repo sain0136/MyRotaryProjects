@@ -12,4 +12,10 @@ export interface IClub {
   // Creation
   club_id?: number;
   [key: string]: any;
+  // Settings
+  settings?: {
+  allowedDsg?: boolean;
+  allowedDM?: boolean;
+  allowedGlobal?: boolean;
+}
 } ;
