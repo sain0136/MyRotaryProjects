@@ -102,7 +102,15 @@
                 Home
               </router-link>
             </li>
-
+            <li>
+              <router-link
+                v-if="store.$state.isSiteAdminLoggedIn"
+                :to="{ name: 'AdminHome' }"
+                class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
+              >
+                Admin Portal
+              </router-link>
+            </li>
             <li>
               <router-link
                 :to="{ name: 'AboutUs' }"
@@ -307,8 +315,7 @@ export default defineComponent({
         this.logo = (response as MainAssets).assets.main_logo.url
           ? (response as MainAssets).assets.main_logo.url
           : imgUrl;
-      } catch (error) {
-      }
+      } catch (error) {}
     },
     setDisrictForm() {
       this.store.setDistrictFormProps({
