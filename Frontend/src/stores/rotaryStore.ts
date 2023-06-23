@@ -52,29 +52,39 @@ export interface IClubFormProps {
 export interface IClubProjectFormProps {
   porjectIdProp?: number;
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
+  isAdminOverrideClubIdProp?: number;
 }
 
 // make interfce for Dsg and Dm project form props
 export interface IDsgOrDMProjectFormProps {
   porjectIdProp?: number;
   formModeProp?: "UPDATE" | "CREATE" | "VIEW";
+  isAdminOverrideClubIdProp?: number;
 }
 
 class clubProjectFormPropsPojo implements IClubProjectFormProps {
   porjectIdProp: number | undefined;
   formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
+  isAdminOverrideClubIdProp: number | undefined;
   constructor(props: IClubProjectFormProps) {
     this.porjectIdProp = props.porjectIdProp ? props.porjectIdProp : undefined;
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
+    this.isAdminOverrideClubIdProp = props.isAdminOverrideClubIdProp
+      ? props.isAdminOverrideClubIdProp
+      : undefined;
   }
 }
 
 class DSGOrDMFormPropsPojo implements IDsgOrDMProjectFormProps {
   porjectIdProp: number | undefined;
   formModeProp: "UPDATE" | "CREATE" | "VIEW" | undefined;
+  isAdminOverrideClubIdProp: number | undefined;
   constructor(props: IClubProjectFormProps) {
     this.porjectIdProp = props.porjectIdProp ? props.porjectIdProp : undefined;
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
+    this.isAdminOverrideClubIdProp = props.isAdminOverrideClubIdProp
+      ? props.isAdminOverrideClubIdProp
+      : undefined;
   }
 }
 
@@ -96,7 +106,9 @@ class clubFormPropsPojo implements IClubFormProps {
   constructor(props: IClubFormProps) {
     this.formModeProp = props.formModeProp ? props.formModeProp : undefined;
     this.clubIdProp = props.clubIdProp ? props.clubIdProp : undefined;
-    this.districtIdProp = props.districtIdProp ? props.districtIdProp : undefined;
+    this.districtIdProp = props.districtIdProp
+      ? props.districtIdProp
+      : undefined;
   }
 }
 
@@ -203,7 +215,7 @@ export const useRotaryStore = defineStore("main", {
      */
     setLoggedInUserInforamtion(user: IUser): void {
       this.loggedInUserData = user;
-      if (user.email === 'admin@myrotaryrotaryprojects.com') {
+      if (user.email === "admin@myrotaryrotaryprojects.com") {
         this.isSiteAdminLoggedIn = true;
       }
       if (user.user_type === UserType.District) {
