@@ -102,9 +102,8 @@
                 Home
               </router-link>
             </li>
-            <li>
+            <li v-if="store.$state.isSiteAdminLoggedIn">
               <router-link
-                v-if="store.$state.isSiteAdminLoggedIn"
                 :to="{ name: 'AdminHome' }"
                 class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
               >
