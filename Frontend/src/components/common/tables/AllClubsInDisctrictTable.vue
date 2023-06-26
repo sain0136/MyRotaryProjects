@@ -94,7 +94,6 @@
           </tr>
         </tbody>
       </table>
- 
 
       <div>
         <div class="flex flex-col items-center">
@@ -151,34 +150,34 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-            </button>     
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <div  class="my flex flex-col m-auto  gap-2" v-if="projectCreatedMenu">
-        <RotaryButton
-          label="Create Club Project"
-          @click="createNewProject('CLUB')"
-        />
-        <RotaryButton
-          v-if="
-            isProjectsOpen == true &&
-            !store.$state.loggedInUsersClub.settings?.allowedDsg
-          "
-          label="Create Dsg Project"
-          @click="createNewProject('DSG')"
-        />
-        <RotaryButton
-          v-if="
-            isProjectsOpen == true &&
-            !store.$state.loggedInUsersClub.settings?.allowedDM
-          "
-          label="Create Dm Project"
-          @click="createNewProject('DM')"
-        />
-        <RotaryButton label="Create Global Project" @click="" />
-      </div>
+    <div class="my m-auto flex flex-col gap-2" v-if="projectCreatedMenu">
+      <RotaryButton
+        label="Create Club Project"
+        @click="createNewProject('CLUB')"
+      />
+      <RotaryButton
+        v-if="
+          isProjectsOpen == true &&
+          !store.$state.loggedInUsersClub.settings?.allowedDsg
+        "
+        label="Create Dsg Project"
+        @click="createNewProject('DSG')"
+      />
+      <RotaryButton
+        v-if="
+          isProjectsOpen == true &&
+          !store.$state.loggedInUsersClub.settings?.allowedDM
+        "
+        label="Create Dm Project"
+        @click="createNewProject('DM')"
+      />
+      <RotaryButton label="Create Global Project" @click="" />
+    </div>
   </div>
   <div v-else>
     <p class="text-center font-bold text-gray-700">
@@ -276,12 +275,12 @@ export default defineComponent({
         this.overrideClubId = clubId;
       }
     },
-    async createNewProject(projectType: string  ) {
+    async createNewProject(projectType: string) {
       switch (projectType) {
         case "DM":
           this.store.setDSGOrDMFormProps({
             formModeProp: "CREATE",
-            isAdminOverrideClubIdProp : this.overrideClubId
+            isAdminOverrideClubIdProp: this.overrideClubId,
           });
           this.$router.push({
             name: "DMProjectFormLandingView",
@@ -290,7 +289,7 @@ export default defineComponent({
         case "DSG":
           this.store.setDSGOrDMFormProps({
             formModeProp: "CREATE",
-            isAdminOverrideClubIdProp : this.overrideClubId
+            isAdminOverrideClubIdProp: this.overrideClubId,
           });
           this.$router.push({
             name: "DSGProjectFormLandingView",
@@ -299,7 +298,7 @@ export default defineComponent({
         case "CLUB":
           this.store.setClubProjectFormProps({
             formModeProp: "CREATE",
-            isAdminOverrideClubIdProp : this.overrideClubId
+            isAdminOverrideClubIdProp: this.overrideClubId,
           });
           this.$router.push({
             name: "ClubProjectFormLandingView",
@@ -310,7 +309,9 @@ export default defineComponent({
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
       if (this.districtAdminIdViewProp) {
-        this.getAllClubsInDistrict();
+        this.getAllClubsInDistrict(
+          this.store.$state.loggedInUsersDistrict.district_id
+        );
       } else {
         this.getAllClubsInDistrict(
           this.store.$state.loggedInUsersDistrict.district_id
