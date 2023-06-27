@@ -21,7 +21,6 @@ import ClubProjectFormLandingView from "@/components/common/forms/ClubProjectFor
 import DSGProjectFormLandingView from "@/components/common/forms/DSProjectForm.vue";
 import DMProjectFormLandingView from "@/components/common/forms/DMProjectForm.vue";
 import { useRotaryStore } from "@/stores/rotaryStore";
-import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 
 const route = {
   path: "/",

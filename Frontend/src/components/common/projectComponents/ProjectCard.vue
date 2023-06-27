@@ -13,12 +13,13 @@
       <div class="p-5">
         <a @click="foward()">
           <h5
-            class="mb-2 cursor-pointer text-2xl font-bold tracking-tight text-gray-900 hover:text-primary-color"
+            id="projectName"
+            class="mb-2 cursor-pointer text-2xl font-bold tracking-tight text-gray-900 hover:text-primary-color sm:text-base"
           >
             {{ projectLoaded.project_name }}
           </h5>
         </a>
-        <p class="desc font-normal text-gray-700 overflow-hidden">
+        <p class="desc overflow-hidden font-normal text-gray-700">
           {{ truncatedDesc }}
         </p>
         <div class="status mt-4 flex gap-4">
@@ -69,9 +70,7 @@
 </template>
 
 <script lang="ts">
-import type ClubProject from "@/utils/shared/classes/ClubProject";
-import type DmProject from "@/utils/shared/classes/DmProject";
-import type DsgProject from "@/utils/shared/classes/DsgProject";
+import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import type {
   IClubProject,
   IDmProject,
@@ -107,6 +106,13 @@ export default defineComponent({
     this.setupCard();
   },
   methods: {
+    escapeHTML(unsafe: string) {
+      // write a string find or function below if the string contains any of the following characters patterns: ))) or (((
+      if (unsafe.includes(")))") || unsafe.includes("(((")) {
+        return ResourceLists.unsafeTextReplacement;
+      }
+      return unsafe;
+    },
     async setupCard() {
       this.projectLoaded = this.project as
         | IDmProject
@@ -120,13 +126,17 @@ export default defineComponent({
       // Shuffle the array using the Fisher-Yates algorithm
       for (let i = this.pictureArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [this.pictureArray[i], this.pictureArray[j]] = [this.pictureArray[j], this.pictureArray[i]];
+        [this.pictureArray[i], this.pictureArray[j]] = [
+          this.pictureArray[j],
+          this.pictureArray[i],
+        ];
       }
-      this.randomPictureSelector = (this.randomPictureSelector + 1) % this.pictureArray.length;
-
-      this.truncatedDesc =
-        this.projectLoaded.project_description.slice(0, 150) + "...";
-     
+      this.randomPictureSelector =
+        (this.randomPictureSelector + 1) % this.pictureArray.length;
+      this.truncatedDesc = this.escapeHTML(
+        this.projectLoaded.project_description.slice(0, 150) + "..."
+      );
+      console.log(this.truncatedDesc);
       this.percentage = Math.trunc(
         (this.projectLoaded.anticipated_funding /
           this.projectLoaded.funding_goal) *
@@ -156,7 +166,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
-.desc{
+.desc {
   line-height: 1.2em;
   max-height: 6em;
   overflow: hidden;
@@ -235,6 +245,9 @@ img {
     border: 2px solid #ffb607;
     font-family: "Lato", sans-serif;
   }
+}
+
+#projectName{
 
 }
 </style>
