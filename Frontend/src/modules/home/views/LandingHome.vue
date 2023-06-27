@@ -1,5 +1,5 @@
 <template>
-  <div class="container mb-8 min-w-full ">
+  <div class="container mb-8 min-w-full">
     <Toast
       v-if="toast.display"
       :msg="toast.msg"
@@ -15,7 +15,7 @@
     <div class="landing_header">
       <h1 class="header_h1">Our Projects</h1>
     </div>
-    <div class="mt-8 mr-24 flex justify-end">
+    <div class="mt-8 mr-24 flex justify-end" id="viewButton">
       <RotaryButton
         :label="viewTypeString"
         :theme="buttonTheme"
@@ -119,10 +119,10 @@
           />
         </div>
       </div>
-      <div class="project_wrapper mr-4 flex flex-col">
+      <div class="project_wrapper sm:mr-0 mr-4 flex flex-col">
         <div
           v-if="projects.length > 0 && listView !== true"
-          class="project_cards"
+          class="project_cards sm:m-auto"
         >
           <ProjectCard
             :project="project"
@@ -245,6 +245,7 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import {
@@ -255,10 +256,6 @@ import {
   type ClubPagination,
   MyError,
 } from "@/utils/frontend/interfaces/Frontend";
-import type ClubProject from "@/utils/shared/classes/ClubProject";
-import type RotaryDistrict from "@/utils/shared/classes/DistrictObject";
-import type DmProject from "@/utils/shared/classes/DmProject";
-import type DsgProject from "@/utils/shared/classes/DsgProject";
 import type RotaryClub from "@/utils/shared/classes/RotaryClub";
 import BaseInputsText from "@/components/common/baseformComponents/BaseInputsText.vue";
 import BaseSelect from "@/components/common/baseformComponents/BaseSelect.vue";
@@ -266,8 +263,6 @@ import RotaryButton from "@/components/common/RotaryButton.vue";
 import ProjectCard from "@/components/common/projectComponents/ProjectCard.vue";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
 import Toast from "@/components/common/toast/Toast.vue";
-
-import { defineComponent } from "vue";
 import ProjectsApi from "@/services/Projects";
 import type { ProjectPagination } from "@/utils/frontend/interfaces/Frontend";
 import type {
@@ -291,6 +286,7 @@ export default defineComponent({
   props: {},
   data() {
     return {
+      windowWidth: 0,
       typeOfTable: "",
       projects: [] as Array<IDmProject | IDsgProject | IClubProject>,
       headerFormatter: Utilities.headerFormater,
@@ -345,6 +341,7 @@ export default defineComponent({
       labelStyling: "mb-1 block text-lg font-medium text-primary-gray",
       inputStyling:
         "block w-4/5   border-gray-300 bg-gray-50 p-1 text-sm text-primary-black",
+      disableListView: false,
     };
   },
   watch: {
@@ -372,11 +369,26 @@ export default defineComponent({
   },
   async created() {
     window.scrollTo(1, 1);
+    window.addEventListener("resize", this.handleWindowResize);
+    this.handleWindowResize();
     await this.populateTable();
     await this.setRotaryYears();
     await this.getAllDistricts();
   },
+  mounted() {},
+  unmounted() {
+    window.removeEventListener("resize", this.handleWindowResize);
+  },
   methods: {
+    handleWindowResize() {
+      const windowWidth = window.innerWidth;
+      if (windowWidth === 768 ) {
+        this.listView = false;
+        this.paginationRequestLimit = this.listView ? 15 : 6;
+        this.paginationRequest.current_page = 1;
+        this.populateTable();
+      } 
+    },
     alterpayload(pageAction: number) {
       this.paginationRequest.current_page =
         this.paginationRequest.current_page + pageAction;
@@ -415,7 +427,7 @@ export default defineComponent({
         if (!Utilities.isAnApiError(response)) {
           this.projects = (response as ProjectPagination).data;
           this.paginationRequest = (response as ProjectPagination).meta;
-        } 
+        }
       } catch (error) {
         this.serverException = true;
         this.expectionObject = error as IApiException;
@@ -572,6 +584,7 @@ export default defineComponent({
     display: grid;
     grid-column: first;
     grid-row: row1-start;
+    margin: auto;
     row-gap: 1rem;
   }
   @media screen and (min-width: $tabletMinScreen) {
@@ -594,5 +607,14 @@ table {
 }
 .pagination_nav {
   height: 5%;
+  @media screen and (max-width: $mobileScreen) {
+    margin-top: 5rem;
+  }
+}
+
+#viewButton {
+  @media screen and (max-width: $mobileScreen) {
+    display: none !important;
+  }
 }
 </style>

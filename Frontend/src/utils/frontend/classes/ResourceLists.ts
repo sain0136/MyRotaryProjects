@@ -3,10 +3,14 @@ import {
   ProjectStatus,
   GrantType,
 } from "@/utils/shared/interfaces/SharedInterface";
-
+  
+// List and common data needed
 class ResourceLists {
-  // List and common data needed
+   static unsafeTextReplacement =
+    "This description is unsafe and has been replaced with this message. Please contact the webmaster if you believe this is an error.";
+
   constructor() {}
+
   static districtRoles: Array<string | undefined> = Object.keys(
     RotaryRoles
   ).map((ele: string) => {
