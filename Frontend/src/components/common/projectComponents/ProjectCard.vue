@@ -108,7 +108,7 @@ export default defineComponent({
   methods: {
     escapeHTML(unsafe: string) {
       // write a string find or function below if the string contains any of the following characters patterns: ))) or (((
-      if (unsafe.includes(")))") || unsafe.includes("(((")) {
+      if (unsafe.includes(")))") || unsafe.includes("(((")  || !unsafe.includes(" ")) {
         return ResourceLists.unsafeTextReplacement;
       }
       return unsafe;

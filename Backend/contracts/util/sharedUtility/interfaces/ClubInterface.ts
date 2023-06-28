@@ -14,8 +14,8 @@ export interface IClub {
   [key: string]: any;
   // Settings
   settings?: {
-    allowedDsg?: boolean;
-    allowedDM?: boolean;
-    allowedGlobal?: boolean;
+    disableDsg?: boolean;
+    disableDM?: boolean;
+    disableGlobal?: boolean;
   };
 } ;

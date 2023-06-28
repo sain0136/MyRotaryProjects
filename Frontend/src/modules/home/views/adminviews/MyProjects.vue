@@ -53,12 +53,12 @@
           @click="createNewProject('CLUB')"
         />
         <RotaryButton
-          v-if="isProjectsOpen == true && !store.$state.loggedInUsersClub.settings?.allowedDsg"
+          v-if="isProjectsOpen === true && !store.$state.loggedInUsersClub.settings?.disableDsg"
           label="Create Dsg Project"
           @click="createNewProject('DSG')"
         />
         <RotaryButton
-          v-if="isProjectsOpen == true && !store.$state.loggedInUsersClub.settings?.allowedDM"
+          v-if="isProjectsOpen === true && !store.$state.loggedInUsersClub.settings?.disableDM"
           label="Create Dm Project"
           @click="createNewProject('DM')"
         />
