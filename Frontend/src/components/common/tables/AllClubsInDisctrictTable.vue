@@ -162,16 +162,16 @@
       />
       <RotaryButton
         v-if="
-          isProjectsOpen == true &&
-          !store.$state.loggedInUsersClub.settings?.allowedDsg
+          isProjectsOpen === true &&
+          !store.$state.loggedInUsersClub.settings?.disableDsg
         "
         label="Create Dsg Project"
         @click="createNewProject('DSG')"
       />
       <RotaryButton
         v-if="
-          isProjectsOpen == true &&
-          !store.$state.loggedInUsersClub.settings?.allowedDM
+          isProjectsOpen === true &&
+          !store.$state.loggedInUsersClub.settings?.disableDM
         "
         label="Create Dm Project"
         @click="createNewProject('DM')"
@@ -232,7 +232,7 @@ export default defineComponent({
         total: 0,
       },
       message: "Choose a district from the dropdown",
-      isProjectsOpen: false,
+      isProjectsOpen: true,
       startDate: "",
       closeDate: "",
       projectCreatedMenu: false,

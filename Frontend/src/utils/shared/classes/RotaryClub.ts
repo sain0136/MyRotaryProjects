@@ -13,9 +13,9 @@ export default class RotaryClub implements IClub {
   district_id= 0;
   club_id= 0;
   settings= {
-    allowedDsg: false,
-    allowedDM: false,
-    allowedGlobal: false,
+    disableDsg: false,
+    disableDM: false,
+    disableGlobal: false,
   };
   constructor() {}
 }

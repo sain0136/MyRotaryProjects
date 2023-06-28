@@ -70,9 +70,9 @@
           v-if="v$.club.club_email.$error"
           :errorMsg="v$.club.club_email.$errors[0].$message"
         />
-        <BaseCheckBox v-model="club.settings.allowedDsg" label="Disable District Simplified Projects" />
-        <BaseCheckBox v-model="club.settings.allowedDM" label="Disable District Matching Projects" />
-        <BaseCheckBox v-model="club.settings.allowedGlobal" label="Disable Global Projects" />
+        <BaseCheckBox v-model="club.settings.disableDsg" label="Disable District Simplified Projects" />
+        <BaseCheckBox v-model="club.settings.disableDM" label="Disable District Matching Projects" />
+        <BaseCheckBox v-model="club.settings.disableGlobal" label="Disable Global Projects" />
         <div class="button_row mt-4 flex justify-center gap-4">
           <RotaryButton
             :label="headerFormatter(submitButtonmsg)"
