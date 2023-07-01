@@ -467,10 +467,10 @@ export default defineComponent({
           }, 3000);
           this.evidenceTable = (
             response as unknown as IDsgProject | IClubProject | IDmProject
-          ).file_uploads.evidence_files;
+          ).file_uploads?.evidence_files;
           this.reportTable = (
             response as unknown as IDsgProject | IClubProject | IDmProject
-          ).file_uploads.reports_files;
+          ).file_uploads?.reports_files;
           this.clear();
         } else if (typeof response !== "boolean") {
           window.scrollTo(0, 0);
@@ -483,7 +483,7 @@ export default defineComponent({
         }
       } catch (error: any) {
         this.toast.display = true;
-        this.toast.msg = error + "\n" + error.toString + "\n" + error.message;
+          this.toast.msg = "Server Error Contact Admin";
         setTimeout(() => {
           this.toast.display = false;
         }, 4000);
