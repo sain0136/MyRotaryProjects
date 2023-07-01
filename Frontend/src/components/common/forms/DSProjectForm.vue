@@ -888,10 +888,9 @@ import {
   FORM_MODE_PROP,
   ErrorMessages,
   type IApiError,
-  DISTRIST_REPORT_TYPE,
   MyError,
 } from "@/utils/frontend/interfaces/Frontend";
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import UploadForm from "@/components/common/forms/UploadForm.vue";
 import DistrictUploadModal from "@/components/common/modals/DistrictUploadModal.vue";
 import BaseDatePicker from "@/components/common/baseformComponents/BaseDatePicker.vue";
@@ -913,10 +912,7 @@ import AddUserProjectForm from "@/components/common/forms/AddUserProjectForm.vue
 
 import type {
   FundingSource,
-  IClubProject,
-  IDmProject,
   IDsgProject,
-  StorageInformation,
 } from "@/utils/shared/interfaces/ProjectsInterface";
 import {
   email,
@@ -925,9 +921,7 @@ import {
   minLength,
   required,
 } from "@vuelidate/validators";
-import UploadsApi from "@/services/Uploads";
 import ProjectsApi from "@/services/Projects";
-import ClubProject from "@/utils/shared/classes/ClubProject";
 import {
   GrantType,
   ProjectStatus,

@@ -336,7 +336,7 @@ export default class UploadsController {
         }
       }
       if (fieldName.includes(FileType.FILE_EVIDENCE)) {
-        fileUploads.evidence_files.push(storageInformation);
+        fileUploads?.evidence_files?.push(storageInformation);
       } else if (
         fieldName.includes(FileType.FILE_REPORT) ||
         fieldName.includes(FileType.IMAGE_REPORT)
@@ -403,13 +403,13 @@ export default class UploadsController {
       project.imageLink = JSON.stringify({});
     }
     if (uploadInformation.fileType === FileType.FILE_EVIDENCE) {
-      const indexToDelete = uploadFile.evidence_files.findIndex(
+      const indexToDelete = uploadFile?.evidence_files?.findIndex(
         (storageInformation) => {
           return storageInformation.id === uploadInformation.id;
         }
       );
-      await Drive.delete(uploadFile.evidence_files[indexToDelete].location);
-      uploadFile.evidence_files.splice(indexToDelete, 1);
+      await Drive.delete(uploadFile?.evidence_files[indexToDelete].location);
+      uploadFile?.evidence_files?.splice(indexToDelete, 1);
     }
     if (
       uploadInformation.fileType === FileType.FILE_REPORT ||
