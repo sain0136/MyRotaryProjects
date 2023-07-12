@@ -4,11 +4,11 @@
   >
     <!--Header Top-->
     <div class="header_top bg-primary-color py-4">
-      <div class="auto_container px-64">
-        <div class="flex flex-col justify-between gap-4 md:flex md:flex-row">
+      <div class="auto_container md:px-64  px-0 sm:flex ">
+        <div class="flex flex-col justify-between gap-4 md:flex md:flex-row md:justify-between w-full">
           <div class="top-left">
             <ul class="flex justify-center">
-              <li class="text-primary-white">
+              <li class="text-primary-white flex ">
                 <font-awesome-icon
                   icon="fa-solid fa-envelope"
                   class="mr-2 cursor-pointer text-xl hover:text-2xl"
@@ -19,7 +19,7 @@
               </li>
             </ul>
           </div>
-          <div class="top-right flex items-center">
+          <div class="top-right flex items-center justify-center">
             <ul class="social-icon-one flex gap-4">
               <li class="li_border">
                 <a href="https://www.facebook.com/rotary">
