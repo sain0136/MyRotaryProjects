@@ -145,7 +145,7 @@ export default defineComponent({
           this.pictureArray[i],
         ];
       }
-      this.truncatedTitle = this.projectLoaded.project_name.length > 20 ? this.projectLoaded.project_name.slice(0, 20) + "..." : this.projectLoaded.project_name;
+      this.truncatedTitle = this.projectLoaded.project_name.length > 30 ? this.projectLoaded.project_name.slice(0, 30) + "..." : this.projectLoaded.project_name;
       this.randomPictureSelector =
         (this.randomPictureSelector + 1) % this.pictureArray.length;
       let truncated = this.escapeHTML(
