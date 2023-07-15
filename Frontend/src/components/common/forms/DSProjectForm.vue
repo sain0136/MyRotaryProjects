@@ -699,7 +699,7 @@
               Your Current Anticipated Funding: {{ sumOfAnticipatedFunding }}
             </h1>
             <h1
-              class="my-4 text-center font-bold underline-offset-8"
+              class="my-4 text-center font-bold underline-offset-8 border-primary-dark-color"
               :class="tailwind.H1"
             >
               Your Current Funding Goal:
@@ -1256,6 +1256,8 @@ export default defineComponent({
     },
     // fix later
     deleteItemByIndex(index: number) {
+      const item = this.projectToUpdateOrCreate.itemized_budget[index];
+      this.projectToUpdateOrCreate.funding_goal -= item.itemCost;
       this.projectToUpdateOrCreate.itemized_budget.splice(index, 1);
     },
     // fix later

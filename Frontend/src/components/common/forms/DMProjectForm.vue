@@ -1767,7 +1767,7 @@ export default defineComponent({
       this.projectToUpdateOrCreate.created_by = this.store.$state
         .loggedInUserData.user_id as number;
       this.projectToUpdateOrCreate.club_id =
-      this.store.$state.DsgOrDMProjectFormProps.isAdminOverrideClubIdProp ??
+        this.store.$state.DsgOrDMProjectFormProps.isAdminOverrideClubIdProp ??
         this.store.$state.loggedInUserData.club_id;
       if (
         (this.store.$state.loggedInUserData.district_id as number) ||
@@ -1884,6 +1884,8 @@ export default defineComponent({
     },
     // fix later
     deleteItemByIndex(index: number) {
+      const item = this.projectToUpdateOrCreate.itemized_budget[index];
+      this.projectToUpdateOrCreate.funding_goal -= item.itemCost;
       this.projectToUpdateOrCreate.itemized_budget.splice(index, 1);
     },
     // fix later
