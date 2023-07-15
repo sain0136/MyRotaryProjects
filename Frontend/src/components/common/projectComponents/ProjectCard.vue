@@ -215,6 +215,11 @@ export default defineComponent({
     line-height: 1.2em;
     max-height: 6em;
     overflow: hidden;
+    display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
   }
   .status_bar {
     flex: 1 1 0;
