@@ -178,7 +178,7 @@ export default class ProjectsController {
     const id: number = request.input("id");
     const currentPage: number = request.input("current_page");
     const limit: number = request.input("limit");
-
+    this.normalizeProjectStatus();
     if (idType === "club") {
       const projects = await Projects.query()
         .select("*")
@@ -207,10 +207,34 @@ export default class ProjectsController {
     return response.json(projects);
   }
 
+  // Temporary function to normalize project status then it will become a cron job
+  async normalizeProjectStatus() {
+    const projects = await Projects.all();
+    for await (const project of projects) {
+      if (project.projectStatus === ProjectStatus.LOOKINGFORFUNDING) {
+        let fullyFunded =
+          parseFloat(project.anticipatedFunding.toString()) ===
+          parseFloat(project.fundingGoal.toString())
+            ? true
+            : false;
+        if (fullyFunded) {
+           await project
+          .merge({ projectStatus: ProjectStatus.FULLYFUNDED })
+          .save();
+        }
+      }
+    }
+  }
+
   /**
-   * @param  {} {request
+   * @desc Filters projects based on provided search criteria
+   * and returns the result sorted by project ID in descending order,
+   * paginated by current page and limit.
+   * @param  {HttpContextContract} {request
    * @param  {HttpContextContract} response}
-   */
+   * @returns Promise
+   * @memberof ProjectsController
+   * */
   public async paginationFilter({ request, response }: HttpContextContract) {
     const searchCriteria: SearchCriteria = request.input("search_criteria");
     let filteredProjects = await this.filter(searchCriteria);
@@ -560,7 +584,9 @@ export default class ProjectsController {
 
           country: oldProjectImformation.country,
 
-          projectStatus: oldProjectImformation.project_status,
+          projectStatus: nonPledgeFullyFunded
+            ? ProjectStatus.FULLYFUNDED
+            : oldProjectImformation.project_status,
           imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
 
@@ -601,7 +627,9 @@ export default class ProjectsController {
 
           country: oldProjectImformation.country,
 
-          projectStatus: oldProjectImformation.project_status,
+          projectStatus: nonPledgeFullyFunded
+            ? ProjectStatus.FULLYFUNDED
+            : oldProjectImformation.project_status,
           imageLink: JSON.stringify(oldProjectImformation.image_link),
           totalPledges: oldProjectImformation.total_pledges,
 
