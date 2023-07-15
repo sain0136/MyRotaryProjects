@@ -22,7 +22,7 @@
         @click="toogleView"
       />
     </div>
-    <div class="landing_grid mt-8 px-24 pb-24">
+    <div class="landing_grid mt-8 px-2 pb-1 md:px-24 md:pb-24">
       <div class="filter_tab pb-8">
         <h1 class="py-8 text-center text-2xl font-bold text-primary-gray">
           {{ headerFormatter("PROJECT SEARCH") }}
@@ -397,6 +397,7 @@ export default defineComponent({
       } else {
         this.fliterProjects();
       }
+      window.scrollTo(1, 1);
     },
     async setRotaryYears() {
       try {
