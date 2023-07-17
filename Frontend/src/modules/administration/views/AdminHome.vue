@@ -17,7 +17,7 @@
         {{ headerFormatter("Welcome to the admin portal!") }}
       </h1>
       <div class="image_wrapper flex justify-center">
-        <img src="/admin-logo.png" alt="admin logo" />
+        <img :src="logo" alt="admin logo" />
       </div>
       <p class="text-center font-bold" :class="tailwind.PARAGRAPHS">
         {{
@@ -58,6 +58,7 @@
 import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
+type MainAssets,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
 import RotaryButton from "@/components/common/RotaryButton.vue";
@@ -68,6 +69,7 @@ import ErrorValidation from "@/components/common/baseformComponents/ErrorValidat
 import { requiredIf } from "@vuelidate/validators";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
 import Utilities from "@/utils/frontend/classes/Utilities";
+import AssetsApi from "@/services/Assets";
 export default defineComponent({
   name: "AdminHome",
   components: {
@@ -93,6 +95,7 @@ export default defineComponent({
       image: null,
       serverException: false,
       expectionObject: {} as IApiException,
+      logo: "",
     };
   },
   validations: {
@@ -101,7 +104,18 @@ export default defineComponent({
     },
   },
   watch: {},
-  async created() {},
+  async created() {
+    try {
+      const response = await AssetsApi.getMainAssets();
+      const imgUrl = new URL("./serve-logo", import.meta.url).href;
+      this.logo = (response as MainAssets).assets.main_logo.url
+        ? (response as MainAssets).assets.main_logo.url
+        : imgUrl;
+    } catch (error) {
+      this.serverException = true;
+      this.expectionObject = error as IApiException;
+    }
+  },
   methods: {
     async submit() {
       this.v$.$validate();

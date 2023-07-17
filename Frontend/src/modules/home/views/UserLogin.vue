@@ -73,7 +73,6 @@ import {
 } from "@/utils/frontend/interfaces/Frontend";
 import useVuelidate from "@vuelidate/core";
 import { helpers, required, email, minLength } from "@vuelidate/validators";
-import AssetsApi from "@/services/Assets";
 import { defineComponent } from "vue";
 import BaseInputsText from "@/components/common/baseformComponents/BaseInputsText.vue";
 import RotaryButton from "@/components/common/RotaryButton.vue";
@@ -150,11 +149,7 @@ export default defineComponent({
             setTimeout(() => {
               window.scroll(0, 0);
               this.toast.display = false;
-              if (this.store.$state.isSiteAdminLoggedIn) {
-                this.$router.push({ name: "AdminHome" });
-              } else {
-                this.$router.push("/");
-              }
+              this.$router.push("/");
             }, 3000);
           } else {
             setTimeout(() => {
