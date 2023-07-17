@@ -4,11 +4,13 @@
   >
     <!--Header Top-->
     <div class="header_top bg-primary-color py-4">
-      <div class="auto_container md:px-64  px-0 sm:flex ">
-        <div class="flex flex-col justify-between gap-4 md:flex md:flex-row md:justify-between w-full">
+      <div class="auto_container px-0 sm:flex md:px-64">
+        <div
+          class="flex w-full flex-col justify-between gap-4 md:flex md:flex-row md:justify-between"
+        >
           <div class="top-left">
             <ul class="flex justify-center">
-              <li class="text-primary-white flex ">
+              <li class="flex text-primary-white">
                 <font-awesome-icon
                   icon="fa-solid fa-envelope"
                   class="mr-2 cursor-pointer text-xl hover:text-2xl"
@@ -105,6 +107,7 @@
             <li v-if="store.$state.isSiteAdminLoggedIn">
               <router-link
                 :to="{ name: 'AdminHome' }"
+                id="admin_portal"
                 class="block rounded py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
               >
                 Admin Portal
@@ -350,10 +353,29 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/syles.scss";
 #dropdownNavbar {
   position: absolute;
   inset: 0px auto auto 0px;
   margin: 0px;
   transform: translate(-64px, 54px);
+}
+
+@keyframes highlight {
+  from {
+    font-size: 1.125rem;
+    color: $nearBlack;
+  }
+  to {
+    font-size: 1.175rem;
+    color: $primaryColor;
+  }
+}
+
+#admin_portal {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-name: highlight;
 }
 </style>

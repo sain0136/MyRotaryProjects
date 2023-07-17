@@ -52,65 +52,6 @@
           </ul>
         </div>
         <div class="col-span-1 flex flex-wrap">
-          <!-- <h2 class=" basis-full text-lg">Quick Links</h2>
-          <ul class="list mb-4 flex basis-1/2 flex-col gap-2">
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">About us</a>
-            </li>
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">Recent projects</a>
-            </li>
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">Our Mission</a>
-            </li>
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">FAQ’s</a>
-            </li>
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">Privacy &amp; plicy</a>
-            </li>
-          </ul>
-          <ul class="list flex basis-1/2 flex-col gap-2">
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">Help center</a>
-            </li>
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">Android App</a>
-            </li>
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">Internships</a>
-            </li>
-            <li class="cursor-pointer hover:text-primary-color">
-              <font-awesome-icon
-                icon="fa-solid fa-angle-right"
-                class="mr-2"
-              /><a href="#">Press</a>
-            </li>
-          </ul> -->
         </div>
         <div class="col-span-1 flex flex-col items-end">
           <h2 class="mb-4 text-center text-lg">Contact</h2>
