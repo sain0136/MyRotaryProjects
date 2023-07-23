@@ -4,8 +4,7 @@
   >
     <LandingHeader />
     <GenericlModal
-    v-if="store.$state.showLogoutModal
-"
+      v-if="store.$state.showLogoutModal"
       title="Logged Out "
       message="You were logged out due to inactivity. Please login again."
     />

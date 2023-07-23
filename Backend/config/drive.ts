@@ -42,7 +42,7 @@ export default driveConfig({
     local: {
       driver: 'local',
       visibility: 'public',
-
+      cacheControl: 'public, max-age=31536000',
       /*
       |--------------------------------------------------------------------------
       | Storage root - Local driver only

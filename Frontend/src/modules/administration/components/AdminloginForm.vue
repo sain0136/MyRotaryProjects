@@ -109,16 +109,7 @@ export default defineComponent({
   },
   watch: {},
   async created() {
-    try {
-      const response = await AssetsApi.getMainAssets();
-      const imgUrl = new URL("./serve-logo", import.meta.url).href;
-      this.logo = (response as MainAssets).assets.main_logo.url
-        ? (response as MainAssets).assets.main_logo.url
-        : imgUrl;
-    } catch (error) {
-      this.serverException = true;
-      this.expectionObject = error as IApiException;
-    }
+    this.logo = this.store.$state.mainLogoUrl ?? "";
   },
   methods: {
     async submittFrmHandler() {

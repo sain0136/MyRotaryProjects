@@ -4,12 +4,11 @@
   >
     <AdminHeader />
     <GenericlModal
-      v-if="store.$state.showLogoutModal
-"
+      v-if="store.$state.showLogoutModal"
       title="Logged Out "
       message="You were logged out due to inactivity. Please login again."
     />
-    <router-view></router-view>
+    <router-view> </router-view>
     <AdminFooter />
   </Main>
 </template>
