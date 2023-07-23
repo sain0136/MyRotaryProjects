@@ -58,7 +58,7 @@
 import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
-type MainAssets,
+  type MainAssets,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
 import RotaryButton from "@/components/common/RotaryButton.vue";
@@ -70,6 +70,7 @@ import { requiredIf } from "@vuelidate/validators";
 import ExceptionModal from "@/components/common/modals/ExceptionModal.vue";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import AssetsApi from "@/services/Assets";
+import { useRotaryStore } from "@/stores/rotaryStore";
 export default defineComponent({
   name: "AdminHome",
   components: {
@@ -79,7 +80,7 @@ export default defineComponent({
     ExceptionModal,
   },
   setup() {
-    return { v$: useVuelidate() };
+    return { v$: useVuelidate(), store: useRotaryStore() };
   },
   props: {},
   data() {
@@ -105,16 +106,7 @@ export default defineComponent({
   },
   watch: {},
   async created() {
-    try {
-      const response = await AssetsApi.getMainAssets();
-      const imgUrl = new URL("./serve-logo", import.meta.url).href;
-      this.logo = (response as MainAssets).assets.main_logo.url
-        ? (response as MainAssets).assets.main_logo.url
-        : imgUrl;
-    } catch (error) {
-      this.serverException = true;
-      this.expectionObject = error as IApiException;
-    }
+    this.logo = this.store.$state.mainLogoUrl ?? "";
   },
   methods: {
     async submit() {

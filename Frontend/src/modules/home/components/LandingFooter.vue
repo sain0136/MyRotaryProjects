@@ -51,8 +51,7 @@
             </li>
           </ul>
         </div>
-        <div class="col-span-1 flex flex-wrap">
-        </div>
+        <div class="col-span-1 flex flex-wrap"></div>
         <div class="col-span-1 flex flex-col items-end">
           <h2 class="mb-4 text-center text-lg">Contact</h2>
           <ul class="list-style-one flex gap-4">
@@ -135,6 +134,7 @@
 
 <script lang="ts">
 import AssetsApi from "@/services/Assets";
+import { useRotaryStore } from "@/stores/rotaryStore";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import type {
@@ -142,8 +142,13 @@ import type {
   IApiException,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
+
 export default defineComponent({
   name: "LandingFooter",
+  setup() {
+    const store = useRotaryStore();
+    return { store };
+  },
   components: {},
   props: {
     title: {
@@ -162,16 +167,7 @@ export default defineComponent({
   },
   watch: {},
   async created() {
-    try {
-      const response = await AssetsApi.getMainAssets();
-      const imgUrl = new URL("./serve-logo", import.meta.url).href;
-      this.logo = (response as MainAssets).assets.main_logo.url
-        ? (response as MainAssets).assets.main_logo.url
-        : imgUrl;
-    } catch (error) {
-      this.serverException = true;
-      this.expectionObject = error as IApiException;
-    }
+    this.logo = this.store.$state.mainLogoUrl ?? "";
   },
   methods: {
     mailTo(email: string) {

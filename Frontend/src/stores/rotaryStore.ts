@@ -176,6 +176,7 @@ export const useRotaryStore = defineStore("main", {
         | IClubProject,
       showLogoutModal: false,
       canLeaveForm: false,
+      mainLogoUrl: "",
     };
   },
   //Used to manipulate state variable without changing the States themseleves
