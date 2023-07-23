@@ -200,12 +200,7 @@
                   v-model="
                     projectToUpdateOrCreate.area_focus.Peace_Conflict_Prevention
                   "
-                  :label="
-                    Object.keys(projectToUpdateOrCreate.area_focus)[0].replace(
-                      /_/g,
-                      ' '
-                    )
-                  "
+                  :label="areaFocusList.find(area => area.key === 'Peace_Conflict_Prevention')?.label"
                 />
               </div>
               <div class="area_focus flex">
@@ -215,13 +210,8 @@
                     projectToUpdateOrCreate.area_focus
                       .Disease_Prevention_And_Treatment
                   "
-                  :label="
-                    Object.keys(projectToUpdateOrCreate.area_focus)[1].replace(
-                      /_/g,
-                      ' '
-                    )
-                  "
-                />
+                  :label="areaFocusList.find(area => area.key === 'Disease_Prevention_And_Treatment')?.label"
+                                  />
               </div>
               <div class="area_focus flex">
                 <img class="w-2/12" :src="areaFocusImages[2]" alt="" />
@@ -229,12 +219,7 @@
                   v-model="
                     projectToUpdateOrCreate.area_focus.Water_And_Sanitation
                   "
-                  :label="
-                    Object.keys(projectToUpdateOrCreate.area_focus)[2].replace(
-                      /_/g,
-                      ' '
-                    )
-                  "
+                  :label="areaFocusList.find(area => area.key === 'Water_And_Sanitation')?.label"
                 />
               </div>
               <div class="area_focus flex">
@@ -243,12 +228,7 @@
                   v-model="
                     projectToUpdateOrCreate.area_focus.Maternal_And_Child_Health
                   "
-                  :label="
-                    Object.keys(projectToUpdateOrCreate.area_focus)[3].replace(
-                      /_/g,
-                      ' '
-                    )
-                  "
+                  :label="areaFocusList.find(area => area.key === 'Maternal_And_Child_Health')?.label"
                 />
               </div>
               <div class="area_focus flex">
@@ -258,12 +238,7 @@
                     projectToUpdateOrCreate.area_focus
                       .Basic_Education_And_Literacy
                   "
-                  :label="
-                    Object.keys(projectToUpdateOrCreate.area_focus)[4].replace(
-                      /_/g,
-                      ' '
-                    )
-                  "
+                  :label="areaFocusList.find(area => area.key === 'Basic_Education_And_Literacy')?.label"
                 />
               </div>
               <div class="area_focus flex">
@@ -273,24 +248,14 @@
                     projectToUpdateOrCreate.area_focus
                       .Economic_And_Community_Development
                   "
-                  :label="
-                    Object.keys(projectToUpdateOrCreate.area_focus)[5].replace(
-                      /_/g,
-                      ' '
-                    )
-                  "
+                  :label="areaFocusList.find(area => area.key === 'Economic_And_Community_Development')?.label"
                 />
               </div>
               <div class="area_focus flex">
                 <img class="w-2/12" :src="areaFocusImages[6]" alt="" />
                 <BaseCheckBox
                   v-model="projectToUpdateOrCreate.area_focus.Environment"
-                  :label="
-                    Object.keys(projectToUpdateOrCreate.area_focus)[6].replace(
-                      /_/g,
-                      ' '
-                    )
-                  "
+                  :label="areaFocusList.find(area => area.key === 'Environment')?.label"
                 />
               </div>
             </div>
@@ -699,7 +664,7 @@
               Your Current Anticipated Funding: {{ sumOfAnticipatedFunding }}
             </h1>
             <h1
-              class="my-4 text-center font-bold underline-offset-8 border-primary-dark-color"
+              class="my-4 border-primary-dark-color text-center font-bold underline-offset-8"
               :class="tailwind.H1"
             >
               Your Current Funding Goal:
@@ -928,6 +893,12 @@ import {
 } from "@/utils/shared/interfaces/SharedInterface";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import DsgProject from "@/utils/shared/classes/DsgProject";
+interface ImageType {
+  label: string;
+  key: string;
+  [key: string]: string;
+}
+
 export default defineComponent({
   name: "DSProjectForm",
   setup() {
@@ -1003,6 +974,7 @@ export default defineComponent({
       countryList: ResourceLists.countryList,
       areaFocusImages: ResourceLists.areaFocusImages,
       regionList: ResourceLists.regionList,
+      areaFocusList: [] as Array<ImageType>,
     };
   },
   watch: {},
@@ -1161,6 +1133,15 @@ export default defineComponent({
           this.store.$state.loggedInUsersDistrict.district_id;
       } else throw new Error("No District Id");
     }
+    this.areaFocusList = Object.keys(
+      this.projectToUpdateOrCreate.area_focus
+    ).map((key) => {
+      return {
+        label: key.replace(/_/g, " "),
+        key: key,
+      };
+    });
+    debugger;
   },
   methods: {
     async approveReports() {

@@ -119,10 +119,10 @@
           />
         </div>
       </div>
-      <div class="project_wrapper sm:mr-0 mr-4 flex flex-col">
+      <div class="projects_container mr-4 flex flex-col sm:mr-0">
         <div
           v-if="projects.length > 0 && listView !== true"
-          class="project_cards sm:m-auto"
+          class="card_view_wrapper project_cards sm:m-auto"
         >
           <ProjectCard
             :project="project"
@@ -131,7 +131,7 @@
           />
         </div>
         <div
-          class="table_wrapper mr-4"
+          class="list_view_wrapper mr-4"
           v-else-if="projects.length > 0 && listView == true"
         >
           <table class="w-full text-left text-sm text-gray-500">
@@ -148,7 +148,7 @@
               <tr
                 v-for="project in projects"
                 :key="project.project_id"
-                @click=""
+                @click="foward(project.project_id)"
                 style="cursor: pointer"
               >
                 <td class="py-4 pl-2 font-bold text-primary-black">
@@ -382,12 +382,12 @@ export default defineComponent({
   methods: {
     handleWindowResize() {
       const windowWidth = window.innerWidth;
-      if (windowWidth === 768 ) {
+      if (windowWidth === 768) {
         this.listView = false;
         this.paginationRequestLimit = this.listView ? 15 : 6;
         this.paginationRequest.current_page = 1;
         this.populateTable();
-      } 
+      }
     },
     alterpayload(pageAction: number) {
       this.paginationRequest.current_page =
@@ -546,7 +546,14 @@ export default defineComponent({
       this.paginationRequest.current_page = 1;
       this.populateTable();
     },
+    foward(projectId: number) {
+      this.$router.push({
+        name: "CardDetails",
+        params: { id: projectId },
+      });
+    },
   },
+
   computed: {},
 });
 </script>
