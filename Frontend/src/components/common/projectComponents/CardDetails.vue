@@ -105,11 +105,11 @@
                 <span class="text-xl font-bold text-primary-black">
                   {{ headerFormatter("Rotary Areas of Focus:") }}
                 </span>
-                <ul class="mt-4 flex flex-col gap-4 bg-primary-color p-4">
+                <ul class="mt-4 flex flex-col gap-4  p-4">
                   <li
                     v-for="area in areasOfFocus"
                     :key="area + 'area_focus'"
-                    class="ml-4 flex gap-2 text-xl font-bold text-primary-white"
+                    class="ml-4 flex gap-2 text-xl font-bold text-primary-black"
                   >
                     <font-awesome-icon
                       class="self-center"
@@ -121,10 +121,11 @@
             </ul>
           </blockquote>
         </div>
+        <hr class="mt-8 h-px w-full border-0 bg-gray-500" />
+
         <div class="faq_section mt-8 flex justify-between">
-          <div class="image_wrapper">
-            <img src="/causes-12.jpg" class="h-1/2 w-3/4" alt="header_image" />
-          </div>
+   
+
           <div class="content_column">
             <h1 class="mb-2 text-2xl font-bold text-primary-black">
               Our Pledge Process
