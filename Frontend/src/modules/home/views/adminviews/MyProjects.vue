@@ -166,7 +166,7 @@ export default defineComponent({
             formModeProp: "CREATE",
           });
           this.$router.push({
-            name: "DSGProjectFormLandingView",
+            name: "DistrictSimplifiedProjectForm",
           });
           break;
         case "CLUB":

@@ -21,7 +21,7 @@ import ClubProjectFormLandingView from "@/components/common/forms/ClubProjectFor
 import DSGProjectFormLandingView from "@/components/common/forms/DSProjectForm.vue";
 import DMProjectFormLandingView from "@/components/common/forms/DMProjectForm.vue";
 import { useRotaryStore } from "@/stores/rotaryStore";
-
+import DistrictSimplifiedProjectForm from "@/components/common/forms/DistrictSimplifiedProjectForm.vue"
 const route = {
   path: "/",
   component: LandingApp,
@@ -136,8 +136,8 @@ const route = {
         },
         {
           path: "/dsgproject",
-          component: DSGProjectFormLandingView,
-          name: "DSGProjectFormLandingView",
+          component: DistrictSimplifiedProjectForm,
+          name: "DistrictSimplifiedProjectForm",
         },
         {
           path: "/dmproject",

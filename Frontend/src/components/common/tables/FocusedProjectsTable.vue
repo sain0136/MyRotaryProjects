@@ -280,7 +280,7 @@ export default defineComponent({
             porjectIdProp: projectId,
           });
           this.$router.push({
-            name: "DSGProjectFormLandingView",
+            name: "DistrictSimplifiedProjectForm",
           });
 
           break;
