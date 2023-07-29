@@ -68,8 +68,8 @@ export class MyError extends Error implements IApiException {
     code?: string | number | undefined
   ) {
     super(message);
-    this.stack = exceptionStack;
-    this.code = code;
+    this.stack = exceptionStack ?? "No stack trace available";
+    this.code = code ?? "No code available";
   }
 }
 

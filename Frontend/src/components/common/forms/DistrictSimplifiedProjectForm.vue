@@ -1,8 +1,15 @@
 <template>
+  <n-modal v-model:show="showModal">
+    <ErrorModal
+      title="Server Error"
+      :message="expectionObject.message"
+      :stackTrace="expectionObject.stack"
+    />
+  </n-modal>
   <div class="landing_header w-full">
     <h1 class="header2_h1">District Simplified Project Form</h1>
   </div>
-  <div class="formtabs_container p-4 md:p-24">
+  <div class="formtabs_container p-4 md:p-24 lg:p-40">
     <ul
       class="flex flex-wrap justify-center border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400"
     >
@@ -105,7 +112,7 @@
         </div>
         <div class="form_item full_width">
           <h3 class="form_item full_width text-center" :class="tailwind.H3">
-            Areaa of Focus
+            Areas of Focus
           </h3>
           <div class="areaoffocus_container">
             <div class="item">
@@ -254,7 +261,6 @@
             "
           />
         </div>
-        <div class="form_item full_width"></div>
         <div class="form_item full_width">
           <h3 class="text-center" :class="tailwind.H3">
             {{ headerFormatter("Primary and Optional Seconday contacts") }}
@@ -366,23 +372,19 @@
             "
           />
         </div>
-        <div class="form_item full_width">
+        <div class="form_item half_width">
           <h3 class="text-center" :class="tailwind.H3">
             {{
-              headerFormatter(
-                "Provide a complete, detailed and itemised budget for the entire project. ( Supporting documents may be requested )"
-              )
+              "Provide a complete, detailed and itemised budget for the entire project. \n (Supporting documents may be requested)"
             }}
           </h3>
           <n-h3 class="text-center">{{
-            headerFormatter(
-              "All Budget Items and Funding Sources will be recorded in USD!"
-            )
+            "*All Budget Items and Funding Sources will be recorded in USD!"
           }}</n-h3>
         </div>
-        <div class="form_item full_width">
-          <div class="relative overflow-x-auto max-w-screen-md shadow-md sm:rounded-lg">
-            <table id="item_table" class="min-w-full text-left text-sm text-gray-500">
+        <div class="form_item full_width table">
+          <div class="relative overflow-x-auto" id="item_table">
+            <table class="w-full text-left text-sm text-gray-500">
               <thead class="bg-gray-50 text-xs uppercase text-gray-700">
                 <tr>
                   <th scope="col" :class="tailwind.TABLEHEADER">Item Name</th>
@@ -425,7 +427,7 @@
                   <td class="px-6 py-4">
                     <button
                       title="Delete item"
-                      class="crud-buttons"
+                      class="crud-buttons plus_icon"
                       @click="deleteItemByIndex(index)"
                     >
                       <font-awesome-icon
@@ -440,7 +442,7 @@
                 <tr>
                   <td></td>
                   <td
-                    class="border-2 border-primary-color px-6 py-4 font-bold text-gray-900"
+                    class="border-2 border-primary-color px-6 py-4 text-end font-bold text-gray-900"
                   >
                     Total Budget:
                   </td>
@@ -454,7 +456,7 @@
             </table>
           </div>
         </div>
-        <div class="form_item full_width">
+        <div class="form_item half_width">
           <h3
             class="border-2 border-primary-color p-2 text-center text-lg font-bold text-primary-black"
           >
@@ -479,40 +481,37 @@
             }}
           </h3>
         </div>
-        <div class="form_item full_width">
+        <div class="form_item half_width">
           <h3
             class="border-2 border-primary-color p-2 text-center text-lg font-bold text-primary-black"
           >
             {{
-              headerFormatter(
-                "* Your District calculates District Designated Funds from these funding sources: "
-              )
+              "*Your District calculates District Designated Funds from these funding sources: "
             }}
             <strong class="text-center text-primary-green">
               {{ fundingSourcesArrary }}</strong
             >
           </h3>
         </div>
-        <div class="form_item full_width">
+        <div class="form_item half_width">
           <h3
             class="border-2 border-primary-color p-2 text-center text-lg font-bold text-primary-black"
           >
-            {{ headerFormatter("your current DDF request limit: $ ") }}
+            {{ "your current DDF request limit: $ " }}
             {{ districtSimplifiedGrantRequestLimit }} USD
           </h3>
         </div>
         <hr :class="tailwind.FORMHR" />
-        <div class="form_item full_width">
+        <div class="form_item half_width">
+          <h3 class="text-center" :class="tailwind.H3">
+            {{ "Funding Sources" }}
+          </h3>
+        </div>
+        <div class="form_item full_width table">
           <div class="relative overflow-x-auto">
             <table
               id="funding_source_table"
-              class="w-full 6
-              
-              
-              
-              
-              
-              2522222222222222222222222222222222222223333text-left text-sm text-gray-500"
+              class="6 w-full text-left text-sm text-gray-500"
             >
               <thead class="bg-gray-50 text-xs uppercase text-gray-700">
                 <tr>
@@ -538,10 +537,10 @@
                   <td class="px-6 py-4">
                     <BaseInputsText v-model="fundingSources.amount" />
                   </td>
-                  <td class="px-6 py-4">
+                  <td class="px-6 py-4 text-center">
                     <button
                       title="Add item"
-                      class="crud-buttons text-lg hover:text-primary-color"
+                      class="plus_icon text-lg hover:text-primary-color"
                       @click="addToFundsArray()"
                     >
                       <font-awesome-icon icon="fa-solid fa-circle-plus" />
@@ -587,7 +586,7 @@
                   <td></td>
                   <td></td>
                   <td
-                    class="border-2 border-primary-color px-6 py-4 font-bold text-gray-900"
+                    class="border-2 border-primary-color px-6 py-4 text-end font-bold text-gray-900"
                   >
                     Total Funding:
                   </td>
@@ -601,7 +600,58 @@
             </table>
           </div>
         </div>
-
+        <div class="form_item half_width">
+          <div class="border-2 border-primary-color">
+            <h1
+              class="my-4 text-center font-bold underline-offset-8"
+              :class="tailwind.H1"
+            >
+              Your Current Anticipated Funding:
+              <!-- {{ sumOfAnticipatedFunding }} -->
+            </h1>
+            <h1
+              class="my-4 border-primary-dark-color text-center font-bold underline-offset-8"
+              :class="tailwind.H1"
+            >
+              Your Current Funding Goal:
+              {{ formatter.format(projectToUpdateOrCreate.funding_goal) }}
+            </h1>
+            <h1
+              class="my-4 text-center font-bold underline-offset-8"
+              :class="tailwind.H1"
+            >
+              Pledge Amount To Date:
+              {{ formatter.format(projectToUpdateOrCreate.total_pledges) }}
+            </h1>
+            <ErrorValidation
+              v-if="
+                v$.projectToUpdateOrCreate.district_simplified_grant_request
+                  .$error
+              "
+              :errorMsg="
+                v$.projectToUpdateOrCreate.district_simplified_grant_request
+                  .$errors[0].$message
+              "
+            />
+            <ErrorValidation
+              class="text-center"
+              v-if="v$.projectToUpdateOrCreate.anticipated_funding.$error"
+              :errorMsg="
+                v$.projectToUpdateOrCreate.anticipated_funding.$errors[0]
+                  .$message
+              "
+            />
+          </div>
+        </div>
+        <div class="form_item full_width">
+          <div class="button_row mt-8 flex justify-center gap-4">
+            <RotaryButton
+              :label="submitButtonmsg"
+              @click="validateDSGProject()"
+            />
+            <RotaryButton label="Cancel" @click="redirect()" />
+          </div>
+        </div>
         <div class="form_item"></div>
         <div class="form_item full_width"></div>
       </div>
@@ -615,13 +665,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useNotification } from "naive-ui";
+import type { NotificationType } from "naive-ui";
+
 import {
   FORM_MODE_PROP,
   MyError,
   TAILWIND_COMMON_CLASSES,
   type IApiError,
+  type IApiException,
 } from "@/utils/frontend/interfaces/Frontend";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import { ErrorMessages } from "@/utils/frontend/interfaces/Frontend";
@@ -649,8 +702,12 @@ import {
 } from "@vuelidate/validators";
 import Utilities from "@/utils/frontend/classes/Utilities";
 import DsgProject from "@/utils/shared/classes/DsgProject";
-import { GrantType } from "@/utils/shared/interfaces/SharedInterface";
+import {
+  GrantType,
+  ProjectStatus,
+} from "@/utils/shared/interfaces/SharedInterface";
 import ProjectsApi from "@/services/Projects";
+import ErrorModal from "@/components/common/modals/ErrorModal.vue";
 interface ImageType {
   label: string;
   key: string;
@@ -668,6 +725,7 @@ export default defineComponent({
     BaseInputsTextEmail,
     BaseDatePicker,
     ErrorValidation,
+    ErrorModal,
   },
   props: {},
   setup() {
@@ -679,13 +737,19 @@ export default defineComponent({
     const store = useRotaryStore();
     const v$ = useVuelidate();
     return {
-      handleClick1() {
-        let count = 4;
-        notification.success({
-          title: "Api response",
-          content: `This is a notification with count ${count}`,
-          duration: 3000,
-          closable: false,
+      showModal: ref(false),
+      toastController(
+        type: NotificationType,
+        title?: string,
+        content?: string,
+        duration?: number,
+        closable?: boolean
+      ) {
+        notification[type]({
+          title: title || "Error",
+          duration: duration || 3000,
+          closable: closable || false,
+          content: content || "",
         });
       },
       v$,
@@ -715,7 +779,7 @@ export default defineComponent({
       submitButtonmsg: "Submit",
       urlForShare: "",
       budgetItemName: "",
-      budgetItemCost: "",
+      budgetItemCost: 0,
       fundingSourcesArrary: "",
       addFundingSource: [
         "District Designated Funds Request (DDF)",
@@ -726,6 +790,7 @@ export default defineComponent({
       ],
       fundingSources: {} as FundingSource,
       fundingSourceAdd: "",
+      expectionObject: {} as IApiException,
     };
   },
   watch: {},
@@ -734,6 +799,7 @@ export default defineComponent({
       projectToUpdateOrCreate: {
         project_name: {
           required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
+          maxLength: maxLength(50),
         },
         project_description: {
           required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
@@ -911,76 +977,466 @@ export default defineComponent({
         } else throw new MyError((response as IApiError).message);
       } catch (error) {
         console.log(error);
+        this.toastController(
+          "error",
+          "Error",
+          "Error while populating form data. Please try again.",
+          3000,
+          false
+        );
       }
     },
     async approveReports() {
-      // TODO: implementation
+      try {
+        const response = await ProjectsApi.updateProjectStatus(
+          this.projectToUpdateOrCreate.project_id as number,
+          ProjectStatus.COMPLETED
+        );
+        if (!Utilities.isAnApiError(response) && response === true) {
+          this.toastController(
+            "success",
+            "Success",
+            "Project Approved Successfully"
+          );
+        } else {
+          throw new MyError(
+            (response as IApiError).message,
+            (response as IApiError).stack,
+            (response as IApiError).code
+          );
+        }
+      } catch (error) {
+        this.expectionObject = error as IApiException;
+      }
     },
+    /**
+     * Add the funding source to the project
+     */
+    async addToFundsArray() {
+      try {
+        if (this.fundingSources.amount < 0) {
+          this.toastController(
+            "error",
+            "Error",
+            "Amount cannot be negative",
+            2000
+          );
+          this.fundingSources.amount = 0;
+          return;
+        }
+        this.fundingSources.sourceName = this.fundingSourceAdd;
 
-    addToFundsArray() {
-      // TODO: implementation
+        switch (this.fundingSources.sourceName) {
+          case "District Club Contribution":
+            this.projectToUpdateOrCreate.intial_sponsor_club_contribution +=
+              this.fundingSources.amount;
+            break;
+
+          case "Non-District Club Contribution":
+            this.projectToUpdateOrCreate.extra_descriptions.other_club_contribution +=
+              this.fundingSources.amount;
+            break;
+
+          case "District Designated Funds Request (DDF)":
+            let currentDDFAmount =
+              this.projectToUpdateOrCreate.district_simplified_grant_request +
+              this.fundingSources.amount;
+
+            if (
+              this.fundingSources.amount >
+                this.districtSimplifiedGrantRequestLimit ||
+              currentDDFAmount > this.districtSimplifiedGrantRequestLimit
+            ) {
+              this.toastController(
+                "error",
+                "Error",
+                "You have exceeded the maximum amount for your Grant Request. Please adjust.",
+                2000
+              );
+              return;
+            } else {
+              this.projectToUpdateOrCreate.district_simplified_grant_request +=
+                parseFloat(this.fundingSources.amount.toString());
+            }
+            break;
+
+          case "Co-operating Organization Contribution":
+            this.projectToUpdateOrCreate.co_operating_organisation_contribution +=
+              parseFloat(this.fundingSources.amount.toString());
+            break;
+
+          case "Other sources":
+            this.projectToUpdateOrCreate.extra_descriptions.other_sources +=
+              parseFloat(this.fundingSources.amount.toString());
+            break;
+
+          default:
+            break;
+        }
+
+        this.projectToUpdateOrCreate.extra_descriptions.fundingSourceArray.push(
+          this.fundingSources
+        );
+
+        this.fundingSourceAdd = "";
+        this.fundingSources = {} as FundingSource;
+      } catch (error) {
+        this.toastController(
+          "error",
+          "Error",
+          "Error while adding to funds array. Please try again.",
+          3000,
+          false
+        );
+        console.error(error);
+      }
     },
 
     deleteItemByIndex(index: number) {
-      // TODO: implementation
+      try {
+        const item = this.projectToUpdateOrCreate.itemized_budget[index];
+        this.projectToUpdateOrCreate.funding_goal -= item.itemCost;
+        this.projectToUpdateOrCreate.itemized_budget.splice(index, 1);
+      } catch (error) {
+        this.toastController(
+          "error",
+          "Error",
+          "Error while deleting item by index. Please try again.",
+          3000,
+          false
+        );
+        console.error(error);
+      }
     },
 
     deleteFromFundsArray(index: number) {
-      // TODO: implementation
+      try {
+        const fundingSource =
+          this.projectToUpdateOrCreate.extra_descriptions.fundingSourceArray[
+            index
+          ];
+
+        switch (fundingSource.sourceName) {
+          case "District Club Contribution":
+            this.projectToUpdateOrCreate.intial_sponsor_club_contribution -=
+              parseFloat(fundingSource.amount.toString());
+            break;
+
+          case "Non-District Club Contribution":
+            this.projectToUpdateOrCreate.extra_descriptions.other_club_contribution -=
+              parseFloat(fundingSource.amount.toString());
+            break;
+
+          case "District Designated Funds Request (DDF)":
+            this.projectToUpdateOrCreate.district_simplified_grant_request -=
+              parseFloat(fundingSource.amount.toString());
+            break;
+
+          case "Co-operating Organization Contribution":
+            this.projectToUpdateOrCreate.co_operating_organisation_contribution -=
+              parseFloat(fundingSource.amount.toString());
+            break;
+
+          case "Other sources":
+            this.projectToUpdateOrCreate.extra_descriptions.other_sources -=
+              parseFloat(fundingSource.amount.toString());
+            break;
+
+          default:
+            break;
+        }
+        this.projectToUpdateOrCreate.extra_descriptions.fundingSourceArray.splice(
+          index,
+          1
+        );
+      } catch (error) {
+        this.toastController(
+          "error",
+          "Error",
+          "Error while deleting from funds array. Please try again.",
+          3000,
+          false
+        );
+        console.error(error);
+      }
     },
 
-    addToBudget(itemName: string, itemCost: number | string) {
-      // TODO: implementation
+    /**
+     * Adds a new item to the project budget.
+     * @param {string} itemName - The name of the item.
+     * @param {number} itemCost - The cost of the item.
+     */
+    addToBudget(itemName: string, itemCost: number) {
+      try {
+        if (itemCost < 0) {
+          window.scrollTo(0, 0);
+          this.toastController(
+            "error",
+            "Invalid cost",
+            "Cost cannot be negative",
+            3000,
+            true
+          );
+          this.budgetItemCost = 0;
+          return;
+        }
+
+        const budgetItemObject = {
+          itemCost: parseFloat(itemCost.toFixed(2)),
+          itemName: itemName,
+        };
+
+        this.projectToUpdateOrCreate.funding_goal += budgetItemObject.itemCost;
+        this.projectToUpdateOrCreate.itemized_budget.push(budgetItemObject);
+
+        this.budgetItemCost = 0;
+        this.budgetItemName = "";
+      } catch (error) {
+        this.toastController(
+          "error",
+          "Error",
+          "Error while adding to budget. Please try again.",
+          3000,
+          false
+        );
+        console.error(error);
+      }
     },
 
+    /**
+     * Approves the project if it is pending approval.
+     */
     async approveProject() {
-      // TODO: implementation
+      try {
+        if (
+          this.projectToUpdateOrCreate.project_status !==
+          ProjectStatus.PENDINGAPPROVAL
+        ) {
+          this.toastController(
+            "error",
+            "Approval Error",
+            "Project has not been submitted for approval.",
+            3000,
+            true
+          );
+          return;
+        }
+
+        const response = await ProjectsApi.updateProjectStatus(
+          this.projectToUpdateOrCreate.project_id as number,
+          ProjectStatus.APPROVED
+        );
+
+        if (!Utilities.isAnApiError(response) && response === true) {
+          this.toastController(
+            "success",
+            "Success",
+            this.headerFormatter("Project Approved"),
+            3000,
+            true
+          );
+          setTimeout(async () => {
+            this.$router.push("/");
+          }, 3000);
+        } else {
+          throw new MyError(
+            (response as IApiError).message,
+            (response as IApiError).stack,
+            (response as IApiError).code
+          );
+        }
+      } catch (error) {
+        this.expectionObject = error as IApiException;
+        this.showModal = true;
+      }
     },
 
+    /**
+     * Creates a new DSG project and handles the server response.
+     */
     async createDSGProject() {
-      // TODO: implementation
+      try {
+        const response = await ProjectsApi.createNewProject(
+          this.projectToUpdateOrCreate
+        );
+
+        if (!Utilities.isAnApiError(response)) {
+          this.toastController(
+            "success",
+            "Success",
+            this.headerFormatter(
+              "Project Created. You can begin uploading files"
+            ),
+            4000,
+            true
+          );
+
+          this.store.setDSGOrDMFormProps({
+            formModeProp: "UPDATE",
+            porjectIdProp: response as number,
+          });
+
+          this.submitButtonmsg = Utilities.uncapitalize(FORM_MODE_PROP.UPDATE);
+
+          setTimeout(async () => {
+            await this.populateFormData(response as number);
+          }, 4000);
+        } else {
+          throw new MyError(
+            (response as IApiError).message,
+            (response as IApiError).stack,
+            (response as IApiError).code
+          );
+        }
+      } catch (error) {
+        this.expectionObject = error as IApiException;
+        this.showModal = true;
+      }
     },
 
+    /**
+     * Updates a DSG project and handles the server response.
+     */
     async updateDSGProject() {
-      // TODO: implementation
+      try {
+        const response = await ProjectsApi.updateProject(
+          this.projectToUpdateOrCreate
+        );
+
+        if (!Utilities.isAnApiError(response)) {
+          this.toastController(
+            "success",
+            "Success",
+            this.headerFormatter("Project Updated"),
+            3500,
+            true
+          );
+
+          setTimeout(() => {
+            this.redirect();
+          }, 3500);
+        } else {
+          throw new MyError(
+            (response as IApiError).message,
+            (response as IApiError).stack,
+            (response as IApiError).code
+          );
+        }
+      } catch (error) {
+        this.showModal = true;
+        this.expectionObject = error as IApiException;
+      }
     },
 
+    /**
+     * Validates a DSG project. If validation fails, it displays an error toast.
+     * If the validation succeeds, it either creates or updates the project based on the form mode.
+     */
     async validateDSGProject(): Promise<void> {
-      // TODO: implementation
+      await this.v$.$validate();
+
+      if (this.v$.$error) {
+        this.toastController("error", "Error", "Fix Form Errors", 4000, true);
+        return;
+      }
+
+      if (!this.v$.$error) {
+        const formMode = this.store.$state.DsgOrDMProjectFormProps.formModeProp;
+
+        if (formMode === "CREATE") {
+          this.createDSGProject();
+        } else if (formMode === "UPDATE") {
+          this.updateDSGProject();
+        }
+      }
     },
 
     formatterMoney(amount: number) {
-      // TODO: implementation
+      if (amount) {
+        return `Total Pledges: ${this.currencyFormatter(amount)}`;
+      } else {
+        return this.headerFormatter(
+          "Total Pledge Amount not available check pledges tab"
+        );
+      }
     },
-
+    currencyFormatter(amount: number): string {
+      const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+      return formatter.format(amount);
+    },
+    /**
+     * Redirects to the previous page and allows leaving the form.
+     */
     redirect() {
-      // TODO: implementation
+      this.store.$state.canLeaveForm = true;
+      this.$router.go(-1);
     },
   },
   computed: {
-    districtSimplifiedGrantRequestLimit() {
+    // Calculate sum of anticipated funding, convert it to USD format and update the projectToUpdateOrCreate object
+    sumOfAnticipatedFunding(): string {
+      let sum: number = 0;
+      this.projectToUpdateOrCreate.extra_descriptions.fundingSourceArray.forEach(
+        (el: { amount: number }) => {
+          sum += parseFloat(el.amount.toString());
+        }
+      );
+
+      const total =
+        sum + parseFloat(this.projectToUpdateOrCreate.total_pledges.toString());
+      this.projectToUpdateOrCreate.anticipated_funding = total;
+
+      return this.currencyFormatter(total);
+    },
+
+    // Calculate sum of costs for all items in itemized_budget and convert it to USD format
+    sumOfItemsCost(): string {
+      let sum = 0;
+      this.projectToUpdateOrCreate.itemized_budget.forEach(
+        (item: { itemCost: number }) => {
+          sum += item.itemCost;
+        }
+      );
+
+      return this.currencyFormatter(sum);
+    },
+
+    // Transform array of funding sources from ddfCalculation into a formatted string
+    fundingSourcesArrary(): string {
+      const sourcesArray =
+        this.store.loggedInUsersDistrict.district_details.ddfCalculation.map(
+          (ele: { toString: () => string }) => ` ${ele.toString()}`
+        );
+
+      return sourcesArray.join(", ");
+    },
+
+    // Calculate the limit for the district simplified grant request based on total funding and defined cap
+    districtSimplifiedGrantRequestLimit(): number {
       const cap = this.store.loggedInUsersDistrict.district_details.ddfCapes
         .dsgCap as number;
       const fraction = this.store.loggedInUsersDistrict.district_details
         .ddfCapes.dsgFraction as number;
-      let limit: number = 0;
-      let total: number = 0;
+
+      let total = 0;
+
       this.store.loggedInUsersDistrict.district_details.ddfCalculation.forEach(
         (ele) => {
           this.projectToUpdateOrCreate.extra_descriptions.fundingSourceArray.forEach(
-            (el) => {
+            (el: { sourceName: string; amount: number }) => {
               if (el.sourceName === ele) {
-                total = total + parseFloat(el.amount.toString());
+                total += parseFloat(el.amount.toString());
               }
             }
           );
         }
       );
-      if (total < parseFloat(cap.toString())) {
-        limit = total * parseFloat(fraction.toString());
-      } else {
-        limit = parseFloat(cap.toString());
-      }
+
+      const limit = total < cap ? total * fraction : cap;
+
       return parseFloat(limit.toFixed(2));
     },
   },
@@ -989,29 +1445,27 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
-#item_table{
-table {
-  width: 100%;
-}
+#item_table {
+  table {
+    width: 100%;
+  }
 
-table th:nth-child(1) {
-  /* Set the width for the first column */
-  width: 40%;
-}
+  table th:nth-child(1) {
+    /* Set the width for the first column */
+    width: 45%;
+  }
 
-table th:nth-child(2) {
-  /* Set the width for the second column */
-  width: 40%;
-}
+  table th:nth-child(2) {
+    /* Set the width for the second column */
+    width: 45%;
+  }
 
-table th:nth-child(3) {
-  /* Set the width for the third column */
-  width: 20%;
-}
+  table th:nth-child(3) {
+    /* Set the width for the third column */
+    width: 10%;
+  }
 }
 .plus_icon {
   font-size: 1.5rem;
 }
-
-
 </style>
