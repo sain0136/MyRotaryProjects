@@ -28,6 +28,8 @@ export const TAILWIND_COMMON_CLASSES = {
   LABEL: "text-primary-black base-text font-bold ",
   A_LINK: "text-primary-black base-text font-bold  hover:text-primary-color",
   SUCCESS: "text-primary-green base-text font-bold",
+  FORMHR:"my-4 h-px w-full border-0 bg-gray-500",
+  TABLEHEADER:"bg-primary-black px-6 py-3 font-bold text-primary-white"
 };
 export interface IResizeImageOptions {
   maxSize: number;
