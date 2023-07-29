@@ -18,6 +18,16 @@ class ResourceLists {
       return ele;
     }
   });
+ 
+  static formTabs = [
+    { name: "Form", label: "Form" },
+    { name: "Uploads", label: "Uploads" },
+    { name: "Pdf", label: "Pdf" },
+    { name: "Approval", label: "Approval" },
+    { name: "Pledges", label: "Pledges" },
+    { name: "Share", label: "Share" },
+    { name: "Add Users", label: "Add Users" },
+  ]
 
   static aboutUsDescription: string = ` MyRotaryProjects aims to simplify project lifecycle management for Rotary Districts.
      Developed by Peter Labelle of District 7040, the app will replace the previously manual process used for Rotary grant applications, pledge tracking,

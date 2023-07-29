@@ -28,6 +28,8 @@ export const TAILWIND_COMMON_CLASSES = {
   LABEL: "text-primary-black base-text font-bold ",
   A_LINK: "text-primary-black base-text font-bold  hover:text-primary-color",
   SUCCESS: "text-primary-green base-text font-bold",
+  FORMHR:"my-4 h-px w-full border-0 bg-gray-500",
+  TABLEHEADER:"bg-primary-black px-6 py-3 font-bold text-primary-white"
 };
 export interface IResizeImageOptions {
   maxSize: number;
@@ -66,8 +68,8 @@ export class MyError extends Error implements IApiException {
     code?: string | number | undefined
   ) {
     super(message);
-    this.stack = exceptionStack;
-    this.code = code;
+    this.stack = exceptionStack ?? "No stack trace available";
+    this.code = code ?? "No code available";
   }
 }
 
@@ -133,6 +135,7 @@ export const ErrorMessages = {
   IMAGE_NOT_UPLOADED: "Please upload an image",
   CANT_BE_LOWER_THAN_PLEDGES_TOTAL: "This field must be greater than the pledges total",
   NO_FILES_UPLOADED: "Please upload at least one file",
+  PROJECT_NAME_LIMIT: "Project name must be less than 50 characters",
 };
 
 export interface UserValidationApiResponse {

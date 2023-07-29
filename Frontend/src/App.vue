@@ -1,9 +1,11 @@
 <template>
-  <RouterView />
+  <n-notification-provider placement="top-right">
+    <RouterView />
+  </n-notification-provider>
 </template>
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import {  RouterView } from "vue-router";
 import { useRotaryStore } from "@/stores/rotaryStore";
 import { onMounted } from "vue";
 import AssetsApi from "./services/Assets";
@@ -12,7 +14,7 @@ const store = useRotaryStore();
 
 onMounted(async () => {
   try {
-    // check that string for main url contains static part of the file name 
+    // check that string for main url contains static part of the file name
     if (store.$state.mainLogoUrl === "") {
       const response = await AssetsApi.getMainAssets();
       const imgUrl = new URL("./serve-logo", import.meta.url).href;

@@ -175,7 +175,6 @@ export default class ProjectsApi {
     }).then(async (response: Response) => {
       if (response.status === 401) {
         useRotaryStore().$state.showLogoutModal = true;
-
         useRotaryStore().signOut();
       }
       return await response.json();

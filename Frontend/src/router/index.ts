@@ -34,8 +34,8 @@ router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0);
   if (
     (from.name === "ClubProjectFormLandingView" ||
-      from.name === "DSGProjectFormLandingView" ||
-      from.name === "DMProjectFormLandingView" ||
+      from.name === "DistrictSimplifiedProjectForm" ||
+      from.name === "DistrictMatchingProjectForm" ||
       from.name === "DistrictAdminClubForm" ||
       from.name === "UserFormForAdmins" ||
       from.name === "PledgeForm" ||

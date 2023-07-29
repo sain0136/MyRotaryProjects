@@ -593,7 +593,7 @@
                     <button
                       title="Add item"
                       class="crud-buttons text-lg hover:text-primary-color"
-                      @click="addToFundsArray()"
+                      @click=""
                     >
                       <font-awesome-icon icon="fa-solid fa-circle-plus" />
                     </button>
@@ -1172,69 +1172,7 @@ export default defineComponent({
         this.serverException = true;
       }
     },
-    addToFundsArray() {
-      if (this.fundingSources.amount < 0) {
-        window.scrollTo(0, 0);
-        this.toast.display = true;
-        this.toast.msg = "Amount cannot be negative";
-        setTimeout(() => {
-          this.toast.display = false;
-        }, 2000);
-        this.fundingSources.amount = 0;
-        return;
-      }
-      let control = true;
-      this.fundingSources.sourceName = this.fundingSourceAdd;
-      if (this.fundingSources.sourceName === "District Club Contribution") {
-        this.projectToUpdateOrCreate.intial_sponsor_club_contribution +=
-          this.fundingSources.amount;
-      } else if (
-        this.fundingSources.sourceName === "Non-District Club Contribution"
-      ) {
-        this.projectToUpdateOrCreate.extra_descriptions.other_club_contribution +=
-          this.fundingSources.amount;
-      } else if (
-        this.fundingSources.sourceName ===
-        "District Designated Funds Request (DDF)"
-      ) {
-        let currentDDFAmount =
-          this.projectToUpdateOrCreate.district_simplified_grant_request +
-          this.fundingSources.amount;
-        if (
-          this.fundingSources.amount >
-            this.districtSimplifiedGrantRequestLimit ||
-          currentDDFAmount > this.districtSimplifiedGrantRequestLimit
-        ) {
-          window.scrollTo(0, 0);
-          this.toast.display = true;
-          this.toast.msg =
-            "You have exceeded the maximum amount for your Grant Request. Please adjust.";
-          setTimeout(() => {
-            this.toast.display = false;
-          }, 2000);
-          control = false;
-        } else {
-          this.projectToUpdateOrCreate.district_simplified_grant_request +=
-            parseFloat(this.fundingSources.amount.toString());
-        }
-      } else if (
-        this.fundingSources.sourceName ===
-        "Co-operating Organization Contribution"
-      ) {
-        this.projectToUpdateOrCreate.co_operating_organisation_contribution +=
-          parseFloat(this.fundingSources.amount.toString());
-      } else if (this.fundingSources.sourceName === "Other sources") {
-        this.projectToUpdateOrCreate.extra_descriptions.other_sources +=
-          parseFloat(this.fundingSources.amount.toString());
-      }
-      if (control) {
-        this.projectToUpdateOrCreate.extra_descriptions.fundingSourceArray.push(
-          this.fundingSources
-        );
-      }
-      this.fundingSourceAdd = "";
-      this.fundingSources = {} as FundingSource;
-    },
+
     // fix later
     deleteItemByIndex(index: number) {
       const item = this.projectToUpdateOrCreate.itemized_budget[index];

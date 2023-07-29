@@ -11,7 +11,7 @@ interface ContactSection {
 export interface FundingSource {
   sourceName: string;
   typeOfFunding: string;
-  amount: number;
+  amount: number ;
 }
 // Host Club Info
 interface SectionC {

@@ -271,7 +271,7 @@ export default defineComponent({
             porjectIdProp: projectId,
           });
           this.$router.push({
-            name: "DMProjectFormLandingView",
+            name: "DistrictMatchingProjectForm",
           });
           break;
         case `${GrantType.DISTRICTSIMPLIFIEDPROJECT}`:
@@ -280,7 +280,7 @@ export default defineComponent({
             porjectIdProp: projectId,
           });
           this.$router.push({
-            name: "DSGProjectFormLandingView",
+            name: "DistrictSimplifiedProjectForm",
           });
 
           break;

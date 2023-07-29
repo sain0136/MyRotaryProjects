@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import VueSocialSharing from 'vue-social-sharing'
-
+import naive from "naive-ui";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -88,6 +88,7 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 app.use(VueSocialSharing);
 app.use(pinia);
+app.use(naive);
 app.use(router);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");
