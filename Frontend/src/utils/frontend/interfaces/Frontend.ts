@@ -135,6 +135,7 @@ export const ErrorMessages = {
   IMAGE_NOT_UPLOADED: "Please upload an image",
   CANT_BE_LOWER_THAN_PLEDGES_TOTAL: "This field must be greater than the pledges total",
   NO_FILES_UPLOADED: "Please upload at least one file",
+  PROJECT_NAME_LIMIT: "Project name must be less than 50 characters",
 };
 
 export interface UserValidationApiResponse {

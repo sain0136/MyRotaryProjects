@@ -7,7 +7,7 @@
     />
   </n-modal>
   <div class="landing_header w-full">
-    <h1 class="header2_h1">District Simplified Project Form</h1>
+    <h1 class="header2_h1">District Matching Project Form</h1>
   </div>
   <div class="formtabs_container p-4 md:p-24 lg:p-40">
     <ul
@@ -31,7 +31,7 @@
         class="my-4 text-center underline underline-offset-8"
         :class="tailwind.H1"
       >
-        District Simplified Grants Club Application Form Criteria
+        District Mathing Grants Club Application Form Criteria
       </h1>
       <ul class="my-8 px-4">
         <li class="list-disc" v-for="listItem in criteriaList" :key="listItem">
@@ -217,25 +217,6 @@
         </div>
         <div class="form_item full_width">
           <BaseTextArea
-            label="1. Describe how the project will benefit the community or address a community need.*"
-            v-model="
-              projectToUpdateOrCreate.extra_descriptions
-                .benefit_community_description
-            "
-          />
-          <ErrorValidation
-            v-if="
-              v$.projectToUpdateOrCreate.extra_descriptions
-                .benefit_community_description.$error
-            "
-            :errorMsg="
-              v$.projectToUpdateOrCreate.extra_descriptions
-                .benefit_community_description.$errors[0].$message
-            "
-          />
-        </div>
-        <div class="form_item full_width">
-          <BaseTextArea
             label="2. Describe the non-financial participation by Rotarians in the project.*"
             v-model="
               projectToUpdateOrCreate.extra_descriptions
@@ -262,6 +243,525 @@
             "
           />
         </div>
+        <div class="form_item full_width">
+          <h3 class="form_item full_width text-center" :class="tailwind.H3">
+            Host Club Information
+          </h3>
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.host_club_name
+            "
+            label="Enter Your Host Clubs' District Number"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information.host_club_name
+                .$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information.host_club_name
+                .$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.district_number
+            "
+            label="Host Club ID"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information.district_number
+                .$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information.district_number
+                .$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseSelect
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.district_country
+            "
+            :options="countryList"
+            label="Host Club Country"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information.district_country
+                .$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information.district_country
+                .$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="projectToUpdateOrCreate.hostclub_information.location_city"
+            label="Host Club City / Community / Village"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information.location_city
+                .$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information.location_city
+                .$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item full_width">
+          <h3 class="form_item full_width text-center" :class="tailwind.H3">
+            Host Club Primary Contact
+          </h3>
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.host_primary_contact
+                .name
+            "
+            label="Name"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.name.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.name.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.host_primary_contact
+                .address
+            "
+            label="Address"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.address.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.address.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.host_primary_contact
+                .email
+            "
+            label="Email"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.email.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.email.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.host_primary_contact
+                .phone
+            "
+            label="Phone"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.phone.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_primary_contact.phone.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.host_primary_contact
+                .cell
+            "
+            label="Cell / WhatsApp"
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.extra_descriptions.sectionE
+                .project_capacity
+            "
+            label="1. How will the project build capacity in the host community?*"
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.extra_descriptions.sectionE
+                .project_sustainment
+            "
+            label="2. How will the outcomes of the project be sustained over time after the funding has been expended?*"
+          />
+        </div>
+        <div class="form_item full_width">
+          <div class="my-8">
+            <h3 class="form_item full_width text-center" :class="tailwind.H3">
+              {{
+                headerFormatter(
+                  "3. Identify how the progress toward the objectives will be measured? Check all that apply & include samples if applicable.*"
+                )
+              }}
+            </h3>
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e.Surveys
+              "
+              :label="measurableHtmlList[0]"
+            />
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e
+                  .Questionnaires
+              "
+              :label="measurableHtmlList[1]"
+            />
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e
+                  .Observations
+              "
+              :label="measurableHtmlList[2]"
+            />
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e
+                  .Tests_Of_Knowledge
+              "
+              :label="measurableHtmlList[3]"
+            />
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e.Interviews
+              "
+              :label="measurableHtmlList[4]"
+            />
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e
+                  .Focus_Groups
+              "
+              :label="measurableHtmlList[5]"
+            />
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e
+                  .Video_Media
+              "
+              :label="measurableHtmlList[6]"
+            />
+            <BaseCheckBox
+              v-model="
+                projectToUpdateOrCreate.extra_descriptions.sectionE.e
+                  .Documents_Materials_Collections
+              "
+              :label="measurableHtmlList[7]"
+            />
+          </div>
+        </div>
+        <hr :class="tailwind.FORMHR" />
+        <div class="form_item full_width table">
+          <div class="relative overflow-x-auto" id="item_table">
+            <table class="w-full text-left text-sm text-gray-500">
+              <thead class="bg-gray-50 text-xs uppercase text-gray-700">
+                <th scope="col" :class="tailwind.TABLEHEADER">No.</th>
+                <th scope="col" :class="tailwind.TABLEHEADER">Objective</th>
+                <th scope="col" :class="tailwind.TABLEHEADER">Actions</th>
+              </thead>
+              <tbody>
+                <tr class="border bg-white">
+                  <td class="px-6 py-4 text-primary-black">#</td>
+                  <td class="px-6 py-4 text-primary-black">
+                    <BaseInputsText v-model="objectiveItem" />
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-6 py-4 text-center font-medium"
+                  >
+                    <button
+                      class="crud-buttons plus_icon hover:text-primary-color"
+                      title="Add"
+                      @click="addToObjectives(objectiveItem)"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-circle-plus" />
+                    </button>
+                  </td>
+                </tr>
+                <tr
+                  id="objective_list"
+                  v-for="(item, index) in projectToUpdateOrCreate
+                    .hostclub_information.listOfObjectives"
+                  :key="index"
+                >
+                  <td class="px-6 py-4 text-primary-black">{{ index + 1 }}</td>
+                  <td class="px-6 py-4 text-primary-black">{{ item }}</td>
+                  <td class="text-center">
+                    <button
+                      title="Delete"
+                      @click="deleteObjectiveByIndex(index)"
+                      class="crud-buttons plus_icon hover:text-primary-color"
+                    >
+                      <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.hostclub_information
+                .host_sponsor_planned_project_description
+            "
+            label="1. Describe how the Host sponsor (in other country) planned this project.*"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_sponsor_planned_project_description.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_sponsor_planned_project_description.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.hostclub_information
+                .host_commit_description
+            "
+            label="2. Describe how the host sponsor will commit their time and expertise during the implementation of the project to ensure success. Provide specific examples of activities or tasks for which the host sponsor will be responsibility.*"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_commit_description.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .host_commit_description.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.hostclub_information
+                .international_commit_description
+            "
+            label="3. Describe how the international sponsor will commit their time and expertise during the implementation of the project to ensure success. Provide specific examples of activities or tasks for which the international sponsor will be responsibility.*"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .international_commit_description.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .international_commit_description.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.hostclub_information
+                .sponsor_publicize_description
+            "
+            label="4. How do the sponsors plan to publicize this project?*"
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .sponsor_publicize_description.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.hostclub_information
+                .sponsor_publicize_description.$errors[0].$message
+            "
+          />
+        </div>
+        <hr :class="tailwind.FORMHR" />
+        <div class="form_item full_width">
+          <h3 class="form_item full_width text-center" :class="tailwind.H3">
+            Cooperating Organization (if applicable)
+          </h3>
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionC
+                .cooperating_organizations[0].organization_name
+            "
+            label="Name of cooperating organization"
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionC
+                .cooperating_organizations[0].address
+            "
+            label="Address"
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            label="Email"
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionC
+                .cooperating_organizations[0].contact_person.email
+            "
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionC
+                .cooperating_organizations[0].contact_person.phone
+            "
+            label="Phone"
+          />
+        </div>
+        <div class="form_item">
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionC
+                .cooperating_organizations[0].contact_person.cell
+            "
+            label="Cell / WhatsApp"
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionC
+                .cooperating_organizations_roles_description
+            "
+            label="1. Provide background information about the cooperating organization(s) including the role they will play in the project activity."
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionC
+                .cooperating_organizations_identify_members
+            "
+            label="2. Identify any members of the host or international sponsors who are project committee members, employees, board members or officers of one of the cooperating organizations."
+          />
+        </div>
+        <hr :class="tailwind.FORMHR" />
+        <div class="form_item full_width">
+          <BaseTextArea
+            label="1. Describe how the project will benefit the community or address a community need.*"
+            v-model="
+              projectToUpdateOrCreate.extra_descriptions
+                .benefit_community_description
+            "
+          />
+          <ErrorValidation
+            v-if="
+              v$.projectToUpdateOrCreate.extra_descriptions
+                .benefit_community_description.$error
+            "
+            :errorMsg="
+              v$.projectToUpdateOrCreate.extra_descriptions
+                .benefit_community_description.$errors[0].$message
+            "
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.extra_descriptions.sectionD
+                .project_accountability
+            "
+            label="2. Who will operate, secure and maintain the items purchased with grant funds and ensure the items are properly maintained and repaired so they continue to function? This includes equipment, assets and materials.*"
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.extra_descriptions.sectionD
+                .ownership_project
+            "
+            label="3. At the end of the project, who will own the items purchased with grant funds? This includes equipment, assets and materials.Items cannot be owned by a Rotary Club or Rotarian(s).*"
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.extra_descriptions.sectionD
+                .inventory_project
+            "
+            label="4. Who will maintain an inventory of the items purchased with grant funds including location after distribution?*"
+          />
+        </div>
+        <div class="form_item full_width">
+          <BaseTextArea
+            v-model="
+              projectToUpdateOrCreate.extra_descriptions.sectionD
+                .customs_clearance
+            "
+            label="5. What arrangements have been made for customs clearance if items will be purchased and shipped from outside the project country?*"
+          />
+        </div>
+        <div class="form_item">
+          <h3 class="my-4 text-center text-lg font-bold text-primary-black">
+            {{ headerFormatter("Budget Summary and Financing Summary") }}
+          </h3>
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionF
+                .local_currency_name
+            "
+            label="Name of Local Currency*"
+          />
+          <BaseInputsText
+            v-model="
+              projectToUpdateOrCreate.hostclub_information.sectionF
+                .exchange_rate
+            "
+            label="Exchange Rate to 1 USD*"
+          />
+        </div>
+
         <div class="form_item full_width">
           <h3 class="text-center" :class="tailwind.H3">
             {{ headerFormatter("Primary and Optional Seconday contacts") }}
@@ -389,7 +889,11 @@
               <thead class="bg-gray-50 text-xs uppercase text-gray-700">
                 <tr>
                   <th scope="col" :class="tailwind.TABLEHEADER">Item Name</th>
+                  <th scope="col" :class="tailwind.TABLEHEADER">Supplier</th>
                   <th scope="col" :class="tailwind.TABLEHEADER">Cost</th>
+                  <th scope="col" :class="tailwind.TABLEHEADER">
+                    Local Currency Cost
+                  </th>
                   <th scope="col" :class="tailwind.TABLEHEADER">Actions</th>
                 </tr>
               </thead>
@@ -399,13 +903,26 @@
                     <BaseInputsText v-model="budgetItemName" />
                   </td>
                   <td class="px-6 py-4">
+                    <BaseInputsText v-model="budgetSupplierName" />
+                  </td>
+                  <td class="px-6 py-4">
                     <BaseInputsText v-model="budgetItemCost" />
+                  </td>
+                  <td class="px-6 py-4">
+                    <BaseInputsText v-model="budgetItemCostLocalCurrency" />
                   </td>
                   <td class="px-6 py-4 text-center">
                     <button
                       title="Add item"
                       class="plus_icon hover:text-primary-color"
-                      @click="addToBudget(budgetItemName, budgetItemCost)"
+                      @click="
+                        addToBudget(
+                          budgetItemName,
+                          budgetSupplierName,
+                          budgetItemCost,
+                          budgetItemCostLocalCurrency
+                        )
+                      "
                     >
                       <font-awesome-icon icon="fa-solid fa-circle-plus" />
                     </button>
@@ -423,7 +940,13 @@
                     {{ item.itemName }}
                   </td>
                   <td class="px-6 py-4 font-medium text-gray-900">
+                    {{ item.supplierName }}
+                  </td>
+                  <td class="px-6 py-4 font-medium text-gray-900">
                     {{ item.itemCost }}
+                  </td>
+                  <td class="px-6 py-4 font-medium text-gray-900">
+                    {{ item.itemCostLocalCurrency }}
                   </td>
                   <td class="px-6 py-4 text-center">
                     <button
@@ -442,7 +965,7 @@
               <tfoot>
                 <tr>
                   <td
-                    colspan="3"
+                    colspan="5"
                     class="border-2 border-primary-color px-6 py-4 text-center font-bold text-gray-900"
                   >
                     Total Budget: USD {{ sumOfItemsCost }}
@@ -488,7 +1011,7 @@
             class="border-2 border-primary-color p-2 text-center text-lg font-bold text-primary-black"
           >
             {{ "DDF request limit: $" }}
-            {{ districtSimplifiedGrantRequestLimit }} USD
+            {{ districtMatchingGrantRequestLimit }} USD
           </h3>
         </div>
         <hr :class="tailwind.FORMHR" />
@@ -609,11 +1132,11 @@
             <ErrorValidation
               class="text-center"
               v-if="
-                v$.projectToUpdateOrCreate.district_simplified_grant_request
+                v$.projectToUpdateOrCreate.district_matching_grant_request
                   .$error
               "
               :errorMsg="
-                v$.projectToUpdateOrCreate.district_simplified_grant_request
+                v$.projectToUpdateOrCreate.district_matching_grant_request
                   .$errors[0].$message
               "
             />
@@ -631,7 +1154,7 @@
           <div class="button_row mt-8 flex justify-center gap-4">
             <RotaryButton
               :label="submitButtonmsg"
-              @click="validateDSGProject()"
+              @click="validateDMProject()"
             />
             <RotaryButton label="Cancel" @click="redirect()" />
           </div>
@@ -644,7 +1167,7 @@
       <UploadForm :projectProp="projectToUpdateOrCreate" />
     </div>
     <div v-else-if="activeTab === 'Pdf'">
-      <DSProjectPdf :projectProp="projectToUpdateOrCreate" />
+      <DMProjectPdf :projectProp="projectToUpdateOrCreate" />
     </div>
     <div v-else-if="activeTab === 'Pledges'">
       <AllPledgesTable
@@ -761,7 +1284,7 @@ import {
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
 import AllPledgesTable from "@/components/common/tables/AllPledgesTable.vue";
 
-import DSProjectPdf from "@/components/common/pdf/DSProjectPdf.vue";
+import DMProjectPdf from "@/components/common/pdf/DMProjectPdf.vue";
 import { ErrorMessages } from "@/utils/frontend/interfaces/Frontend";
 import BaseDatePicker from "@/components/common/baseformComponents/BaseDatePicker.vue";
 import RotaryButton from "@/components/common/RotaryButton.vue";
@@ -776,7 +1299,7 @@ import { useRotaryStore } from "@/stores/rotaryStore";
 import ErrorValidation from "@/components/common/baseformComponents/ErrorValidation.vue";
 import type {
   FundingSource,
-  IDsgProject,
+  IDmProject,
 } from "@/utils/shared/interfaces/ProjectsInterface";
 import {
   email,
@@ -795,6 +1318,7 @@ import ProjectsApi from "@/services/Projects";
 import ErrorModal from "@/components/common/modals/ErrorModal.vue";
 import UploadForm from "@/components/common/forms/UploadForm.vue";
 import AddUserProjectForm from "@/components/common/forms/AddUserProjectForm.vue";
+import DmProject from "@/utils/shared/classes/DmProject";
 
 interface ImageType {
   label: string;
@@ -802,7 +1326,7 @@ interface ImageType {
   [key: string]: string;
 }
 export default defineComponent({
-  name: "DistrictSimplifiedProjectForm",
+  name: "DistrictMatchingProjectForm",
   components: {
     RotaryButton,
     BaseFileUpload,
@@ -815,7 +1339,7 @@ export default defineComponent({
     ErrorValidation,
     ErrorModal,
     UploadForm,
-    DSProjectPdf,
+    DMProjectPdf,
     AllPledgesTable,
     AddUserProjectForm,
   },
@@ -863,8 +1387,8 @@ export default defineComponent({
       ],
       tailwind: TAILWIND_COMMON_CLASSES,
       headerFormatter: Utilities.headerFormater,
-      criteriaList: ResourceLists.districtSimplifiedCriteria,
-      projectToUpdateOrCreate: {} as IDsgProject,
+      criteriaList: ResourceLists.districtMatchingCriteria,
+      projectToUpdateOrCreate: {} as IDmProject,
       countryList: ResourceLists.countryList,
       areaFocusImages: ResourceLists.areaFocusImages,
       regionList: ResourceLists.regionList,
@@ -873,6 +1397,8 @@ export default defineComponent({
       urlForShare: "",
       budgetItemName: "",
       budgetItemCost: "",
+      budgetSupplierName: "",
+      budgetItemCostLocalCurrency: "",
       addFundingSource: [
         "District Designated Funds Request (DDF)",
         "District Club Contribution",
@@ -883,6 +1409,11 @@ export default defineComponent({
       fundingSources: {} as FundingSource,
       expectionObject: {} as IApiException,
       projectApproval: "",
+      objectiveItem: "",
+      measurableHtmlList: ResourceLists.measurableList,
+      allowedToLeaveForm: false,
+      submited: false,
+      serverException: false,
     };
   },
   watch: {},
@@ -899,16 +1430,16 @@ export default defineComponent({
         project_description: {
           required: helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
           maxLength: maxLength(3000),
-          minLenght: minLength(100),
+          minLength: minLength(100),
         },
         area_focus: {
           oneMustBeSelected: helpers.withMessage(
             ErrorMessages.ONE_MUST_BE_SELECTED,
             () => {
-              const areaFocuseValues = Object.values(
+              const areaFocusValues = Object.values(
                 this.projectToUpdateOrCreate.area_focus
               );
-              return areaFocuseValues.includes(true);
+              return areaFocusValues.includes(true);
             }
           ),
         },
@@ -941,7 +1472,7 @@ export default defineComponent({
               }
             }
           ),
-          cantBelowerThanPledgesTotal: helpers.withMessage(
+          cantBeLowerThanPledgesTotal: helpers.withMessage(
             ErrorMessages.CANT_BE_LOWER_THAN_PLEDGES_TOTAL,
             () => {
               if (
@@ -983,7 +1514,7 @@ export default defineComponent({
               ErrorMessages.REQURIED_FIELD,
               required
             ),
-            maxLength: maxLength(3000),
+            maxLength: maxLength(2000),
             minLength: minLength(150),
           },
           non_financial_participation: {
@@ -991,26 +1522,47 @@ export default defineComponent({
               ErrorMessages.REQURIED_FIELD,
               required
             ),
-            maxLength: maxLength(3000),
+            maxLength: maxLength(2000),
             minLength: minLength(150),
           },
           primary_contact: {
-            address: { required },
-            email: { required, email },
-            name: { required },
-            phone: { required },
+            address: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+            },
+            email: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+              email: helpers.withMessage(ErrorMessages.INVALID_EMAIL, email),
+            },
+            name: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+            },
+            phone: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+            },
           },
         },
-        district_simplified_grant_request: {
+        district_matching_grant_request: {
           validateRequest: helpers.withMessage(
-            "Maximum amount exceeded for District Simplified Grant Request",
+            "You have exceeded the maximum amount for your Grant Request. Please adjust.",
             () => {
               if (
                 parseFloat(
-                  this.projectToUpdateOrCreate.district_simplified_grant_request.toFixed(
+                  this.projectToUpdateOrCreate.district_matching_grant_request.toFixed(
                     2
                   )
-                ) > (this.districtSimplifiedGrantRequestLimit as number)
+                ) > this.districtMatchingGrantRequestLimit
               ) {
                 return false;
               } else {
@@ -1018,6 +1570,94 @@ export default defineComponent({
               }
             }
           ),
+        },
+        hostclub_information: {
+          host_club_name: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+          },
+          district_number: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+          },
+          district_country: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+          },
+          host_primary_contact: {
+            name: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+            },
+            address: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+            },
+            email: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+              email: helpers.withMessage(ErrorMessages.INVALID_EMAIL, email),
+            },
+            phone: {
+              required: helpers.withMessage(
+                ErrorMessages.REQURIED_FIELD,
+                required
+              ),
+            },
+          },
+          location_city: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+          },
+          host_sponsor_planned_project_description: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+            maxLength: maxLength(3000),
+            minLength: minLength(100),
+          },
+          host_commit_description: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+            maxLength: maxLength(3000),
+            minLength: minLength(100),
+          },
+          international_commit_description: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+            maxLength: maxLength(3000),
+            minLength: minLength(100),
+          },
+          sponsor_publicize_description: {
+            required: helpers.withMessage(
+              ErrorMessages.REQURIED_FIELD,
+              required
+            ),
+            maxLength: maxLength(3000),
+            minLength: minLength(100),
+          },
+          sectionF: {
+            // required:helpers.withMessage(ErrorMessages.REQURIED_FIELD, required),
+          },
         },
       },
     };
@@ -1030,9 +1670,9 @@ export default defineComponent({
       this.store.$state.DsgOrDMProjectFormProps.formModeProp === "CREATE"
     ) {
       this.tabs = [{ name: "Form", label: "Form" }];
-      this.projectToUpdateOrCreate = new DsgProject();
+      this.projectToUpdateOrCreate = new DmProject();
       this.projectToUpdateOrCreate.grant_type =
-        GrantType.DISTRICTSIMPLIFIEDPROJECT;
+        GrantType.DISTRICTMATCHINGPROJECT;
       this.projectToUpdateOrCreate.created_by = this.store.$state
         .loggedInUserData.user_id as number;
       this.projectToUpdateOrCreate.club_id =
@@ -1057,7 +1697,6 @@ export default defineComponent({
       };
     });
   },
-  mounted() {},
   methods: {
     async populateFormData(responseProjectId?: number) {
       try {
@@ -1068,7 +1707,7 @@ export default defineComponent({
                 .porjectIdProp as number)
         );
         if (!Utilities.isAnApiError(response)) {
-          this.projectToUpdateOrCreate = response as IDsgProject;
+          this.projectToUpdateOrCreate = response as IDmProject;
           this.urlForShare =
             "https://myrotaryprojects.org/" +
             "project/" +
@@ -1108,7 +1747,6 @@ export default defineComponent({
         this.expectionObject = error as IApiException;
       }
     },
-
     addToFundsArray() {
       try {
         if (
@@ -1153,14 +1791,14 @@ export default defineComponent({
           case "District Designated Funds Request (DDF)":
             let futureDdfAmount = parseFloat(
               (
-                this.projectToUpdateOrCreate.district_simplified_grant_request +
+                this.projectToUpdateOrCreate.district_matching_grant_request +
                 fundingSourceAmountParsed
               ).toFixed(2)
             );
             if (
               fundingSourceAmountParsed >
-                this.districtSimplifiedGrantRequestLimit ||
-              futureDdfAmount > this.districtSimplifiedGrantRequestLimit
+                this.districtMatchingGrantRequestLimit ||
+              futureDdfAmount > this.districtMatchingGrantRequestLimit
             ) {
               this.toastController(
                 "error",
@@ -1171,7 +1809,7 @@ export default defineComponent({
               this.fundingSources = {} as FundingSource;
               return;
             } else {
-              this.projectToUpdateOrCreate.district_simplified_grant_request =
+              this.projectToUpdateOrCreate.district_matching_grant_request =
                 futureDdfAmount;
             }
             break;
@@ -1216,7 +1854,6 @@ export default defineComponent({
       }
       this.fundingSources = {} as FundingSource;
     },
-
     deleteFromFundsArray(index: number) {
       try {
         const fundingSource =
@@ -1236,7 +1873,7 @@ export default defineComponent({
             break;
 
           case "District Designated Funds Request (DDF)":
-            this.projectToUpdateOrCreate.district_simplified_grant_request -=
+            this.projectToUpdateOrCreate.district_matching_grant_request -=
               parseFloat(fundingSource.amount.toFixed(2));
             break;
 
@@ -1268,8 +1905,12 @@ export default defineComponent({
         console.error(error);
       }
     },
-
-    addToBudget(itemName: string, itemCost: string) {
+    addToBudget(
+      itemName: string,
+      supplierName: string,
+      itemCost: string,
+      itemCostLocal: string
+    ) {
       let itemCostParsed = parseFloat(itemCost);
       try {
         if (itemCostParsed < 0 || isNaN(itemCostParsed)) {
@@ -1284,6 +1925,8 @@ export default defineComponent({
         const budgetItemObject = {
           itemCost: parseFloat(itemCostParsed.toFixed(2)),
           itemName: itemName,
+          supplierName: supplierName,
+          itemCostLocalCurrency: parseFloat(itemCostLocal),
         };
 
         this.projectToUpdateOrCreate.funding_goal += budgetItemObject.itemCost;
@@ -1291,6 +1934,8 @@ export default defineComponent({
 
         this.budgetItemCost = "";
         this.budgetItemName = "";
+        this.budgetItemCostLocalCurrency = "";
+        this.budgetSupplierName = "";
       } catch (error) {
         this.toastController(
           "error",
@@ -1302,7 +1947,6 @@ export default defineComponent({
         console.error(error);
       }
     },
-
     deleteItemFromBudget(index: number) {
       try {
         const item = this.projectToUpdateOrCreate.itemized_budget[index];
@@ -1367,7 +2011,7 @@ export default defineComponent({
       }
     },
 
-    async createDSGProject() {
+    async createDMProject() {
       try {
         const response = await ProjectsApi.createNewProject(
           this.projectToUpdateOrCreate
@@ -1403,8 +2047,7 @@ export default defineComponent({
         this.showModal = true;
       }
     },
-
-    async updateDSGProject() {
+    async updateDMProject() {
       try {
         const response = await ProjectsApi.updateProject(
           this.projectToUpdateOrCreate
@@ -1430,8 +2073,7 @@ export default defineComponent({
         this.expectionObject = error as IApiException;
       }
     },
-
-    async validateDSGProject(): Promise<void> {
+    async validateDMProject(): Promise<void> {
       await this.v$.$validate();
 
       if (this.v$.$error) {
@@ -1443,13 +2085,24 @@ export default defineComponent({
         const formMode = this.store.$state.DsgOrDMProjectFormProps.formModeProp;
 
         if (formMode === "CREATE") {
-          this.createDSGProject();
+          this.createDMProject();
         } else if (formMode === "UPDATE") {
-          this.updateDSGProject();
+          this.updateDMProject();
         }
       }
     },
-
+    async addToObjectives(objectiveItem: string) {
+      this.projectToUpdateOrCreate.hostclub_information.listOfObjectives.push(
+        objectiveItem
+      );
+      this.objectiveItem = "";
+    },
+    deleteObjectiveByIndex(index: number) {
+      this.projectToUpdateOrCreate.hostclub_information.listOfObjectives.splice(
+        index,
+        1
+      );
+    },
     formatterMoney(amount: number) {
       if (amount) {
         return `Total Pledges: ${this.currencyFormatter(amount)}`;
@@ -1459,7 +2112,6 @@ export default defineComponent({
         );
       }
     },
-
     currencyFormatter(amount: number): string {
       const formatter = new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -1467,7 +2119,6 @@ export default defineComponent({
       });
       return formatter.format(amount);
     },
-
     duplicateNamesToast() {
       this.toastController(
         "error",
@@ -1477,14 +2128,12 @@ export default defineComponent({
         true
       );
     },
-
     redirect() {
       this.store.$state.canLeaveForm = true;
       this.$router.go(-1);
     },
   },
   computed: {
-    // Calculate sum of anticipated funding, convert it to USD format and update the projectToUpdateOrCreate object
     sumOfAnticipatedFunding(): string {
       let sum: number = 0;
       this.projectToUpdateOrCreate.extra_descriptions.fundingSourceArray.forEach(
@@ -1519,15 +2168,14 @@ export default defineComponent({
       return sourcesArray.join(", ");
     },
 
-    // Calculate the limit for the district simplified grant request based on total funding and defined cap
-    districtSimplifiedGrantRequestLimit(): number {
+    districtMatchingGrantRequestLimit() {
       const cap = parseFloat(
         this.store.loggedInUsersDistrict.district_details.ddfCapes
-          .dsgCap as unknown as string
+          .dmCap as unknown as string
       );
       const fraction = parseFloat(
         this.store.loggedInUsersDistrict.district_details.ddfCapes
-          .dsgFraction as unknown as string
+          .dmFraction as unknown as string
       );
       let total = 0;
       this.store.loggedInUsersDistrict.district_details.ddfCalculation.forEach(
@@ -1550,6 +2198,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
+
 #item_table {
   table {
     width: 100%;

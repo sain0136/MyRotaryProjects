@@ -500,6 +500,7 @@
                 </tr>
               </tbody>
             </table>
+          >fdfd/vDFg\kf;hgdfo
             <hr class="my-16 h-px w-full border-0 bg-gray-500" />
             <BaseTextArea
               v-model="
@@ -1513,12 +1514,6 @@ export default defineComponent({
     return {
       projectToUpdateOrCreate: {
         extra_descriptions: {
-          // sectionD: {
-          //   verifySectionD: this.verifySectionD,
-          // },
-          // sectionE: {
-          //   verifySectionE: this.verifySectionE,
-          // },
           benefit_community_description: {
             required: helpers.withMessage(
               ErrorMessages.REQURIED_FIELD,

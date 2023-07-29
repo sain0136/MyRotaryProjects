@@ -48,6 +48,7 @@
 <script lang='ts'>
 import { defineComponent } from 'vue';
 import RotaryButton from "@/components/common/RotaryButton.vue";
+import { useRotaryStore } from '@/stores/rotaryStore';
 export default defineComponent({
   name: 'ErrorModal',
   components: {
@@ -72,13 +73,17 @@ export default defineComponent({
     },
   },
   data() {
-    return {};
+    return {
+      store: useRotaryStore(),
+    };
   },
   watch: {},
   async created() {},
   methods: {
     redirect() {
-      this.$router.go(0);
+      this.store.$state.canLeaveForm = true;
+
+      this.$router.push({ name: "LandingApp" });
     },
   },
   computed: {},

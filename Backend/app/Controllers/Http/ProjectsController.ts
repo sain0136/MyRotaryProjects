@@ -20,6 +20,8 @@ import {
 } from "Contracts/util/sharedUtility/interfaces/SharedInterface";
 import { DateTime } from "luxon";
 import IUser from "Contracts/util/sharedUtility/interfaces/UserInterface";
+import { dbError } from "Contracts/util/backend/interfaces/Utilities";
+import { handleDatabaseError } from "Contracts/util/backend/classes/databaseError";
 
 export default class ProjectsController {
   /**
@@ -218,9 +220,9 @@ export default class ProjectsController {
             ? true
             : false;
         if (fullyFunded) {
-           await project
-          .merge({ projectStatus: ProjectStatus.FULLYFUNDED })
-          .save();
+          await project
+            .merge({ projectStatus: ProjectStatus.FULLYFUNDED })
+            .save();
         }
       }
     }
@@ -260,7 +262,7 @@ export default class ProjectsController {
       newProject.completion_date,
       "yyyy-MM-dd"
     );
-      
+    newProject.project_name = newProject.project_name.trim();  
     if (newProject.grant_type === "Club Project") {
       try {
         const projectNumber: number = await ProjectCodeGenerator.getProjectCode(
@@ -301,7 +303,8 @@ export default class ProjectsController {
         }
         return response.json(createdProject.projectId);
       } catch (error) {
-        return response.json(new CustomReponse(error.message));
+        const errorParsed = handleDatabaseError(error) as unknown as dbError;
+        return response.json(new CustomReponse(errorParsed.message, errorParsed.stack , errorParsed.code));
       }
     }
 
@@ -354,7 +357,8 @@ export default class ProjectsController {
         }
         return response.json(createdProject.projectId);
       } catch (error) {
-        return response.json(new CustomReponse(error));
+        const errorParsed = handleDatabaseError(error) as unknown as dbError;
+        return response.json(new CustomReponse(errorParsed.message, errorParsed.stack , errorParsed.code));
       }
     }
 
@@ -405,12 +409,14 @@ export default class ProjectsController {
               createdProject.projectNumber
             );
           } catch (error) {
-            return response.json(new CustomReponse(error.message , error.stack));
+            const errorParsed = handleDatabaseError(error) as unknown as dbError;
+            return response.json(new CustomReponse(errorParsed.message, errorParsed.stack , errorParsed.code));
           }
         }
         return response.json(createdProject.projectId);
       } catch (error) {
-        return response.json(new CustomReponse(error.message , error.stack));
+        const errorParsed = handleDatabaseError(error) as unknown as dbError;
+        return response.json(new CustomReponse(errorParsed.message, errorParsed.stack , errorParsed.code));
       }
     }
   }
@@ -535,124 +541,142 @@ export default class ProjectsController {
       oldProjectImformation.completion_date,
       "yyyy-MM-dd"
     );
+    oldProjectImformation.project_name = oldProjectImformation.project_name.trim();
     let nonPledgeFullyFunded =
       parseFloat(oldProjectImformation.anticipated_funding.toString()) ===
       parseFloat(oldProjectImformation.funding_goal.toString())
         ? true
         : false;
     if (oldProjectImformation.grant_type === "Club Project") {
-      const updatedProject = await projectToBeUpdateds
-        .merge({
-          projectName: oldProjectImformation.project_name,
-          projectDescription: oldProjectImformation.project_description,
-          grantType: oldProjectImformation.grant_type,
-          areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate,
-          fundingGoal: oldProjectImformation.funding_goal,
-          anticipatedFunding: oldProjectImformation.anticipated_funding,
-          startDate: convertedStartDate,
-          region: oldProjectImformation.region,
-          rotaryYear: oldProjectImformation.rotary_year,
-          country: oldProjectImformation.country,
-          projectStatus: nonPledgeFullyFunded
-            ? ProjectStatus.FULLYFUNDED
-            : oldProjectImformation.project_status,
-          imageLink: JSON.stringify(oldProjectImformation.image_link),
-          totalPledges: oldProjectImformation.total_pledges,
-          extraDescriptions: JSON.stringify(
-            oldProjectImformation.extra_descriptions
-          ),
-          fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
-        })
-        .save();
-      return response.json(await this.addComputed(updatedProject));
+      try {
+        const updatedProject = await projectToBeUpdateds
+          .merge({
+            projectName: oldProjectImformation.project_name,
+            projectDescription: oldProjectImformation.project_description,
+            grantType: oldProjectImformation.grant_type,
+            areaFocus: JSON.stringify(oldProjectImformation.area_focus),
+            completionDate: convertedCompletionDate,
+            fundingGoal: oldProjectImformation.funding_goal,
+            anticipatedFunding: oldProjectImformation.anticipated_funding,
+            startDate: convertedStartDate,
+            region: oldProjectImformation.region,
+            rotaryYear: oldProjectImformation.rotary_year,
+            country: oldProjectImformation.country,
+            projectStatus: nonPledgeFullyFunded
+              ? ProjectStatus.FULLYFUNDED
+              : oldProjectImformation.project_status,
+            imageLink: JSON.stringify(oldProjectImformation.image_link),
+            totalPledges: oldProjectImformation.total_pledges,
+            extraDescriptions: JSON.stringify(
+              oldProjectImformation.extra_descriptions
+            ),
+            fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
+          })
+          .save();
+        return response.json(await this.addComputed(updatedProject));
+      } catch (error) {
+        const errorParsed = handleDatabaseError(error) as unknown as dbError;
+        return response.json(new CustomReponse(errorParsed.message, errorParsed.stack , errorParsed.code));      }
     }
 
     if (oldProjectImformation.grant_type === "District Simplified Project") {
-      const updatedProject = await projectToBeUpdateds
-        .merge({
-          projectName: oldProjectImformation.project_name,
-          projectDescription: oldProjectImformation.project_description,
-          grantType: oldProjectImformation.grant_type,
-          areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate,
-          startDate: convertedStartDate,
-          fundingGoal: oldProjectImformation.funding_goal,
-          anticipatedFunding: oldProjectImformation.anticipated_funding,
-          region: oldProjectImformation.region,
-          rotaryYear: oldProjectImformation.rotary_year,
+      try {
+        const updatedProject = await projectToBeUpdateds
+          .merge({
+            projectName: oldProjectImformation.project_name,
+            projectDescription: oldProjectImformation.project_description,
+            grantType: oldProjectImformation.grant_type,
+            areaFocus: JSON.stringify(oldProjectImformation.area_focus),
+            completionDate: convertedCompletionDate,
+            startDate: convertedStartDate,
+            fundingGoal: oldProjectImformation.funding_goal,
+            anticipatedFunding: oldProjectImformation.anticipated_funding,
+            region: oldProjectImformation.region,
+            rotaryYear: oldProjectImformation.rotary_year,
 
-          country: oldProjectImformation.country,
+            country: oldProjectImformation.country,
 
-          projectStatus: nonPledgeFullyFunded
-            ? ProjectStatus.FULLYFUNDED
-            : oldProjectImformation.project_status,
-          imageLink: JSON.stringify(oldProjectImformation.image_link),
-          totalPledges: oldProjectImformation.total_pledges,
+            projectStatus: nonPledgeFullyFunded
+              ? ProjectStatus.FULLYFUNDED
+              : oldProjectImformation.project_status,
+            imageLink: JSON.stringify(oldProjectImformation.image_link),
+            totalPledges: oldProjectImformation.total_pledges,
 
-          coOperatingOrganisationContribution: (
-            oldProjectImformation as IDsgProject
-          ).co_operating_organisation_contribution,
-          districtSimplifiedGrantRequest: (oldProjectImformation as IDsgProject)
-            .district_simplified_grant_request,
-          intialSponsorClubContribution: (oldProjectImformation as IDsgProject)
-            .intial_sponsor_club_contribution,
-          extraDescriptions: JSON.stringify(
-            oldProjectImformation.extra_descriptions
-          ),
-          itemizedBudget: JSON.stringify(
-            (oldProjectImformation as IDsgProject).itemized_budget
-          ),
-          fileUploads: JSON.stringify(
-            (oldProjectImformation as IDsgProject).file_uploads
-          ),
-        })
-        .save();
-      return response.json(await this.addComputed(updatedProject));
+            coOperatingOrganisationContribution: (
+              oldProjectImformation as IDsgProject
+            ).co_operating_organisation_contribution,
+            districtSimplifiedGrantRequest: (
+              oldProjectImformation as IDsgProject
+            ).district_simplified_grant_request,
+            intialSponsorClubContribution: (
+              oldProjectImformation as IDsgProject
+            ).intial_sponsor_club_contribution,
+            extraDescriptions: JSON.stringify(
+              oldProjectImformation.extra_descriptions
+            ),
+            itemizedBudget: JSON.stringify(
+              (oldProjectImformation as IDsgProject).itemized_budget
+            ),
+            fileUploads: JSON.stringify(
+              (oldProjectImformation as IDsgProject).file_uploads
+            ),
+          })
+          .save();
+        return response.json(await this.addComputed(updatedProject));
+      } catch (error) {
+        const errorParsed = handleDatabaseError(error) as unknown as dbError;
+        return response.json(new CustomReponse(errorParsed.message, errorParsed.stack , errorParsed.code));
+      }
     }
 
     if ((oldProjectImformation.grant_type = "District Matching Project")) {
-      const updatedProject = await projectToBeUpdateds
-        .merge({
-          projectName: oldProjectImformation.project_name,
-          projectDescription: oldProjectImformation.project_description,
-          grantType: oldProjectImformation.grant_type,
-          areaFocus: JSON.stringify(oldProjectImformation.area_focus),
-          completionDate: convertedCompletionDate,
-          startDate: convertedStartDate,
-          fundingGoal: oldProjectImformation.funding_goal,
-          anticipatedFunding: oldProjectImformation.anticipated_funding,
-          region: oldProjectImformation.region,
-          rotaryYear: oldProjectImformation.rotary_year,
+      try {
+        const updatedProject = await projectToBeUpdateds
+          .merge({
+            projectName: oldProjectImformation.project_name,
+            projectDescription: oldProjectImformation.project_description,
+            grantType: oldProjectImformation.grant_type,
+            areaFocus: JSON.stringify(oldProjectImformation.area_focus),
+            completionDate: convertedCompletionDate,
+            startDate: convertedStartDate,
+            fundingGoal: oldProjectImformation.funding_goal,
+            anticipatedFunding: oldProjectImformation.anticipated_funding,
+            region: oldProjectImformation.region,
+            rotaryYear: oldProjectImformation.rotary_year,
 
-          country: oldProjectImformation.country,
+            country: oldProjectImformation.country,
 
-          projectStatus: nonPledgeFullyFunded
-            ? ProjectStatus.FULLYFUNDED
-            : oldProjectImformation.project_status,
-          imageLink: JSON.stringify(oldProjectImformation.image_link),
-          totalPledges: oldProjectImformation.total_pledges,
+            projectStatus: nonPledgeFullyFunded
+              ? ProjectStatus.FULLYFUNDED
+              : oldProjectImformation.project_status,
+            imageLink: JSON.stringify(oldProjectImformation.image_link),
+            totalPledges: oldProjectImformation.total_pledges,
 
-          coOperatingOrganisationContribution: (
-            oldProjectImformation as IDmProject
-          ).co_operating_organisation_contribution,
-          districtSimplifiedGrantRequest: (oldProjectImformation as IDmProject)
-            .district_simplified_grant_request,
-          intialSponsorClubContribution: (oldProjectImformation as IDmProject)
-            .intial_sponsor_club_contribution,
-          extraDescriptions: JSON.stringify(
-            (oldProjectImformation as IDmProject).extra_descriptions
-          ),
-          itemizedBudget: JSON.stringify(
-            (oldProjectImformation as IDmProject).itemized_budget
-          ),
-          fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
-          hostclubInformation: JSON.stringify(
-            (oldProjectImformation as IDmProject).hostclub_information
-          ),
-        })
-        .save();
-      return response.json(await this.addComputed(updatedProject));
+            coOperatingOrganisationContribution: (
+              oldProjectImformation as IDmProject
+            ).co_operating_organisation_contribution,
+            districtSimplifiedGrantRequest: (
+              oldProjectImformation as IDmProject
+            ).district_simplified_grant_request,
+            intialSponsorClubContribution: (oldProjectImformation as IDmProject)
+              .intial_sponsor_club_contribution,
+            extraDescriptions: JSON.stringify(
+              (oldProjectImformation as IDmProject).extra_descriptions
+            ),
+            itemizedBudget: JSON.stringify(
+              (oldProjectImformation as IDmProject).itemized_budget
+            ),
+            fileUploads: JSON.stringify(oldProjectImformation.file_uploads),
+            hostclubInformation: JSON.stringify(
+              (oldProjectImformation as IDmProject).hostclub_information
+            ),
+          })
+          .save();
+        return response.json(await this.addComputed(updatedProject));
+      } catch (error) {
+        const errorParsed = handleDatabaseError(error) as unknown as dbError;
+        return response.json(new CustomReponse(errorParsed.message, errorParsed.stack , errorParsed.code));
+      }
     }
   }
 
@@ -702,3 +726,4 @@ export default class ProjectsController {
     }
   }
 }
+

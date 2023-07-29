@@ -283,7 +283,7 @@ export default defineComponent({
             isAdminOverrideClubIdProp: this.overrideClubId,
           });
           this.$router.push({
-            name: "DMProjectFormLandingView",
+            name: "DistrictMatchingProjectForm",
           });
           break;
         case "DSG":

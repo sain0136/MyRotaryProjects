@@ -79,4 +79,8 @@ export const condtionals= {
   district_id:"district_id"
 }
 
-
+export interface dbError   {
+  message: string;
+  code: string | number;
+  stack?: string;
+}
