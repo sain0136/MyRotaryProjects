@@ -196,7 +196,7 @@
                 <img class="w-2/12" :src="areaFocusImages[0]" alt="" />
                 <BaseCheckBox
                   v-model="
-                    projectToUpdateOrCreate.area_focus.Peace_Conflict_Prevention
+                    projectToUpdateOrCreate.area_focus.Peace_Conflict_Prevention 
                   "
                   :label="
                     Object.keys(projectToUpdateOrCreate.area_focus)[0].replace(
@@ -508,7 +508,7 @@ export default defineComponent({
       projectApproval: "",
       urlForShare: "",
       headerFormatter: Utilities.headerFormater,
-      projectToUpdateOrCreate: {} as IClubProject,
+      projectToUpdateOrCreate:  new ClubProject() as IClubProject,
       activeTab1: "",
       activeTab2: "",
       activeTab3: "",

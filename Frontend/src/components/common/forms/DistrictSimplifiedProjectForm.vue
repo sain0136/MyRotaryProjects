@@ -865,7 +865,7 @@ export default defineComponent({
       tailwind: TAILWIND_COMMON_CLASSES,
       headerFormatter: Utilities.headerFormater,
       criteriaList: ResourceLists.districtSimplifiedCriteria,
-      projectToUpdateOrCreate: {} as IDsgProject,
+      projectToUpdateOrCreate: new DsgProject() as IDsgProject, 
       initialProject: {} as IDsgProject,
       countryList: ResourceLists.countryList,
       areaFocusImages: ResourceLists.areaFocusImages,

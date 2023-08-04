@@ -1389,7 +1389,7 @@ export default defineComponent({
       tailwind: TAILWIND_COMMON_CLASSES,
       headerFormatter: Utilities.headerFormater,
       criteriaList: ResourceLists.districtMatchingCriteria,
-      projectToUpdateOrCreate: {} as IDmProject,
+      projectToUpdateOrCreate: new DmProject() as IDmProject,
       countryList: ResourceLists.countryList,
       areaFocusImages: ResourceLists.areaFocusImages,
       regionList: ResourceLists.regionList,
