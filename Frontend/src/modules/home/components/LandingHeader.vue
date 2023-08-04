@@ -61,12 +61,12 @@
       class="rounded border-gray-200 bg-primary-white px-2 py-2.5 dark:bg-gray-900 sm:px-4"
     >
       <div
-        class="container mx-auto flex flex-wrap items-center justify-between"
+        class="sm:none container mx-auto flex flex-wrap items-center justify-center"
       >
         <div href="" class="contents items-center">
           <img
             :src="logo"
-            class="mr-3 max-w-[50%] sm:max-w-[10%]"
+            class="mr-3 hidden max-w-[50%] sm:max-w-[10%] md:block"
             alt="rotary-logo"
           />
         </div>
@@ -76,6 +76,7 @@
           class="ml-3 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden"
           aria-controls="navbar-default"
           aria-expanded="false"
+          @click="toggleMenu()"
         >
           <span class="sr-only">Open main menu</span>
           <svg
@@ -92,7 +93,11 @@
             ></path>
           </svg>
         </button>
-        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+        <div
+          class="w-full md:block md:w-auto"
+          :class="revealMenu"
+          id="navbar-default"
+        >
           <ul
             class="mt-4 flex flex-col rounded-lg border border-gray-100 bg-primary-white p-4 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-primary-white md:text-sm md:font-medium md:hover:bg-transparent"
           >
@@ -157,7 +162,7 @@
                 id="dropdownNavbarLink"
                 data-dropdown-toggle="dropdownNavbar"
                 class="flex w-full items-center justify-between py-2 pl-3 pr-4 text-lg font-medium text-primary-black hover:text-primary-color"
-                @click="toggleDropdown()"
+                @click="toggleAdminDropdown()"
               >
                 Admin
                 <font-awesome-icon
@@ -168,8 +173,8 @@
               <div
                 id="dropdownNavbar"
                 class="z-10 bg-primary-gray"
-                :class="revealDropdown"
-                @click="toggleDropdown()"
+                :class="revealAdminDropdown"
+                @click="toggleAdminDropdown()"
               >
                 <ul class="whitespace-nowrap text-sm">
                   <li>
@@ -301,7 +306,8 @@ export default defineComponent({
   },
   data() {
     return {
-      revealDropdown: "hidden",
+      revealAdminDropdown: "hidden",
+      revealMenu: "hidden",
       logo: "",
     };
   },
@@ -324,11 +330,18 @@ export default defineComponent({
       await this.store.signOut();
       this.$router.push("/");
     },
-    toggleDropdown() {
-      if (this.revealDropdown == "hidden") {
-        this.revealDropdown = "";
+    toggleAdminDropdown() {
+      if (this.revealAdminDropdown == "hidden") {
+        this.revealAdminDropdown = "";
       } else {
-        this.revealDropdown = "hidden";
+        this.revealAdminDropdown = "hidden";
+      }
+    },
+    toggleMenu() {
+      if (this.revealMenu == "hidden") {
+        this.revealMenu = "";
+      } else {
+        this.revealMenu = "hidden";
       }
     },
   },

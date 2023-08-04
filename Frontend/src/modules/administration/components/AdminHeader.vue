@@ -1,8 +1,8 @@
 <template>
   <nav
-    class=" border-gray-200 bg-primary-black p-3 dark:border-gray-700 dark:bg-gray-800"
+    class="border-gray-200 bg-primary-black p-3 dark:border-gray-700 dark:bg-gray-800"
   >
-    <div class="flex  justify-center w-full">
+    <div class="flex w-full justify-center">
       <img
         src="/transparent-logo.png"
         class="mr-3 h-6 sm:h-10"
@@ -13,7 +13,14 @@
         >Admin Web Portal</span
       >
     </div>
-    <hr class="h-px my-2 bg-gray-500 border-0">
+    <hr class="my-2 h-px border-0 bg-gray-500" />
+    <!-- <n-config-provider :theme-overrides="themeOverrides" :theme="darkTheme">
+      <n-menu
+        v-model:value="activeKey"
+        mode="horizontal"
+        :options="menuOptions"
+      />
+    </n-config-provider > -->
 
     <div class="container mx-auto flex flex-wrap items-center justify-center">
       <button
@@ -23,6 +30,7 @@
         aria-controls="navbar-solid-bg"
         aria-expanded="false"
         id="triggerEl"
+        @click="toggleNavBar()"
       >
         <span class="sr-only">Open main menu</span>
         <svg
@@ -39,48 +47,53 @@
           ></path>
         </svg>
       </button>
-      <div class="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
+
+      <div
+        class="w-full md:block md:w-auto"
+        :class="hidden"
+        id="navbar-solid-bg"
+      >
         <ul
-          class="mt-4 flex flex-col flex-wrap rounded-lg bg-gray-50 dark:border-gray-700 dark:bg-gray-800 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-transparent md:text-sm md:font-medium "
+          class="mt-4 flex flex-col flex-wrap justify-center rounded-lg bg-gray-50 dark:border-gray-700 dark:bg-gray-800 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-transparent md:text-sm md:font-medium"
         >
           <li>
             <router-link
-              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
+              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white"
               :to="{ name: 'AdminHome' }"
               >Settings</router-link
             >
           </li>
           <li>
             <router-link
-              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
+              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white"
               :to="{ path: '/' }"
               >Landing Page</router-link
             >
           </li>
           <li>
             <router-link
-              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
+              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white"
               :to="{ name: 'AllDistricts' }"
               >Districts</router-link
             >
           </li>
           <li>
             <router-link
-              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
+              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white"
               :to="{ name: 'DistrictAdmins' }"
               >Administrators</router-link
             >
           </li>
           <li>
             <router-link
-              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
+              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white"
               :to="{ name: 'ClubAdmin' }"
               >Clubs & Members</router-link
             >
           </li>
           <li>
             <router-link
-              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
+              class="block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white"
               :to="{ name: 'AllProjects' }"
               >All Projects</router-link
             >
@@ -88,7 +101,7 @@
           <li>
             <a
               id="last_nav_item"
-              class=" cursor-pointer block rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white  "
+              class="block cursor-pointer rounded py-2 pl-3 pr-4 text-2xl font-bold text-gray-700 hover:text-primary-color md:bg-transparent md:p-0 md:text-primary-white"
               @click="
                 () => {
                   signOut();
@@ -104,13 +117,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, h } from "vue";
+import type { MenuOption } from "naive-ui";
 import { Collapse } from "flowbite";
-import type { CollapseOptions, CollapseInterface } from "flowbite";
+import type { CollapseOptions } from "flowbite";
 import { useRotaryStore } from "@/stores/rotaryStore";
 import { RouterLink } from "vue-router";
 import router from "@/router";
+import { darkTheme } from "naive-ui";
+import { NConfigProvider } from "naive-ui";
 
+import type GlobalThemeOverrides from "naive-ui";
 export default defineComponent({
   name: "AdminHeader",
   components: {},
@@ -121,12 +138,14 @@ export default defineComponent({
     },
   },
   setup() {
+    const activeKey = ref<string | null>(null);
     const store = useRotaryStore();
-    return { store };
+    return { store, activeKey };
   },
   data() {
     return {
       collapse: {} as Collapse,
+      hidden: "hidden",
     };
   },
   watch: {},
@@ -152,18 +171,18 @@ export default defineComponent({
   },
   methods: {
     toggleNavBar() {
-      this.collapse.expand();
+      this.hidden = this.hidden === "hidden" ? "" : "hidden";
     },
-   async signOut() {
-    try {
+    async signOut() {
+      try {
         if (this.store.$state.isSiteAdminLoggedIn) {
-          await  this.store.signOut()
-          this.$router.push( '/admin-login');
+          await this.store.signOut();
+          this.$router.push("/admin-login");
         } else {
         }
-    } catch (error) {
-      alert(error);
-    }
+      } catch (error) {
+        alert(error);
+      }
     },
   },
   computed: {},
