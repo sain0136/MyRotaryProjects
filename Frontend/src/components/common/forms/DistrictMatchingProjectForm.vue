@@ -1319,6 +1319,7 @@ import ErrorModal from "@/components/common/modals/ErrorModal.vue";
 import UploadForm from "@/components/common/forms/UploadForm.vue";
 import AddUserProjectForm from "@/components/common/forms/AddUserProjectForm.vue";
 import DmProject from "@/utils/shared/classes/DmProject";
+import fastDeepEqual from "fast-deep-equal";
 
 interface ImageType {
   label: string;
@@ -1414,9 +1415,21 @@ export default defineComponent({
       allowedToLeaveForm: false,
       submited: false,
       serverException: false,
+      initialProject: {} as IDmProject,
     };
   },
-  watch: {},
+  watch: {
+    projectToUpdateOrCreate: {
+      handler() {
+       if (fastDeepEqual(this.projectToUpdateOrCreate, this.initialProject)) {
+        this.store.$state.canLeaveForm = true;
+       } else {
+        this.store.$state.canLeaveForm = false;
+       }
+      },
+      deep: true,
+    },
+  },
   validations() {
     return {
       projectToUpdateOrCreate: {
@@ -1671,6 +1684,7 @@ export default defineComponent({
     ) {
       this.tabs = [{ name: "Form", label: "Form" }];
       this.projectToUpdateOrCreate = new DmProject();
+      this.initialProject= {...this.projectToUpdateOrCreate};
       this.projectToUpdateOrCreate.grant_type =
         GrantType.DISTRICTMATCHINGPROJECT;
       this.projectToUpdateOrCreate.created_by = this.store.$state
@@ -1708,6 +1722,7 @@ export default defineComponent({
         );
         if (!Utilities.isAnApiError(response)) {
           this.projectToUpdateOrCreate = response as IDmProject;
+          this.initialProject= {...this.projectToUpdateOrCreate};
           this.urlForShare =
             "https://myrotaryprojects.org/" +
             "project/" +

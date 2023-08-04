@@ -795,6 +795,7 @@ import ProjectsApi from "@/services/Projects";
 import ErrorModal from "@/components/common/modals/ErrorModal.vue";
 import UploadForm from "@/components/common/forms/UploadForm.vue";
 import AddUserProjectForm from "@/components/common/forms/AddUserProjectForm.vue";
+import fastDeepEqual from "fast-deep-equal";
 
 interface ImageType {
   label: string;
@@ -865,6 +866,7 @@ export default defineComponent({
       headerFormatter: Utilities.headerFormater,
       criteriaList: ResourceLists.districtSimplifiedCriteria,
       projectToUpdateOrCreate: {} as IDsgProject,
+      initialProject: {} as IDsgProject,
       countryList: ResourceLists.countryList,
       areaFocusImages: ResourceLists.areaFocusImages,
       regionList: ResourceLists.regionList,
@@ -885,7 +887,18 @@ export default defineComponent({
       projectApproval: "",
     };
   },
-  watch: {},
+  watch: {
+    projectToUpdateOrCreate: {
+      handler() {
+       if (fastDeepEqual(this.projectToUpdateOrCreate, this.initialProject)) {
+        this.store.$state.canLeaveForm = true;
+       } else {
+        this.store.$state.canLeaveForm = false;
+       }
+      },
+      deep: true,
+    },
+  },
   validations() {
     return {
       projectToUpdateOrCreate: {
@@ -1031,6 +1044,7 @@ export default defineComponent({
     ) {
       this.tabs = [{ name: "Form", label: "Form" }];
       this.projectToUpdateOrCreate = new DsgProject();
+      this.initialProject= {...this.projectToUpdateOrCreate};
       this.projectToUpdateOrCreate.grant_type =
         GrantType.DISTRICTSIMPLIFIEDPROJECT;
       this.projectToUpdateOrCreate.created_by = this.store.$state
@@ -1057,7 +1071,9 @@ export default defineComponent({
       };
     });
   },
-  mounted() {},
+  mounted() {
+    this.store.$state.canLeaveForm = true;
+  },
   methods: {
     async populateFormData(responseProjectId?: number) {
       try {
@@ -1069,6 +1085,7 @@ export default defineComponent({
         );
         if (!Utilities.isAnApiError(response)) {
           this.projectToUpdateOrCreate = response as IDsgProject;
+          this.initialProject= {...this.projectToUpdateOrCreate}
           this.urlForShare =
             "https://myrotaryprojects.org/" +
             "project/" +

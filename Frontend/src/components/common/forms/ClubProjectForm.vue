@@ -472,6 +472,7 @@ import {
 } from "@/utils/shared/interfaces/SharedInterface";
 import AddUserProjectForm from "@/components/common/forms/AddUserProjectForm.vue";
 import ResourceLists from "@/utils/frontend/classes/ResourceLists";
+import fastDeepEqual from "fast-deep-equal";
 export default defineComponent({
   name: "ClubProjectForm",
   setup() {
@@ -530,9 +531,21 @@ export default defineComponent({
       countryList: ResourceLists.countryList,
       areaFocusImages: ResourceLists.areaFocusImages,
       regionList: ResourceLists.regionList,
+      initialProject: {} as IClubProject,
     };
   },
-  watch: {},
+  watch: {
+    projectToUpdateOrCreate: {
+      handler() {
+       if (fastDeepEqual(this.projectToUpdateOrCreate, this.initialProject)) {
+        this.store.$state.canLeaveForm = true;
+       } else {
+        this.store.$state.canLeaveForm = false;
+       }
+      },
+      deep: true,
+    },
+  },
   validations() {
     return {
       projectToUpdateOrCreate: {
@@ -637,6 +650,7 @@ export default defineComponent({
       this.store.$state.clubProjectFormProps.formModeProp === "CREATE"
     ) {
       this.projectToUpdateOrCreate = new ClubProject();
+      this.initialProject = { ...this.projectToUpdateOrCreate };
       this.projectToUpdateOrCreate.grant_type = GrantType.CLUBPROJECT;
       this.projectToUpdateOrCreate.created_by = this.store.$state
         .loggedInUserData.user_id as number;
@@ -777,6 +791,7 @@ export default defineComponent({
         );
         if (!Utilities.isAnApiError(response)) {
           this.projectToUpdateOrCreate = response as IClubProject;
+          this.initialProject = { ...this.projectToUpdateOrCreate };
           this.urlForShare =
             "https://myrotaryprojects.org/" +
             "project/" +
