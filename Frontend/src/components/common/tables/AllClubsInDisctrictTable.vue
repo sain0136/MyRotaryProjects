@@ -9,7 +9,7 @@
           <tr>
             <th scope="col" class="px-6 py-3">
               Club Name
-              <div class="question-mark">
+              <!-- <div class="question-mark">
                 <font-awesome-icon
                   class="ml-2 cursor-pointer text-primary-color"
                   data-te-toggle="tooltip"
@@ -19,7 +19,7 @@
                   title="Click a row to view and add club memebers"
                   icon="fa-solid fa-question"
                 />
-              </div>
+              </div> -->
             </th>
             <th scope="col" class="px-6 py-3">Actions</th>
           </tr>
@@ -79,7 +79,7 @@
                     icon="fa-solid fa-trash-can"
                   />
                 </button>
-                <button
+                <!-- <button
                   title="Create New Project"
                   class="crud_buttons hover:text-primary-c"
                   @click="toggleCreateMenu(club.club_id as number)"
@@ -88,7 +88,7 @@
                     class="hover:text-primary-color"
                     icon="fa-solid fa-plus"
                   />
-                </button>
+                </button> -->
               </div>
             </td>
           </tr>
@@ -347,7 +347,7 @@ export default defineComponent({
         formModeProp: "UPDATE",
         clubIdProp: clubId,
       });
-      this.$router.push({ name: "SiteAdminClubForm" });
+      this.$router.push({ name: "ClubAdministration" });
     },
     updateClubAsDistrictAdmin(clubId: number) {
       this.store.setClubFormProps({

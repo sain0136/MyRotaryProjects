@@ -18,17 +18,14 @@
       :width="toast.width"
       :closeTimer="toast.closeTimer"
     />
-    <section :class="tailwind.DIVCOL" class="my-8 gap-8">
+    <section :class="tailwind.DIVCOL " class="my-8 gap-8">
       <h1 class="text-center" :class="tailwind.H1">
         {{ headerFormatter("Choose a District") }}
       </h1>
-      <h3 class="text-center font-bold" :class="tailwind.H3">
-        {{ headerFormatter("All Districts") }}
-      </h3>
       <BaseSelect v-model="districtChosen" :options="districtNameList" />
-      <h6 class="text-center font-bold" v-if="districtId !== 0">
-        *Click on a row to add members to club!
-      </h6>
+      <h3 class="text-center font-bold" :class="tailwind.H3" v-if="districtId !== 0">
+        *Click the edit button on a row to fully administer the club!
+      </h3>
       <AllClubsInDisctrictTable
         :key="key"
         v-if="districtId !== 0"
@@ -36,7 +33,7 @@
         @update:showConfirmModal="updateShowModal"
         @update:clubId="updateClubId"
       />
-      <RotaryButton
+     <!--  <RotaryButton
         v-if="clubId !== 0"
         label="Create New Member"
         @click="createNewClubMember()"
@@ -48,13 +45,13 @@
         :key="clubId"
         tableViewProp="SITEADMIN"
       />
-      <hr class="mt-2 h-px w-full border-0 bg-gray-500" />
+      <hr class="mt-2 h-px w-full border-0 bg-gray-500" />-->
       <h1 class="text-center" :class="tailwind.H1">
         {{ headerFormatter("Create a new club") }}
       </h1>
       <div class="button_wrapper">
         <RotaryButton label="Create" @click="createNewClub()" />
-      </div>
+      </div> 
     </section>
   </div>
 </template>

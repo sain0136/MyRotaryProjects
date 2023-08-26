@@ -9,7 +9,8 @@ import SiteAdminUserForm from "@/components/common/forms/UserForm.vue";
 import SiteAdminClubForm from "@/components/common/forms/ClubForm.vue";
 import { useRotaryStore } from "@/stores/rotaryStore";
 import UserFormForSiteAdmin from "@/components/common/forms/UserForm.vue";
-
+import ClubAdministration from "@/modules/administration/components/ClubAdministration.vue"
+import AdminClub from "@/modules/administration/views/AdminClub.vue"
 const route = {
   path: "/admin",
   component: AdminApp,
@@ -72,7 +73,16 @@ const route = {
       name: "UserFormForSiteAdmin",
       props: true,
     },
-    
+    {
+      path: "club-administration",
+      component: ClubAdministration,
+      name: "ClubAdministration",
+    },
+    {
+      path: "admin-club",
+      component: AdminClub,
+      name: "AdminClub",
+    }
   ],
   
 };

@@ -8,7 +8,7 @@
       title="Logged Out "
       message="You were logged out due to inactivity. Please login again."
     />
-    <router-view> </router-view>
+    <router-view/> 
     <AdminFooter />
   </Main>
 </template>

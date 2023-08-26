@@ -1,32 +1,44 @@
 <template>
+  <n-message-provider>
   <n-notification-provider placement="top-right">
-    <RouterView />
+    <router-view />
   </n-notification-provider>
+</n-message-provider>
+
 </template>
 
-<script setup lang="ts">
-import {  RouterView } from "vue-router";
+<script lang="ts">
+import { RouterView } from "vue-router";
 import { useRotaryStore } from "@/stores/rotaryStore";
 import { onMounted } from "vue";
 import AssetsApi from "./services/Assets";
 import type { MainAssets } from "./utils/frontend/interfaces/Frontend";
-const store = useRotaryStore();
 
-onMounted(async () => {
-  try {
-    // check that string for main url contains static part of the file name
-    if (store.$state.mainLogoUrl === "") {
-      const response = await AssetsApi.getMainAssets();
-      const imgUrl = new URL("./serve-logo", import.meta.url).href;
-      let logo = (response as MainAssets).assets.main_logo.url
-        ? (response as MainAssets).assets.main_logo.url
-        : imgUrl;
-      store.$state.mainLogoUrl = logo;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
+export default {
+  name: "App",
+  components: {
+    RouterView,
+  },
+  setup() {
+    const store = useRotaryStore();
+
+    onMounted(async () => {
+      try {
+        // check that string for main url contains static part of the file name
+        if (store.$state.mainLogoUrl === "") {
+          const response = await AssetsApi.getMainAssets();
+          const imgUrl = new URL("./serve-logo", import.meta.url).href;
+          let logo = (response as MainAssets).assets.main_logo.url
+            ? (response as MainAssets).assets.main_logo.url
+            : imgUrl;
+          store.$state.mainLogoUrl = logo;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  },
+};
 </script>
 
 <style scoped>
@@ -90,5 +102,6 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
+
 }
 </style>
