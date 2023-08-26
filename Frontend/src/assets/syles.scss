@@ -26,14 +26,17 @@ tbody {
       }
     }
   }
+
   @mixin genericFlexColumn {
     display: flex;
     flex-direction: column;
   }
+
   @mixin genericFlexRow {
     display: flex;
     flex-direction: row;
   }
+  
   .header_h1 {
     text-transform: capitalize;
     text-align: center;
@@ -107,3 +110,13 @@ tbody {
     }
   }
   
+
+  .base_container {
+    padding: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }

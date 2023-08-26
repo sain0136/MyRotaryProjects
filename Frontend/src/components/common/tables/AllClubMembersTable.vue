@@ -1,4 +1,14 @@
 <template>
+  <n-modal
+    v-model:show="showModal"
+    preset="dialog"
+    title="Dialog"
+    :content="dialog"
+    positive-text="Submit"
+    negative-text="Cancel"
+    @positive-click="submitCallback"
+    @negative-click="cancelCallback"
+  />
   <div
     id="all_club_members"
     class="relative overflow-x-auto shadow-md sm:rounded-lg"
@@ -46,11 +56,12 @@
                 title="Delete Member"
                 class="crud_buttons hover:text-primary-c"
                 @click="
-                  updateShowModal(
-                    true,
-                    clubMember.fullName,
-                    clubMember.user_id as number
-                  )
+                  // updateShowModal(
+                  //   true,
+                  //   clubMember.fullName,
+                  //   clubMember.user_id as number
+                  // )
+                  deleteUser(clubMember.user_id as number, clubMember.fullName)
                 "
               >
                 <font-awesome-icon
@@ -139,11 +150,29 @@ import type {
   UserPagination,
 } from "@/utils/frontend/interfaces/Frontend";
 import type IUser from "@/utils/shared/interfaces/UserInterface";
-import { defineComponent, type SetupContext } from "vue";
+import { useMessage, type NotificationType } from "naive-ui";
+import { defineComponent, ref, type SetupContext } from "vue";
+import userApi from "@/services/User";
+import { useNotification } from "naive-ui";
+
 export default defineComponent({
   name: "AllClubMembersTable",
   setup(props, context: SetupContext) {
     const store = useRotaryStore();
+    const messageT = useMessage();
+    const showModal = ref(false);
+    const userTobDeleted = ref({
+      idTobeDeleted: 0,
+      memberName: "",
+    });
+
+    const dialog = ref(
+      "Are you sure you want to delete this member?" +
+        userTobDeleted.value.memberName
+    );
+
+    function cancelCallback() {}
+
     function updateShowModal(
       show: boolean,
       memberName: string,
@@ -155,7 +184,31 @@ export default defineComponent({
         idTobeDeleted: userId,
       });
     }
-    return { updateShowModal, store };
+    const notification = useNotification();
+
+    return {
+      updateShowModal,
+      store,
+      messageT,
+      showModal,
+      cancelCallback,
+      userTobDeleted,
+      dialog,
+      toastController(
+        type: NotificationType,
+        title?: string,
+        content?: string,
+        duration?: number,
+        closable?: boolean
+      ) {
+        notification[type]({
+          title: title || "Error",
+          duration: duration || 3000,
+          closable: closable || false,
+          content: content || "",
+        });
+      },
+    };
   },
   components: {},
   props: {
@@ -163,7 +216,7 @@ export default defineComponent({
     tableViewProp: {
       type: String,
       default: "DISTRICTADMIN",
-    }
+    },
   },
   data() {
     return {
@@ -185,6 +238,43 @@ export default defineComponent({
     this.getAllClubMemebers(this.clubIdProp || 0);
   },
   methods: {
+    async submitCallback() {
+      try {
+        const response = await userApi.delete(
+          this.userTobDeleted.idTobeDeleted
+        );
+        if (!Utilities.isAnApiError(response) && response === true) {
+          this.toastController(
+            "success",
+            "Success",
+            "User deleted successfully",
+            3000,
+            false
+          );
+          this.getAllClubMemebers(this.clubIdProp || 0);
+        }
+        else if (!response){
+          this.toastController(
+            "error",
+            "Error",
+            "Cannot delete user with projects",
+            3000,
+            false
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        this.toastController(
+          "error",
+          "Error",
+          "Error while deleting user",
+          3000,
+          false
+        );
+      }
+
+      this.showModal = false;
+    },
     alterpayload(pageAction: number) {
       this.payload.current_page = this.payload.current_page + pageAction;
       this.getAllClubMemebers(this.clubIdProp || 0);
@@ -227,6 +317,11 @@ export default defineComponent({
       } else if (this.tableViewProp === "SITEADMIN") {
         this.$router.push({ name: "UserFormForSiteAdmin" });
       }
+    },
+    deleteUser(userId: number, name: string) {
+      this.userTobDeleted.idTobeDeleted = userId;
+      this.userTobDeleted.memberName = name;
+      this.showModal = true;
     },
   },
   computed: {},
