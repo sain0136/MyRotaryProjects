@@ -8,6 +8,8 @@
     negative-text="Cancel"
     @positive-click="submitCallback"
     @negative-click="cancelCallback"
+    type="info"
+    :positive-button-props="{ 'text-color': 'black' }"
   />
   <div
     id="all_club_members"
@@ -38,7 +40,7 @@
           <td
             class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
           >
-            {{ clubMember.role[0].club_role }}
+            {{ clubMember?.role[0]?.club_role ?? "Unkown" }}
           </td>
           <td class="px-6 py-4 text-primary-black">
             <div class="buttons_container2 flex gap-2">
@@ -252,8 +254,7 @@ export default defineComponent({
             false
           );
           this.getAllClubMemebers(this.clubIdProp || 0);
-        }
-        else if (!response){
+        } else if (!response) {
           this.toastController(
             "error",
             "Error",
@@ -319,6 +320,10 @@ export default defineComponent({
       }
     },
     deleteUser(userId: number, name: string) {
+      this.dialog =
+        "Are you sure you want to delete " +
+        name +
+        "from the club? This action cannot be undone";
       this.userTobDeleted.idTobeDeleted = userId;
       this.userTobDeleted.memberName = name;
       this.showModal = true;
@@ -328,4 +333,6 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+
+</style>
