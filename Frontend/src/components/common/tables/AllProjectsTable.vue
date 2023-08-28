@@ -1,12 +1,7 @@
 <template>
-  <div
-    class=" my-16 relative overflow-x-auto shadow-md sm:rounded-lg"
-    v-if="allProjects.length != 0"
-  >
+  <div class=" my-16 relative overflow-x-auto shadow-md sm:rounded-lg" v-if="allProjects.length != 0">
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-      <thead
-        class="t_head text-s bg-primary-black uppercase text-primary-white"
-      >
+      <thead class="t_head text-s bg-primary-black uppercase text-primary-white">
         <tr>
           <th>Project Name</th>
           <th>Code</th>
@@ -16,16 +11,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          class="border-b bg-white"
-          id="admin_info"
-          v-for="project in allProjects"
-          :key="project.project_id"
-        >
-          <th
-            scope="row"
-            class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-          >
+        <tr class="border-b bg-white" id="admin_info" v-for="project in allProjects" :key="project.project_id">
+          <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
             {{ project.project_name }}
           </th>
           <td class="px-6 py-4 text-primary-black">
@@ -39,32 +26,19 @@
           </td>
           <td class="px-6 py-4 text-primary-black">
             <div class="buttons_container2 flex gap-2">
-              <button
-                title="Edit Project"
-                class="crud_buttons hover:text-primary-c"
-                @click="updateProject(project.project_id, project.grant_type)"
-              >
-                <font-awesome-icon
-                  class="hover:text-primary-color"
-                  icon="fa-solid fa-pen-to-square"
-                />
+              <button title="Edit Project" class="crud_buttons hover:text-primary-c"
+                @click="updateProject(project.project_id, project.grant_type)">
+                <font-awesome-icon class="hover:text-primary-color" icon="fa-solid fa-pen-to-square" />
               </button>
-              <button
-                v-if="!siteAdminViewProp && !forApprovalViewProp"
-                title="Delete Project"
-                class="crud_buttons hover:text-primary-c"
-                @click="
+              <button v-if="!siteAdminViewProp && !forApprovalViewProp" title="Delete Project"
+                class="crud_buttons hover:text-primary-c" @click="
                   updateShowModal(
                     true,
                     project.project_name,
                     project.project_id as number
                   )
-                "
-              >
-                <font-awesome-icon
-                  class="hover:text-primary-color"
-                  icon="fa-solid fa-trash-can"
-                />
+                  ">
+                <font-awesome-icon class="hover:text-primary-color" icon="fa-solid fa-trash-can" />
               </button>
             </div>
           </td>
@@ -87,18 +61,12 @@
         </span>
         <div class="xs:mt-0 my-2 inline-flex w-full justify-evenly">
           <!-- Buttons -->
-          <button
-            @click="alterpayload(-1)"
-            v-if="payload.current_page != 1"
-            class="inline-flex items-center rounded-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
-          >
+          <button @click="alterpayload(-1)" v-if="payload.current_page != 1"
+            class="inline-flex items-center rounded-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color">
             Prev
           </button>
-          <button
-            v-if="payload.current_page !== payload.last_page"
-            @click="alterpayload(1)"
-            class="inline-flex items-center rounded-r border-0 border-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
-          >
+          <button v-if="payload.current_page !== payload.last_page" @click="alterpayload(1)"
+            class="inline-flex items-center rounded-r border-0 border-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color">
             Next
           </button>
         </div>
@@ -180,7 +148,7 @@ export default defineComponent({
             porjectIdProp: projectId,
           });
           this.$router.push({
-            name: "DistrictMatchingProjectForm",
+            name: this.siteAdminViewProp ? "DistrictMatchingProjectFormSiteView" : "DistrictMatchingProjectForm",
           });
           break;
         case `${GrantType.DISTRICTSIMPLIFIEDPROJECT}`:
@@ -189,7 +157,7 @@ export default defineComponent({
             porjectIdProp: projectId,
           });
           this.$router.push({
-            name: "DistrictSimplifiedProjectForm",
+            name: this.siteAdminViewProp ? "DistrictSimplifiedProjectFormSiteView" : "DistrictSimplifiedProjectForm",
           });
           break;
         case `${GrantType.CLUBPROJECT}`:
@@ -198,7 +166,7 @@ export default defineComponent({
             porjectIdProp: projectId,
           });
           this.$router.push({
-            name: "ClubProjectFormLandingView",
+            name: this.siteAdminViewProp ? "ClubProjectFormSiteView" : "ClubProjectFormLandingView",
           });
           break;
       }
@@ -292,8 +260,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
+
 .t_head {
   height: 50px;
+
   th {
     padding-left: 1rem;
     padding-right: 1rem;

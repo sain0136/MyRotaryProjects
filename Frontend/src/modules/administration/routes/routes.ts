@@ -11,6 +11,10 @@ import { useRotaryStore } from "@/stores/rotaryStore";
 import UserFormForSiteAdmin from "@/components/common/forms/UserForm.vue";
 import ClubAdministration from "@/modules/administration/components/ClubAdministration.vue"
 import AdminClub from "@/modules/administration/views/AdminClub.vue"
+import ClubProjectFormSiteView from "@/components/common/forms/ClubProjectForm.vue";
+import DistrictSimplifiedProjectFormSiteView from "@/components/common/forms/DistrictSimplifiedProjectForm.vue"
+import DistrictMatchingProjectFormSiteView from "@/components/common/forms/DistrictMatchingProjectForm.vue"
+
 const route = {
   path: "/admin",
   component: AdminApp,
@@ -74,15 +78,31 @@ const route = {
       props: true,
     },
     {
-      path: "club-administration",
+      path: "club-administration/:clubDistrictIdProp",
       component: ClubAdministration,
       name: "ClubAdministration",
+      props: true,
     },
     {
       path: "admin-club",
       component: AdminClub,
       name: "AdminClub",
-    }
+    },
+    {
+      path: "/clubproject",
+      component: ClubProjectFormSiteView,
+      name: "ClubProjectFormSiteView",
+    },
+    {
+      path: "/dsgproject",
+      component: DistrictSimplifiedProjectFormSiteView,
+      name: "DistrictSimplifiedProjectFormSiteView",
+    },
+    {
+      path: "/dmproject",
+      component: DistrictMatchingProjectFormSiteView,
+      name: "DistrictMatchingProjectFormSiteView",
+    },
   ],
   
 };
