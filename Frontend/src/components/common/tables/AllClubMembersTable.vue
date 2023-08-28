@@ -1,21 +1,8 @@
 <template>
-  <n-modal
-    v-model:show="showModal"
-    preset="dialog"
-    title="Dialog"
-    :content="dialog"
-    positive-text="Submit"
-    negative-text="Cancel"
-    @positive-click="submitCallback"
-    @negative-click="cancelCallback"
-    type="info"
-    :positive-button-props="{ 'text-color': 'black' }"
-  />
-  <div
-    id="all_club_members"
-    class="relative overflow-x-auto shadow-md sm:rounded-lg"
-    v-if="allClubMemebers.length != 0"
-  >
+  <n-modal v-model:show="showModal" preset="dialog" title="Warning" :content="dialog" positive-text="Submit"
+    negative-text="Cancel" @positive-click="submitCallback" @negative-click="cancelCallback" type="info"
+    :positive-button-props="{ 'text-color': 'black', 'type': 'warning' }" />
+  <div id="all_club_members" class="relative overflow-x-auto shadow-md sm:rounded-lg" v-if="allClubMemebers.length != 0">
     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
       <thead class="text-s bg-primary-black uppercase text-primary-white">
         <tr>
@@ -25,51 +12,28 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          class="border-b bg-white"
-          id="admin_info"
-          v-for="clubMember in allClubMemebers"
-          :key="clubMember.user_id"
-        >
-          <th
-            scope="row"
-            class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-          >
+        <tr class="border-b bg-white" id="admin_info" v-for="clubMember in allClubMemebers" :key="clubMember.user_id">
+          <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
             {{ clubMember.fullName }}
           </th>
-          <td
-            class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-          >
+          <td class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
             {{ clubMember?.role[0]?.club_role ?? "Unkown" }}
           </td>
           <td class="px-6 py-4 text-primary-black">
             <div class="buttons_container2 flex gap-2">
-              <button
-                title="Edit Member"
-                class="crud_buttons hover:text-primary-c"
-                @click="editClubMember(clubMember.user_id as number)"
-              >
-                <font-awesome-icon
-                  class="hover:text-primary-color"
-                  icon="fa-solid fa-pen-to-square"
-                />
+              <button title="Edit Member" class="crud_buttons hover:text-primary-c"
+                @click="editClubMember(clubMember.user_id as number)">
+                <font-awesome-icon class="hover:text-primary-color" icon="fa-solid fa-pen-to-square" />
               </button>
-              <button
-                title="Delete Member"
-                class="crud_buttons hover:text-primary-c"
-                @click="
-                  // updateShowModal(
-                  //   true,
-                  //   clubMember.fullName,
-                  //   clubMember.user_id as number
-                  // )
-                  deleteUser(clubMember.user_id as number, clubMember.fullName)
-                "
-              >
-                <font-awesome-icon
-                  class="hover:text-primary-color"
-                  icon="fa-solid fa-trash-can"
-                />
+              <button title="Delete Member" class="crud_buttons hover:text-primary-c" @click="
+                // updateShowModal(
+                //   true,
+                //   clubMember.fullName,
+                //   clubMember.user_id as number
+                // )
+                deleteUser(clubMember.user_id as number, clubMember.fullName)
+                ">
+                <font-awesome-icon class="hover:text-primary-color" icon="fa-solid fa-trash-can" />
               </button>
             </div>
           </td>
@@ -92,44 +56,24 @@
         </span>
         <div class="xs:mt-0 my-2 inline-flex w-full justify-evenly">
           <!-- Buttons -->
-          <button
-            @click="alterpayload(-1)"
-            v-if="payload.current_page != 1"
-            class="inline-flex items-center rounded-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
-          >
-            <svg
-              aria-hidden="true"
-              class="mr-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
+          <button @click="alterpayload(-1)" v-if="payload.current_page != 1"
+            class="inline-flex items-center rounded-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color">
+            <svg aria-hidden="true" class="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
                 d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
-                clip-rule="evenodd"
-              ></path>
+                clip-rule="evenodd"></path>
             </svg>
             Prev
           </button>
-          <button
-            v-if="payload.current_page !== payload.last_page"
-            @click="alterpayload(1)"
-            class="inline-flex items-center rounded-r border-0 border-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color"
-          >
+          <button v-if="payload.current_page !== payload.last_page" @click="alterpayload(1)"
+            class="inline-flex items-center rounded-r border-0 border-l bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-primary-color">
             Next
-            <svg
-              aria-hidden="true"
-              class="ml-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
+            <svg aria-hidden="true" class="ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
                 d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              ></path>
+                clip-rule="evenodd"></path>
             </svg>
           </button>
         </div>
@@ -170,10 +114,10 @@ export default defineComponent({
 
     const dialog = ref(
       "Are you sure you want to delete this member?" +
-        userTobDeleted.value.memberName
+      userTobDeleted.value.memberName
     );
 
-    function cancelCallback() {}
+    function cancelCallback() { }
 
     function updateShowModal(
       show: boolean,
@@ -323,7 +267,7 @@ export default defineComponent({
       this.dialog =
         "Are you sure you want to delete " +
         name +
-        "from the club? This action cannot be undone";
+        " from this club? This action cannot be undone";
       this.userTobDeleted.idTobeDeleted = userId;
       this.userTobDeleted.memberName = name;
       this.showModal = true;
@@ -333,6 +277,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
