@@ -33,7 +33,7 @@ const headerFormater = Utilities.headerFormater;
 const store = useRotaryStore();
 const tailwind = TAILWIND_COMMON_CLASSES;
 const activeTab = ref(
-  store.$state.lastActiveTabAdminHomeComponent || "Welcome"
+  store.$state.lastActiveTabAdminHomeComponent || "welcome"
 );
 const tabs = ref([
   { name: "welcome", label: "Welcome" },
