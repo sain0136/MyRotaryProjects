@@ -15,9 +15,9 @@
                   icon="fa-solid fa-envelope"
                   class="mr-2 cursor-pointer text-xl hover:text-2xl"
                 />
-                <span class="icon fa fa-envelope mr-1"
-                  >info@cornwallrotary.com</span
-                >
+                <span class="icon fa fa-envelope mr-1">{{
+                  mainAssets?.assets?.contentManagement?.myRotaryEmail || ""
+                }}</span>
               </li>
             </ul>
           </div>
@@ -289,13 +289,17 @@
 <script lang="ts">
 import AssetsApi from "@/services/Assets";
 import { useRotaryStore } from "@/stores/rotaryStore";
+import toastController from "@/utils/composables/toastController";
 import type { MainAssets } from "@/utils/frontend/interfaces/Frontend";
+import { useNotification } from "naive-ui";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "LandingHeader",
   setup() {
     const store = useRotaryStore();
-    return { store };
+    const notification = useNotification();
+
+    return { store, notification };
   },
   components: {},
   props: {
@@ -309,13 +313,30 @@ export default defineComponent({
       revealAdminDropdown: "hidden",
       revealMenu: "hidden",
       logo: "",
+      mainAssets: {} as MainAssets,
     };
   },
   watch: {},
   async created() {
+    await this.getAssets();
     this.getLogo();
   },
   methods: {
+    async getAssets() {
+      try {
+        this.mainAssets = (await AssetsApi.getMainAssets()) as MainAssets;
+      } catch (error) {
+        let er = error as Error;
+        console.error(er.message);
+        const useToast = toastController(
+          this.notification,
+          "error",
+          "Error",
+          er.message
+        );
+        useToast();
+      }
+    },
     async getLogo() {
       this.logo = this.store.$state.mainLogoUrl ?? "";
     },

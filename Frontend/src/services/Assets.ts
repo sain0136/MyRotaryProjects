@@ -33,6 +33,28 @@ class AssetsApi {
     }
     return apiReponse as IApiError | MainAssets;
   }
+
+  public static async updateMainAssets(assets: MainAssets) {
+    const apiReponse = await fetch(
+      import.meta.env.VITE_API_URL + "assets/updateAssets",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(assets),
+        credentials: "include",
+      }
+    ).then(async (response: Response) => {
+      if (response.status === 401) {
+        useRotaryStore().signOut();
+        useRotaryStore().$state.showLogoutModal = true;
+      }
+      return await response.json();
+    });
+
+    return apiReponse as MainAssets;
+  }
 }
 
 export default AssetsApi;
