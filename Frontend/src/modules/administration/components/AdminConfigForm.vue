@@ -24,10 +24,10 @@ onMounted(async () => {
   try {
     const response = (await AssetsApi.getMainAssets()) as MainAssets;
     if (response) {
-      for (const [key, value] of Object.entries(
-        response.assets.contentManagement
-      )) {
-        mainAssets.assets.contentManagement[key] = value;
+      for (const [key, value] of Object.entries(response.assets.contentManagement)) {
+        if (mainAssets.assets.contentManagement[key] !== undefined && mainAssets.assets.contentManagement[key] !== null) {
+          mainAssets.assets.contentManagement[key] = value;
+        }
       }
     }
   } catch (error) {
