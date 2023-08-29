@@ -72,6 +72,23 @@ export class MyError extends Error implements IApiException {
     this.code = code ?? "No code available";
   }
 }
+export interface contentManagement {
+  myRotaryEmail: string;
+  myRotaryPhone: string;
+  myRotaryAddress: string;
+  myRotaryCountry: string;
+  myRotaryCity: string;
+  myRotaryPostalCode: string;
+  myRotaryProvince: string;
+  myRotaryAbout: string;
+  myRotaryAdminFullName: string;
+  myRotaryAdminEmail: string;
+  myRotaryfooterDescription: string;
+  FaceboolUrl: string;
+  TwitterUrl: string;
+  InstagramUrl: string;
+  [key: string]: string | number | object;
+}
 
 export interface MainAssets {
   id: number;
@@ -86,24 +103,9 @@ export interface MainAssets {
       fileType: string;
       location: string;
     };
-    contentManagement: {
-      myRotaryEmail: string;
-      myRotaryPhone: string;
-      myRotaryAddress: string;
-      myRotaryCountry: string;
-      myRotaryCity: string;
-      myRotaryPostalCode: string;
-      myRotaryProvince: string;
-      myRotaryAbout: string;
-      myRotaryAdminFullName: string;
-      myRotaryAdminEmail: string;
-      myRotaryfooterDescription: string;
-      FaceboolUrl: string;
-      TwitterUrl: string;
-      InstagramUrl: string;
-      [key: string]: string;
-    };
+    contentManagement: contentManagement;
   };
+  [key: string]: string | number | object;
 }
 
 interface meta {

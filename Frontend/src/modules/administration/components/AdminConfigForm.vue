@@ -16,7 +16,7 @@ import { useNotification, type NotificationType } from "naive-ui";
 import { MainAssetsClass } from "@/utils/frontend/classes/MainAssetsClass";
 // Data
 const notification = useNotification();
-let mainAssets = ref<MainAssets | null>(new MainAssetsClass());
+let mainAssets = reactive(new MainAssetsClass() as MainAssets);
 const emit = defineEmits(["submit"]);
 
 // On Mount
@@ -24,7 +24,11 @@ onMounted(async () => {
   try {
     const response = (await AssetsApi.getMainAssets()) as MainAssets;
     if (response) {
-      Object.assign(mainAssets.value as MainAssets, response);
+      for (const [key, value] of Object.entries(
+        response.assets.contentManagement
+      )) {
+        mainAssets.assets.contentManagement[key] = value;
+      }
     }
   } catch (error) {
     console.error(error);
