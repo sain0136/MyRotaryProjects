@@ -105,6 +105,7 @@ export interface MainAssets {
     };
   };
 }
+
 interface meta {
   limit: number;
   total: number;

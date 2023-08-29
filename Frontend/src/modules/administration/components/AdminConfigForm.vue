@@ -13,16 +13,19 @@ import type { MainAssets } from "@/utils/frontend/interfaces/Frontend";
 import AssetsApi from "@/services/Assets";
 import RotaryButton from "@/components/common/RotaryButton.vue";
 import { useNotification, type NotificationType } from "naive-ui";
-
+import { MainAssetsClass } from "@/utils/frontend/classes/MainAssetsClass";
 // Data
 const notification = useNotification();
-let mainAssets = ref<MainAssets | null>(null);
+let mainAssets = ref<MainAssets | null>(new MainAssetsClass());
 const emit = defineEmits(["submit"]);
 
 // On Mount
 onMounted(async () => {
   try {
-    mainAssets.value = (await AssetsApi.getMainAssets()) as MainAssets;
+    const response = (await AssetsApi.getMainAssets()) as MainAssets;
+    if (response) {
+      mainAssets.value = response;
+    }
   } catch (error) {
     console.error(error);
     toastController("error", "Error", "Error while fetching data");
@@ -51,7 +54,9 @@ const submit = async () => {
     );
     if (response) {
       toastController("success", "Success", "Data updated successfully");
-      mainAssets.value = response as MainAssets;
+      if (response) {
+        mainAssets.value = response;
+      }
       emit("submit");
     }
   } catch (error) {
@@ -111,7 +116,7 @@ const submit = async () => {
         label="MyRotary Country"
       />
     </div>
-    <div class="form_item">
+    <div class="form_item half_width">
       <BaseInputsText
         v-model="mainAssets.assets.contentManagement.myRotaryPostalCode"
         label="MyRotary Postal Code"
