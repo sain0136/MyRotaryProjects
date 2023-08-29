@@ -59,7 +59,7 @@ const toastController = (
 const submit = async () => {
   try {
     const response = await AssetsApi.updateMainAssets(
-      mainAssets as MainAssets
+      mainAssets.value as MainAssets
     );
     if (response) {
       toastController("success", "Success", "Data updated successfully");
