@@ -24,9 +24,13 @@ onMounted(async () => {
   try {
     const response = (await AssetsApi.getMainAssets()) as MainAssets;
     if (response) {
-      for (const [key, value] of Object.entries(response.assets.contentManagement)) {
-        if (mainAssets.assets.contentManagement[key] !== undefined && mainAssets.assets.contentManagement[key] !== null) {
-          debugger
+      for (const [key, value] of Object.entries(
+        response.assets.contentManagement
+      )) {
+        if (
+          mainAssets.assets.contentManagement[key] !== undefined &&
+          mainAssets.assets.contentManagement[key] !== null
+        ) {
           mainAssets.assets.contentManagement[key] = value;
         }
       }
@@ -59,8 +63,15 @@ const submit = async () => {
     );
     if (response) {
       toastController("success", "Success", "Data updated successfully");
-      if (response) {
-        Object.assign(mainAssets.value as MainAssets, response);
+      for (const [key, value] of Object.entries(
+        response.assets.contentManagement
+      )) {
+        if (
+          mainAssets.assets.contentManagement[key] !== undefined &&
+          mainAssets.assets.contentManagement[key] !== null
+        ) {
+          mainAssets.assets.contentManagement[key] = value;
+        }
       }
       emit("submit");
     }
