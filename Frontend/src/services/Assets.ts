@@ -35,6 +35,7 @@ class AssetsApi {
   }
 
   public static async updateMainAssets(assets: MainAssets) {
+    debugger
     const apiReponse = await fetch(
       import.meta.env.VITE_API_URL + "assets/updateAssets",
       {
