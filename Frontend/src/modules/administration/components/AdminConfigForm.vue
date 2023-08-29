@@ -24,7 +24,7 @@ onMounted(async () => {
   try {
     const response = (await AssetsApi.getMainAssets()) as MainAssets;
     if (response) {
-      mainAssets.value = response;
+      Object.assign(mainAssets.value as MainAssets, response);
     }
   } catch (error) {
     console.error(error);
@@ -55,7 +55,7 @@ const submit = async () => {
     if (response) {
       toastController("success", "Success", "Data updated successfully");
       if (response) {
-        mainAssets.value = response;
+        Object.assign(mainAssets.value as MainAssets, response);
       }
       emit("submit");
     }
