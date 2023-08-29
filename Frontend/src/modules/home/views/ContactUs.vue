@@ -66,16 +66,20 @@
                 <font-awesome-icon class="icon" icon="fa-solid fa-envelope" />
                 <div class="mt-2">
                   <h3>E-mail</h3>
-                  <span class="text-primary-color"
-                    >info@cornwallrotary.com</span
-                  >
+                  <span class="text-primary-color">{{
+                    mainAssets?.assets?.contentManagement?.myRotaryEmail || ""
+                  }}</span>
                 </div>
               </li>
               <li class="flex w-full">
                 <font-awesome-icon class="icon" icon="fa-solid fa-phone" />
                 <div class="mt-2">
                   <h3>Phone</h3>
-                  <span class="text-primary-color">613-555-5555 </span>
+                  <span class="text-primary-color"
+                    >{{
+                      mainAssets?.assets?.contentManagement?.myRotaryPhone || ""
+                    }}
+                  </span>
                 </div>
               </li>
               <li class="flex w-full">
@@ -86,8 +90,22 @@
                 <div class="mt-2">
                   <h3>Address</h3>
                   <span class="text-primary-color"
-                    >P.O. Box 411, Cornwall ON K6H 5T1</span
-                  >
+                    >{{
+                      mainAssets?.assets?.contentManagement?.myRotaryAddress ||
+                      ""
+                    }}
+                    {{
+                      mainAssets?.assets?.contentManagement?.myRotaryCity || ""
+                    }}{{ "," }}
+                    {{
+                      mainAssets?.assets?.contentManagement?.myRotaryProvince ||
+                      ""
+                    }}
+                    {{
+                      mainAssets?.assets?.contentManagement
+                        ?.myRotaryPostalCode || ""
+                    }}
+                  </span>
                 </div>
               </li>
             </ul>
@@ -104,6 +122,7 @@ import {
   TAILWIND_COMMON_CLASSES,
   type IApiException,
   ErrorMessages,
+  type MainAssets,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
 import ErrorValidation from "@/components/common/baseformComponents/ErrorValidation.vue";
@@ -116,6 +135,9 @@ import BaseTextArea from "@/components/common/baseformComponents/BaseTextArea.vu
 import useVuelidate from "@vuelidate/core";
 import { helpers, required, email, maxLength } from "@vuelidate/validators";
 import RotaryButton from "@/components/common/RotaryButton.vue";
+import toastController from "@/utils/composables/toastController";
+import { useNotification, type NotificationType } from "naive-ui";
+import AssetsApi from "@/services/Assets";
 export default defineComponent({
   name: "ContactUs",
   components: {
@@ -128,7 +150,8 @@ export default defineComponent({
     RotaryButton,
   },
   setup() {
-    return { v$: useVuelidate() };
+    const notification = useNotification();
+    return { v$: useVuelidate(), notification };
   },
   props: {},
   data() {
@@ -151,6 +174,7 @@ export default defineComponent({
         width: "w-1/2",
         closeTimer: 4000,
       },
+      mainAssets: {} as MainAssets,
     };
   },
   watch: {},
@@ -170,8 +194,21 @@ export default defineComponent({
       },
     };
   },
-
-  async created() {},
+  async created() {
+    try {
+      this.mainAssets = (await AssetsApi.getMainAssets()) as MainAssets;
+    } catch (error) {
+      let er = error as Error;
+      console.error(er.message);
+      const useToast = toastController(
+        this.notification,
+        "error",
+        "Error",
+        er.message
+      );
+      useToast();
+    }
+  },
   methods: {
     async submitForm() {
       await this.v$.$validate();
@@ -187,6 +224,7 @@ export default defineComponent({
       this.sendEmail();
     },
     async sendEmail() {
+      this.v$.$reset();
       try {
         window.scroll(0, 0);
         const response = await MailerApi.contactMailer(

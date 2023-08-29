@@ -5,6 +5,7 @@ import {
   MyError,
   type IApiError,
   type IApiException,
+  type MainAssets,
 } from "@/utils/frontend/interfaces/Frontend";
 import type IDistrict from "@/utils/shared/interfaces/DistrictInterface";
 import type {
@@ -90,7 +91,7 @@ export default class UploadsApi {
         const exception = apiReponse.data as IApiException;
         throw new MyError(exception.message, exception.stack, exception.code);
       }
-      return apiReponse.data as IApiError | boolean | IDistrict;
+      return apiReponse.data as IApiError | boolean | IDistrict | MainAssets;
     } catch (error) {
       throw error;
     }

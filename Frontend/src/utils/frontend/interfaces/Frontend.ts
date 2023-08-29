@@ -28,8 +28,8 @@ export const TAILWIND_COMMON_CLASSES = {
   LABEL: "text-primary-black base-text font-bold ",
   A_LINK: "text-primary-black base-text font-bold  hover:text-primary-color",
   SUCCESS: "text-primary-green base-text font-bold",
-  FORMHR:"my-4 h-px w-full border-0 bg-gray-500",
-  TABLEHEADER:"bg-primary-black px-6 py-3 font-bold text-primary-white"
+  FORMHR: "my-4 h-px w-full border-0 bg-gray-500",
+  TABLEHEADER: "bg-primary-black px-6 py-3 font-bold text-primary-white",
 };
 export interface IResizeImageOptions {
   maxSize: number;
@@ -86,6 +86,22 @@ export interface MainAssets {
       fileType: string;
       location: string;
     };
+    contentManagement: {
+      myRotaryEmail: string;
+      myRotaryPhone: string;
+      myRotaryAddress: string;
+      myRotaryCountry: string;
+      myRotaryCity: string;
+      myRotaryPostalCode: string;
+      myRotaryProvince: string;
+      myRotaryAbout: string;
+      myRotaryAdminFullName: string;
+      myRotaryAdminEmail: string;
+      myRotaryfooterDescription: string;
+      FaceboolUrl: string;
+      TwitterUrl: string;
+      InstagramUrl: string;
+    };
   };
 }
 interface meta {
@@ -129,11 +145,13 @@ export const ErrorMessages = {
   REQURIED_NUM_MIN_LENGTH: "This field cant be zero",
   NUMBER_MUST_FRAC: "This field must be a fraction or 1",
   MAX_AMOUNT: "This field must be less than $10,000,000",
-  LOWER_THAN_FUNDING_GOAL: "The Anticipated funding amount must be less than funding goal",
-  ONE_MUST_BE_SELECTED:"At least one Area Of Focus must be selected",
+  LOWER_THAN_FUNDING_GOAL:
+    "The Anticipated funding amount must be less than funding goal",
+  ONE_MUST_BE_SELECTED: "At least one Area Of Focus must be selected",
   DATE_AFTER_START_DATE: "This field must be after start date",
   IMAGE_NOT_UPLOADED: "Please upload an image",
-  CANT_BE_LOWER_THAN_PLEDGES_TOTAL: "This field must be greater than the pledges total",
+  CANT_BE_LOWER_THAN_PLEDGES_TOTAL:
+    "This field must be greater than the pledges total",
   NO_FILES_UPLOADED: "Please upload at least one file",
   PROJECT_NAME_LIMIT: "Project name must be less than 50 characters",
 };

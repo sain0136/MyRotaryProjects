@@ -20,7 +20,18 @@ export default class Assets extends BaseModel {
   @column()
   public globalInitial?: number;
 
-  @column()
+  @column({
+    serialize: (value: string | null) => {
+      if (value) {
+        let parse =
+          typeof value === "object" &&
+          Object.keys(value as unknown as object).length < 1
+            ? "{}"
+            : JSON.parse(value);
+        return parse;
+      }
+    },
+  })
   public assets?: string;
 
   @column.dateTime({ autoCreate: true })

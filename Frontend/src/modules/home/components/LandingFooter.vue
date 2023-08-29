@@ -9,11 +9,10 @@
             /></a>
           </div>
           <div class="text mt-4">
-            My Rotary Projects is a platform for Rotarians and Rotary clubs to
-            showcase their service projects and inspire others to take action.
-            You can browse, share, and support projects from around the world
-            that align with Rotary’s areas of focus. Join us in making a
-            difference in our communities and beyond.
+            {{
+              mainAssets?.assets?.contentManagement
+                ?.myRotaryfooterDescription || ""
+            }}
           </div>
           <ul class="social-icon-two mt-4 flex justify-evenly">
             <li>
@@ -60,15 +59,25 @@
                 <font-awesome-icon
                   icon="fa-solid fa-location-dot "
                   class="mt-1 mr-4 text-2xl text-primary-color"
-                />{{ siteValues.adminAddress }}</span
+                />{{
+                  mainAssets?.assets?.contentManagement?.myRotaryAddress || ""
+                }}</span
               >
               <span
-                >{{ siteValues.adminCity }} ,
-                {{ siteValues.adminProvince }}</span
+                >{{ mainAssets?.assets?.contentManagement?.myRotaryCity || "" }}
+                ,
+                {{
+                  mainAssets?.assets?.contentManagement?.myRotaryProvince || ""
+                }}</span
               >
               <span>
-                {{ siteValues.adminCountry }}
-                {{ siteValues.adminPostalCode }}</span
+                {{
+                  mainAssets?.assets?.contentManagement?.myRotaryCountry || ""
+                }}
+                {{
+                  mainAssets?.assets?.contentManagement?.myRotaryPostalCode ||
+                  ""
+                }}</span
               >
             </li>
           </ul>
@@ -76,20 +85,22 @@
             ><font-awesome-icon
               icon="fa-solid fa-phone"
               class="mt-4 mr-2 text-2xl text-primary-color"
-            />{{ siteValues.adminPhone }}</span
+            />{{
+              mainAssets?.assets?.contentManagement?.myRotaryPhone || ""
+            }}</span
           >
 
           <span class="mt-auto flex"
             ><font-awesome-icon
               @click="
                 () => {
-                  mailTo(siteValues.adminEmail);
+                  mailTo(mainAssets?.assets?.contentManagement?.myRotaryEmail);
                 }
               "
               title="Send Email"
               icon="fa-solid fa-envelope"
               class="mr-4 cursor-pointer text-2xl text-primary-color"
-            />{{ siteValues.adminEmail }}
+            />{{ mainAssets?.assets?.contentManagement?.myRotaryEmail || "" }}
           </span>
         </div>
       </div>
@@ -142,12 +153,16 @@ import type {
   IApiException,
 } from "@/utils/frontend/interfaces/Frontend";
 import { defineComponent } from "vue";
+import toastController from "@/utils/composables/toastController";
+import { useNotification, type NotificationType } from "naive-ui";
 
 export default defineComponent({
   name: "LandingFooter",
   setup() {
     const store = useRotaryStore();
-    return { store };
+    const notification = useNotification();
+
+    return { store, notification };
   },
   components: {},
   props: {
@@ -163,10 +178,24 @@ export default defineComponent({
       logo: "",
       serverException: false,
       expectionObject: {} as IApiException,
+      mainAssets: {} as MainAssets,
     };
   },
   watch: {},
   async created() {
+    try {
+      this.mainAssets = (await AssetsApi.getMainAssets()) as MainAssets;
+    } catch (error) {
+      let er = error as Error;
+      console.error(er.message);
+      const useToast = toastController(
+        this.notification,
+        "error",
+        "Error",
+        er.message
+      );
+      useToast();
+    }
     this.logo = this.store.$state.mainLogoUrl ?? "";
   },
   methods: {

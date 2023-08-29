@@ -178,6 +178,7 @@ export const useRotaryStore = defineStore("main", {
       canLeaveForm: false,
       mainLogoUrl: "",
       lastActiveTabClubAdminComponent: "",
+      lastActiveTabAdminHomeComponent: "",
     };
   },
   //Used to manipulate state variable without changing the States themseleves

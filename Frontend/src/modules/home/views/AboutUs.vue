@@ -1,3 +1,42 @@
+<script lang="ts">
+export default {
+  name: "AboutUs",
+};
+</script>
+
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+import ResourceLists from "@/utils/frontend/classes/ResourceLists";
+import {
+  TAILWIND_COMMON_CLASSES,
+  type MainAssets,
+} from "@/utils/frontend/interfaces/Frontend";
+import toastController from "@/utils/composables/toastController";
+import { useNotification, type NotificationType } from "naive-ui";
+import AssetsApi from "@/services/Assets";
+// Data
+const tailwind = ref(TAILWIND_COMMON_CLASSES);
+const resources = ref(ResourceLists);
+const notification = useNotification();
+let mainAssets = ref<MainAssets | null>(null);
+
+onMounted(async () => {
+  try {
+    mainAssets.value = (await AssetsApi.getMainAssets()) as MainAssets;
+  } catch (error) {
+    let er = error as Error;
+    console.error(er.message);
+    const useToast = toastController(
+      notification,
+      "error",
+      "Error",
+      er.message
+    );
+    useToast();
+  }
+});
+</script>
+
 <template>
   <div class="container min-w-full gap-8" :class="tailwind.DIVCOL">
     <div class="landing_header w-full">
@@ -10,7 +49,7 @@
             Welcome to Rotary Projects
           </h1>
           <p>
-            {{ resources.aboutUsDescription }}
+            {{ mainAssets?.assets.contentManagement.myRotaryAbout || "" }}
           </p>
         </div>
         <hr class="my-8 h-px w-full border-0 bg-gray-500" />
@@ -18,7 +57,15 @@
           <ul>
             <li class="mt-4">
               <Strong> MyRotaryProjects Administrator:</Strong>
-              Peter Labelle
+              {{
+                mainAssets?.assets.contentManagement.myRotaryAdminFullName || ""
+              }}
+            </li>
+            <li>
+              <Strong>Email:</Strong>
+              {{
+                mainAssets?.assets.contentManagement.myRotaryAdminEmail || ""
+              }}
             </li>
           </ul>
         </div>
@@ -92,27 +139,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import ResourceLists from "@/utils/frontend/classes/ResourceLists";
-import { TAILWIND_COMMON_CLASSES } from "@/utils/frontend/interfaces/Frontend";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "AboutUs",
-  components: {},
-  props: {},
-  data() {
-    return {
-      tailwind: TAILWIND_COMMON_CLASSES,
-      resources: ResourceLists,
-    };
-  },
-  watch: {},
-  async created() {},
-  methods: {},
-  computed: {},
-});
-</script>
 
 <style scoped lang="scss">
 @import "@/assets/syles.scss";
