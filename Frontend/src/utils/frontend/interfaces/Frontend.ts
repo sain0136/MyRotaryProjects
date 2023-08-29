@@ -101,6 +101,7 @@ export interface MainAssets {
       FaceboolUrl: string;
       TwitterUrl: string;
       InstagramUrl: string;
+      [key: string]: string;
     };
   };
 }
