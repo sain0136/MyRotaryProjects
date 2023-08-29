@@ -26,6 +26,7 @@ onMounted(async () => {
     if (response) {
       for (const [key, value] of Object.entries(response.assets.contentManagement)) {
         if (mainAssets.assets.contentManagement[key] !== undefined && mainAssets.assets.contentManagement[key] !== null) {
+          debugger
           mainAssets.assets.contentManagement[key] = value;
         }
       }
